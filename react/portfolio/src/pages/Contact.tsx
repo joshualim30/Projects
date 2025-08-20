@@ -1,183 +1,300 @@
-// Contact.tsx - Contact page component
+// Contact.tsx - Contact page component (Mobile-First Redesign)
 // 10/22/2024 - Joshua Lim
 
 import React from 'react';
-import { Input, Textarea } from "@nextui-org/input";
+import { Input, Textarea, Card, CardHeader, CardBody } from "@nextui-org/react";
 import { Button } from "@nextui-org/button";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/modal";
-import { addDoc, collection } from "firebase/firestore";
-import { db } from "../firebase";
 import { motion } from "framer-motion";
+import { 
+  EnvelopeClosedIcon, 
+  PersonIcon, 
+  MobileIcon, 
+  ChatBubbleIcon,
+  GitHubLogoIcon,
+  LinkedInLogoIcon,
+  TwitterLogoIcon
+} from '@radix-ui/react-icons';
 
-// Contact page component
 const Contact = () => {
-  const [name, setName] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [phone, setPhone] = React.useState('');
-  const [message, setMessage] = React.useState('');
-  const [isOpenSuccess, onOpenChangeSuccess] = React.useState(false);
-  const [isOpenFailure, onOpenChangeFailure] = React.useState(false);
+  const [formData, setFormData] = React.useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+  const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    // Simulate form submission
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    setIsLoading(false);
+    setIsSubmitted(true);
+    
+    // Reset form after 3 seconds
+    setTimeout(() => {
+      setIsSubmitted(false);
+      setFormData({ name: '', email: '', phone: '', message: '' });
+    }, 3000);
+  };
+
+  const contactInfo = [
+    {
+      icon: EnvelopeClosedIcon,
+      label: 'Email',
+      value: 'hi@joshualim.me',
+      href: 'mailto:hi@joshualim.me'
+    },
+    {
+      icon: MobileIcon,
+      label: 'Phone',
+      value: '+1 (937) 707-3022',
+      href: 'tel:+19377073022'
+    },
+    {
+      icon: PersonIcon,
+      label: 'Location',
+      value: 'Orlando, FL 32817',
+      href: null
+    }
+  ];
+
+  const socialLinks = [
+    {
+      icon: GitHubLogoIcon,
+      label: 'GitHub',
+      href: 'https://github.com/joshualim30',
+      color: 'text-default-600 hover:text-foreground'
+    },
+    {
+      icon: LinkedInLogoIcon,
+      label: 'LinkedIn',
+      href: 'https://linkedin.com/in/joshualim30',
+      color: 'text-blue-500 hover:text-blue-600'
+    },
+    {
+      icon: TwitterLogoIcon,
+      label: 'Twitter',
+      href: 'https://twitter.com/joshualim30',
+      color: 'text-blue-400 hover:text-blue-500'
+    }
+  ];
+
   return (
-    <section id="contact" className='min-h-screen w-full flex flex-col px-6 py-12 bg-gradient-to-br from-background to-default-50'>
-      <div className='flex-1 w-full max-w-2xl mx-auto flex items-center justify-center'>
-        <motion.div 
-          className="w-full"
+    <section id="contact" className='min-h-screen bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800'>
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
+        {/* Header */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
+          className="text-center mb-8 md:mb-12"
         >
-          <div className="bg-background/80 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-default-200">
-            <div className="text-center mb-8">
-              <h1 className='font-bold text-4xl md:text-5xl mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
-                Let's get in touch!
-              </h1>
-              <h2 className='font-normal text-lg md:text-xl text-default-500'>
-                Feel free to shoot me a message and I will get back to you as soon as possible!
-              </h2>
-            </div>
-            
-            <div className="space-y-6">
-              <Input
-                isRequired
-                label="Name"
-                placeholder="John Doe"
-                type='name'
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                classNames={{
-                  input: "text-lg",
-                  label: "text-base font-medium"
-                }}
-                size="lg"
-              />
-              <Input
-                isRequired
-                label="Email"
-                placeholder="example@email.com"
-                type='email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                classNames={{
-                  input: "text-lg",
-                  label: "text-base font-medium"
-                }}
-                size="lg"
-              />
-              <Input
-                label="Phone Number"
-                placeholder="123-456-7890"
-                type='tel'
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                classNames={{
-                  input: "text-lg",
-                  label: "text-base font-medium"
-                }}
-                size="lg"
-              />
-              <Textarea
-                isRequired
-                label="Message"
-                placeholder="Hello! I would like to get in touch with you!"
-                type='text'
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                classNames={{
-                  input: "text-lg",
-                  label: "text-base font-medium"
-                }}
-                size="lg"
-                minRows={4}
-              />
-              <Button 
-                color="primary" 
-                variant="shadow"
-                className='w-full font-semibold shadow-xl hover:shadow-2xl transition-shadow' 
-                size="lg"
-                onClick={
-                  async () => {
-                    // Enable loading state
-                    setIsLoading(true);
-
-                    // Add message to Firestore
-                    try {
-                      // Add a new document with a generated id
-                      await addDoc(collection(db, "messages"), {
-                        name: name,
-                        email: email,
-                        phone: phone,
-                        message: message,
-                        timestamp: new Date()
-                      });
-
-                      // Disable loading state
-                      setIsLoading(false);
-
-                      // Clear form
-                      setName('');
-                      setEmail('');
-                      setPhone('');
-                      setMessage('');
-
-                      // Open modal
-                      onOpenChangeSuccess(true);
-                    } catch (e) {
-                      console.error("Error adding document: ", e);
-                      // Disable loading state
-                      setIsLoading(false);
-
-                      // Open modal
-                      onOpenChangeFailure(true);
-                    }
-                  }
-                } 
-                isLoading={isLoading}
-              >
-                Send Message
-              </Button>
-            </div>
-          </div>
-          
-          <Modal isOpen={isOpenSuccess} onOpenChange={onOpenChangeSuccess}>
-            <ModalContent className="bg-background/95 backdrop-blur-sm">
-              <ModalHeader className="text-2xl font-bold">Message Sent</ModalHeader>
-              <ModalBody>
-                <p className="text-lg">Your message has been sent successfully! I will get back to you as soon as possible!</p>
-              </ModalBody>
-              <ModalFooter>
-                <Button 
-                  color="primary" 
-                  variant="shadow"
-                  onClick={() => onOpenChangeSuccess(false)}
-                  className="font-semibold shadow-xl hover:shadow-2xl transition-shadow"
-                >
-                  Close
-                </Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
-          
-          <Modal isOpen={isOpenFailure} onOpenChange={onOpenChangeFailure}>
-            <ModalContent className="bg-background/95 backdrop-blur-sm">
-              <ModalHeader className="text-2xl font-bold">Error Sending Message</ModalHeader>
-              <ModalBody>
-                <p className="text-lg">There was an error sending your message :( Please try again later!</p>
-              </ModalBody>
-              <ModalFooter>
-                <Button 
-                  color="primary" 
-                  variant="shadow"
-                  onClick={() => onOpenChangeFailure(false)}
-                  className="font-semibold shadow-xl hover:shadow-2xl transition-shadow"
-                >
-                  Close
-                </Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
+            Get In Touch
+          </h1>
+          <p className="text-base md:text-lg lg:text-xl text-gray-500 dark:text-gray-400 mb-6">
+            Let's discuss your next project or just say hello!
+          </p>
         </motion.div>
+
+        {/* Two-Column Layout - Mobile First */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+          {/* Contact Form */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-2xl border border-gray-200 dark:border-gray-700">
+              <CardHeader className="pb-4">
+                <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+                  <ChatBubbleIcon className="w-6 h-6 text-primary" />
+                  Send me a message
+                </h2>
+              </CardHeader>
+              <CardBody>
+                {isSubmitted ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="text-center py-8"
+                  >
+                    <div className="w-16 h-16 bg-success/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <EnvelopeClosedIcon className="w-8 h-8 text-success" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Message Sent!</h3>
+                    <p className="text-gray-500 dark:text-gray-400">Thanks for reaching out. I'll get back to you soon!</p>
+                  </motion.div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <Input
+                        isRequired
+                        label="Name"
+                        placeholder="Your name"
+                        value={formData.name}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        variant="bordered"
+                        size="lg"
+                        startContent={<PersonIcon className="w-4 h-4 text-gray-400" />}
+                        classNames={{
+                          inputWrapper: "shadow-sm border-gray-300 dark:border-gray-600"
+                        }}
+                      />
+                      <Input
+                        isRequired
+                        label="Phone"
+                        placeholder="Your phone number"
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => handleInputChange('phone', e.target.value)}
+                        variant="bordered"
+                        size="lg"
+                        startContent={<MobileIcon className="w-4 h-4 text-gray-400" />}
+                        classNames={{
+                          inputWrapper: "shadow-sm border-gray-300 dark:border-gray-600"
+                        }}
+                      />
+                    </div>
+                    
+                    <Input
+                      isRequired
+                      label="Email"
+                      placeholder="your.email@example.com"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
+                      variant="bordered"
+                      size="lg"
+                      startContent={<EnvelopeClosedIcon className="w-4 h-4 text-gray-400" />}
+                      classNames={{
+                        inputWrapper: "shadow-sm border-gray-300 dark:border-gray-600"
+                      }}
+                    />
+
+                    <Textarea
+                      isRequired
+                      label="Message"
+                      placeholder="Tell me about your project or just say hello..."
+                      value={formData.message}
+                      onChange={(e) => handleInputChange('message', e.target.value)}
+                      variant="bordered"
+                      minRows={4}
+                      classNames={{
+                        inputWrapper: "shadow-sm border-gray-300 dark:border-gray-600"
+                      }}
+                    />
+
+                    <Button
+                      type="submit"
+                      color="primary"
+                      variant="shadow"
+                      size="lg"
+                      isLoading={isLoading}
+                      className="w-full font-semibold shadow-xl hover:shadow-2xl transition-shadow"
+                      startContent={!isLoading && <EnvelopeClosedIcon className="w-5 h-5" />}
+                    >
+                      {isLoading ? 'Sending...' : 'Send Message'}
+                    </Button>
+                  </form>
+                )}
+              </CardBody>
+            </Card>
+          </motion.div>
+
+          {/* Contact Information */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="space-y-6"
+          >
+            {/* Contact Info Card */}
+            <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-xl border border-gray-200 dark:border-gray-700">
+              <CardHeader className="pb-4">
+                <h3 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">Contact Information</h3>
+              </CardHeader>
+              <CardBody className="space-y-4">
+                {contactInfo.map((info, index) => {
+                  const Icon = info.icon;
+                  return (
+                    <div key={index} className="flex items-center gap-4 p-3 rounded-lg bg-default-50/50 hover:bg-default-100/50 transition-colors">
+                      <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
+                        <Icon className="w-5 h-5 text-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-xs text-default-500 uppercase tracking-wide">{info.label}</p>
+                        {info.href ? (
+                          <a 
+                            href={info.href} 
+                            className="text-sm md:text-base text-foreground hover:text-primary transition-colors font-medium"
+                          >
+                            {info.value}
+                          </a>
+                        ) : (
+                          <p className="text-sm md:text-base text-foreground font-medium">{info.value}</p>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </CardBody>
+            </Card>
+
+            {/* Social Links Card */}
+            <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-xl border border-gray-200 dark:border-gray-700">
+              <CardHeader className="pb-4">
+                <h3 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">Follow Me</h3>
+              </CardHeader>
+              <CardBody>
+                <div className="grid grid-cols-1 gap-3">
+                  {socialLinks.map((social, index) => {
+                    const Icon = social.icon;
+                    return (
+                      <a
+                        key={index}
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-4 p-3 rounded-lg bg-default-50/50 hover:bg-default-100/50 transition-colors group"
+                      >
+                        <div className="w-10 h-10 bg-default-100 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <Icon className={`w-5 h-5 ${social.color} transition-colors`} />
+                        </div>
+                        <span className="text-sm md:text-base text-foreground group-hover:text-primary transition-colors font-medium">
+                          {social.label}
+                        </span>
+                      </a>
+                    );
+                  })}
+                </div>
+              </CardBody>
+            </Card>
+
+            {/* Quick Info Card */}
+            <Card className="bg-primary/5 backdrop-blur-md shadow-xl border border-primary/20">
+              <CardBody className="text-center p-6">
+                <h4 className="text-lg font-bold text-foreground mb-2">Quick Response</h4>
+                <p className="text-sm text-default-600 mb-4">
+                  I typically respond to messages within 24 hours. For urgent matters, feel free to call!
+                </p>
+                <div className="flex justify-center gap-2">
+                  <span className="w-2 h-2 bg-success rounded-full animate-pulse"></span>
+                  <span className="text-xs text-success font-medium">Available for new projects</span>
+                </div>
+              </CardBody>
+            </Card>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

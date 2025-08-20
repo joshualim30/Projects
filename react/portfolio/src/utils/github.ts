@@ -75,33 +75,6 @@ const fetchProjectMeta = async (username: string, langName: string, projectName:
   return null;
 };
 
-// Fallback: Try to fetch old tags.json for backward compatibility
-const fetchLegacyTags = async (username: string, langName: string, projectName: string): Promise<string[]> => {
-  try {
-    const tagsResponse = await fetch(`https://api.github.com/repos/${username}/Projects/contents/${langName}/${projectName}/tags.json`, {
-      headers: {
-        'Accept': 'application/vnd.github.v3+json',
-        'User-Agent': 'Portfolio-App'
-      }
-    });
-    
-    if (tagsResponse.ok) {
-      const tagsData = await tagsResponse.json();
-      if (tagsData.content) {
-        const tagsContent = atob(tagsData.content);
-        const parsedTags = JSON.parse(tagsContent);
-        if (Array.isArray(parsedTags)) {
-          return parsedTags;
-        }
-      }
-    }
-  } catch (error) {
-    console.log(`No tags.json found for ${langName}/${projectName}:`, error);
-  }
-  
-  return [langName]; // Default fallback
-};
-
 export const fetchGitHubProjects = async (username: string = 'joshualim30'): Promise<GitHubProject[]> => {
   // Check cache first
   if (projectsCache && Date.now() - projectsCache.timestamp < CACHE_DURATION) {
@@ -222,9 +195,6 @@ export const fetchGitHubProjects = async (username: string = 'joshualim30'): Pro
                 if (projectMeta.description) {
                   description = projectMeta.description;
                 }
-              } else {
-                // Fallback to legacy tags.json
-                projectTags = await fetchLegacyTags(username, langName, projectName);
               }
               
               const project: GitHubProject = {

@@ -2,7 +2,6 @@
 // 10/22/2024 - Joshua Lim
 
 import './App.css'
-import EasterEgg from './components/EasterEgg';
 import Welcome from './pages/Welcome';
 import Resume from './pages/Resume';
 import Projects from './pages/Projects';
@@ -14,10 +13,9 @@ import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
-    <div className='font-TitilliumWebSemiBold bg-background'>
-      <div className='scroll-container'>
-        <EasterEgg />
-        <ProgressBar />
+    <div className='min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300'>
+      <ProgressBar />
+      <main className='overflow-y-auto overflow-x-hidden scroll-smooth'>
         <Welcome />
         <Resume />
         <Projects />
@@ -25,8 +23,8 @@ function App() {
         {/** <Live /> */}
         <Contact />
         <Footer />
-        <ScrollToTop />
-      </div>
+      </main>
+      <ScrollToTop />
     </div>
   )
 }
