@@ -20,7 +20,7 @@ const Contact = () => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   return (
-    <section id="contact" className='min-h-screen w-full flex flex-col px-6 py-16 bg-gradient-to-br from-background to-default-50'>
+    <section id="contact" className='min-h-screen w-full flex flex-col px-6 py-12 bg-gradient-to-br from-background to-default-50'>
       <div className='flex-1 w-full max-w-2xl mx-auto flex items-center justify-center'>
         <motion.div 
           className="w-full"
@@ -30,10 +30,10 @@ const Contact = () => {
         >
           <div className="bg-background/80 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-default-200">
             <div className="text-center mb-8">
-              <h1 className='font-bold text-5xl mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
+              <h1 className='font-bold text-4xl md:text-5xl mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
                 Let's get in touch!
               </h1>
-              <h2 className='font-normal text-xl text-default-500'>
+              <h2 className='font-normal text-lg md:text-xl text-default-500'>
                 Feel free to shoot me a message and I will get back to you as soon as possible!
               </h2>
             </div>
@@ -93,7 +93,8 @@ const Contact = () => {
               />
               <Button 
                 color="primary" 
-                className='w-full shadow-lg hover:shadow-xl transition-shadow' 
+                variant="shadow"
+                className='w-full font-semibold shadow-xl hover:shadow-2xl transition-shadow' 
                 size="lg"
                 onClick={
                   async () => {
@@ -148,8 +149,9 @@ const Contact = () => {
               <ModalFooter>
                 <Button 
                   color="primary" 
+                  variant="shadow"
                   onClick={() => onOpenChangeSuccess(false)}
-                  className="shadow-lg"
+                  className="font-semibold shadow-xl hover:shadow-2xl transition-shadow"
                 >
                   Close
                 </Button>
@@ -166,8 +168,9 @@ const Contact = () => {
               <ModalFooter>
                 <Button 
                   color="primary" 
+                  variant="shadow"
                   onClick={() => onOpenChangeFailure(false)}
-                  className="shadow-lg"
+                  className="font-semibold shadow-xl hover:shadow-2xl transition-shadow"
                 >
                   Close
                 </Button>

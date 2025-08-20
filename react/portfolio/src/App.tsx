@@ -6,6 +6,7 @@ import EasterEgg from './components/EasterEgg';
 import Welcome from './pages/Welcome';
 import Resume from './pages/Resume';
 import Projects from './pages/Projects';
+// import Live from './pages/Live';
 import Contact from './pages/Contact';
 import Footer from './components/Footer';
 import ProgressBar from './components/ProgressBar';
@@ -20,6 +21,8 @@ function App() {
         <Welcome />
         <Resume />
         <Projects />
+        {/** <Live /> to be enabled later */}
+        {/** <Live /> */}
         <Contact />
         <Footer />
         <ScrollToTop />

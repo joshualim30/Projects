@@ -1,0 +1,40 @@
+{
+  "tags": [
+    "react",
+    "typescript",
+    "tailwind",
+    "framer-motion",
+    "supabase",
+    "postgresql",
+    "vite",
+    "react-hook-form",
+    "context-api",
+    "dashboard",
+    "csv-export"
+  ],
+  "description": "A comprehensive internship application tracker with dashboard analytics, filtering, and data export capabilities",
+  "liveUrl": "",
+  "featured": true,
+  "difficulty": "intermediate",
+  "status": "active",
+  "technologies": [
+    "React 18",
+    "TypeScript",
+    "Tailwind CSS",
+    "Framer Motion",
+    "Supabase",
+    "PostgreSQL",
+    "React Hook Form",
+    "Context API",
+    "Vite"
+  ],
+  "highlights": [
+    "Full-stack application with Supabase backend",
+    "Real-time data synchronization",
+    "Advanced filtering and search",
+    "Dashboard with analytics",
+    "CSV export functionality",
+    "Responsive design with animations",
+    "Form validation with React Hook Form"
+  ]
+}

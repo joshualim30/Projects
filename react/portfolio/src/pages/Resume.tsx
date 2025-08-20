@@ -3,6 +3,8 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
+import { button, Button } from "@nextui-org/react";
+import { ChevronLeftIcon, ChevronRightIcon, DownloadIcon } from '@radix-ui/react-icons';
 
 const Resume = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -132,48 +134,39 @@ const Resume = () => {
   ];
 
   return (
-    <section id="resume" className='min-h-screen w-full flex flex-col px-6 py-16 bg-gradient-to-br from-default-50 to-background'>
+    <section id="resume" className='min-h-screen w-full flex flex-col px-6 py-12 bg-gradient-to-br from-default-50 to-background'>
       <div className="flex-1 w-full max-w-4xl mx-auto flex flex-col">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-12"
+          className="text-center mb-2"
         >
-          <h1 className="text-5xl font-bold text-foreground mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             Resume
           </h1>
-          <p className="text-default-500 text-xl">Download my full resume or explore below</p>
+          <p className="text-lg md:text-xl text-default-500 mb-2">Download my full resume or explore below</p>
         </motion.div>
 
         {/* Download Button */}
         <motion.div
-          className="flex justify-center mb-12"
+          className="flex justify-center mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <button
+          <Button
             onClick={handleDownload}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-lg shadow-xl text-white bg-primary hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-300 hover:scale-105"
+            color="primary"
+            variant="shadow"
+            size="lg"
+            className="font-semibold shadow-xl hover:shadow-2xl transition-shadow"
+            startContent={<DownloadIcon className={`w-5 h-5 ${isHovered ? 'transform translate-y-1' : ''} transition-transform duration-200`} />}
           >
-            <svg
-              className={`w-6 h-6 mr-3 ${isHovered ? 'transform translate-y-1' : ''} transition-transform duration-200`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-              />
-            </svg>
             Download Resume
-          </button>
+          </Button>
         </motion.div>
 
         {/* Content Sections */}
@@ -185,7 +178,7 @@ const Resume = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -100 }}
               transition={{ duration: 0.3 }}
-              className="absolute inset-0 bg-background/80 backdrop-blur-sm rounded-xl shadow-2xl p-8 overflow-y-auto border border-default-200"
+              className="absolute inset-0 bg-background/80 backdrop-blur-md rounded-3xl p-8 md:p-12 shadow-lg border border-default-200 m-4"
             >
               <h2 className="text-2xl font-bold text-foreground mb-6">{sections[currentSection].title}</h2>
               {sections[currentSection].content}
@@ -199,9 +192,7 @@ const Resume = () => {
             onClick={handlePrevious}
             className="p-3 rounded-full bg-background/80 backdrop-blur-sm shadow-xl hover:bg-background/90 transition-all duration-300 hover:scale-110"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
+            <ChevronLeftIcon className="w-6 h-6" />
           </button>
 
           {/* Navigation Dots */}
@@ -221,9 +212,7 @@ const Resume = () => {
             onClick={handleNext}
             className="p-3 rounded-full bg-background/80 backdrop-blur-sm shadow-xl hover:bg-background/90 transition-all duration-300 hover:scale-110"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+            <ChevronRightIcon className="w-6 h-6" />
           </button>
         </div>
       </div>

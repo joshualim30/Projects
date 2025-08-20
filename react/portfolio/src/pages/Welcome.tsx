@@ -9,22 +9,25 @@ import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 
 const Welcome = () => {
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    const scrollContainer = document.querySelector('.scroll-container');
-    if (element && scrollContainer) {
-      const containerRect = scrollContainer.getBoundingClientRect();
-      const elementRect = element.getBoundingClientRect();
-      const scrollTop = scrollContainer.scrollTop + elementRect.top - containerRect.top;
-      
-      scrollContainer.scrollTo({
-        top: scrollTop,
-        behavior: 'smooth'
-      });
-    }
+    // Add a small delay to ensure DOM is updated
+    setTimeout(() => {
+      const element = document.getElementById(sectionId);
+      const scrollContainer = document.querySelector('.scroll-container');
+      if (element && scrollContainer) {
+        // Get the exact position of the target section
+        const elementTop = element.offsetTop;
+        
+        // Scroll to the exact position of the section
+        scrollContainer.scrollTo({
+          top: elementTop,
+          behavior: 'smooth'
+        });
+      }
+    }, 50);
   };
 
   return (
-    <section id="home" className='min-h-screen w-full flex flex-col justify-center items-center px-4 py-16'>
+    <section id="home" className='min-h-screen w-full flex flex-col justify-center items-center px-6 py-12 bg-gradient-to-br from-background to-default-50'>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -41,7 +44,7 @@ const Welcome = () => {
           <img
             src={Self}
             alt="Joshua Lim"
-            className="relative rounded-full h-40 w-40 md:h-60 md:w-60 object-cover border-4 border-primary/50"
+            className="relative rounded-full h-32 w-32 md:h-48 md:w-48 object-cover border-4 border-primary/50 shadow-2xl"
           />
         </motion.div>
 
@@ -50,10 +53,10 @@ const Welcome = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          <h1 className="font-TitilliumWebBold text-4xl md:text-5xl lg:text-6xl mb-4">
+          <h1 className="font-TitilliumWebBold text-3xl md:text-4xl lg:text-5xl mb-4">
             Joshua Lim
           </h1>
-          <div className="text-xl md:text-2xl text-gray-400 mb-6">
+          <div className="text-lg md:text-xl text-gray-400 mb-6">
             <TypeAnimation
               sequence={[
                 "Software Engineer",
@@ -70,7 +73,7 @@ const Welcome = () => {
             />
           </div>
 
-          <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
             Passionate about building innovative solutions and creating impactful technology.
             Currently focusing on full-stack development and internship opportunities.
           </p>
@@ -81,7 +84,7 @@ const Welcome = () => {
               color="primary"
               variant="shadow"
               size="lg"
-              className="font-semibold"
+              className="font-semibold shadow-xl hover:shadow-2xl transition-shadow"
             >
               View My Work
             </Button>
@@ -89,7 +92,7 @@ const Welcome = () => {
               onClick={() => scrollToSection('contact')}
               variant="bordered"
               size="lg"
-              className="font-semibold"
+              className="font-semibold shadow-lg hover:shadow-xl transition-shadow border-2"
             >
               Get in Touch
             </Button>

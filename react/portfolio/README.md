@@ -1,4 +1,4 @@
-# 🎨 Personal Portfolio Website
+# Personal Portfolio Website
 
 > A modern, responsive portfolio website showcasing my skills and projects with smooth animations and interactive elements
 

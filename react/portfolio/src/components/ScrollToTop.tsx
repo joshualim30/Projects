@@ -45,8 +45,10 @@ const ScrollToTop: React.FC = () => {
                 >
                     <Button
                         isIconOnly
+                        color="primary"
+                        variant="shadow"
                         radius="full"
-                        className="bg-primary/90 hover:bg-primary shadow-lg backdrop-blur-sm"
+                        className="font-semibold shadow-xl hover:shadow-2xl transition-shadow"
                         onClick={scrollToTop}
                         aria-label="Scroll to top"
                     >
