@@ -1,0 +1,7 @@
+# .gitignore for entire repo
+
+# VSCode Configs
+.vscode
+
+# Mac OS X (all occurences of .DS_Store)
+**/.DS_Store

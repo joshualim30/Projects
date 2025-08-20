@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: TitilliumWebExtraLight;
+    src: url('./assets/fonts/TitilliumWeb-ExtraLight.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: TitilliumWebLight;
+    src: url('./assets/fonts/TitilliumWeb-Light.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'TitilliumWebRegular';
+    src: url('./assets/fonts/TitilliumWeb-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: TitilliumWebSemiBold;
+    src: url('./assets/fonts/TitilliumWeb-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: TitilliumWebBold;
+    src: url('./assets/fonts/TitilliumWeb-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: TitilliumWebBlack;
+    src: url('./assets/fonts/TitilliumWeb-Black.ttf') format('truetype');
+}
+
+
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+#root {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+/* Main scroll container */
+.scroll-container {
+    height: 100vh;
+    width: 100vw;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* All sections must snap */
+section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    height: 100vh;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+/* Easter egg sections should not snap */
+.easter-egg {
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
+    height: 5rem;
+    min-height: 5rem;
+    flex-shrink: 0;
+}
