@@ -148,36 +148,14 @@ const Projects: React.FC = () => {
                         fallbackSrc={getFallbackImage(project.name)}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                      
-                      {/* Status badges */}
-                      <div className="absolute top-3 left-3 flex flex-wrap gap-1">
-                        {project.meta?.featured && (
-                          <Chip size="sm" color="warning" variant="solid" className="text-xs font-medium">
-                            ✨ Featured
-                          </Chip>
-                        )}
-                        {project.meta?.status && (
-                        <Chip
-                          size="sm"
-                            color={getStatusColor(project.meta.status) as 'success' | 'warning' | 'default'} 
-                          variant="flat"
-                            className="text-xs backdrop-blur-sm bg-background/80"
-                        >
-                            {project.meta.status}
-                        </Chip>
-                        )}
-                      </div>
-
-                      {/* Project title overlay */}
-                      <div className="absolute bottom-3 left-3 right-3">
-                        <h3 className="text-lg md:text-xl font-bold text-white drop-shadow-lg line-clamp-2">
-                          {project.name}
-                        </h3>
-                      </div>
                     </div>
                   </CardHeader>
 
                   <CardBody className="p-4 md:p-6 flex-1 flex flex-col">
+                    {/* Project Header */}
+                    <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-4 line-clamp-2">
+                      {project.name}
+                    </h3>
                     <p className="text-default-600 text-sm md:text-base leading-relaxed mb-4 line-clamp-3 flex-1">
                       {project.description}
                     </p>
