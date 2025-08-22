@@ -39,14 +39,7 @@ const Projects: React.FC = () => {
     }
   };
 
-  const getStatusColor = (status?: string) => {
-    switch (status) {
-      case 'active': return 'success';
-      case 'maintenance': return 'warning';
-      case 'archived': return 'default';
-      default: return 'default';
-    }
-  };
+
 
 
 
