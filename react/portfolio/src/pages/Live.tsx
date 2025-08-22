@@ -94,7 +94,7 @@ const Live: React.FC = () => {
                       src={project.image}
                       alt={project.title}
                       className="w-full h-full object-cover"
-                      fallbackSrc="https://via.placeholder.com/400x300?text=Live+Project"
+                      fallbackSrc="https://placehold.co/400x300/6366f1/ffffff?text=Live+Project"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                     <div className="absolute top-3 right-3">
@@ -161,7 +161,7 @@ const Live: React.FC = () => {
                         src={liveProjects[currentLiveIndex].image}
                         alt={liveProjects[currentLiveIndex].title}
                         className="w-full h-full object-cover"
-                        fallbackSrc="https://via.placeholder.com/400x300?text=Live+Project"
+                        fallbackSrc="https://placehold.co/400x300/6366f1/ffffff?text=Live+Project"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                       <div className="absolute top-3 right-3">

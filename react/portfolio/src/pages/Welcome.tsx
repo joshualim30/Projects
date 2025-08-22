@@ -12,15 +12,11 @@ const Welcome = () => {
     // Add a small delay to ensure DOM is updated
     setTimeout(() => {
       const element = document.getElementById(sectionId);
-      const scrollContainer = document.querySelector('.scroll-container');
-      if (element && scrollContainer) {
-        // Get the exact position of the target section
-        const elementTop = element.offsetTop;
-        
-        // Scroll to the exact position of the section
-        scrollContainer.scrollTo({
-          top: elementTop,
-          behavior: 'smooth'
+      if (element) {
+        // Use window.scrollTo for smooth scrolling to the element
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
         });
       }
     }, 50);

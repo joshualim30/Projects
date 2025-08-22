@@ -319,5 +319,6 @@ export const getProjectImage = (username: string, repoName: string): string => {
 };
 
 export const getFallbackImage = (projectName: string): string => {
-  return `https://via.placeholder.com/400x300/6366f1/ffffff?text=${encodeURIComponent(projectName)}`;
+  // Use a more reliable placeholder service
+  return `https://placehold.co/400x300/6366f1/ffffff?text=${encodeURIComponent(projectName)}`;
 };
