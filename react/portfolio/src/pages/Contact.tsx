@@ -11,8 +11,7 @@ import {
   MobileIcon, 
   ChatBubbleIcon,
   GitHubLogoIcon,
-  LinkedInLogoIcon,
-  TwitterLogoIcon
+  LinkedInLogoIcon
 } from '@radix-ui/react-icons';
 
 const Contact = () => {
@@ -79,12 +78,6 @@ const Contact = () => {
       label: 'LinkedIn',
       href: 'https://linkedin.com/in/joshualim30',
       color: 'text-blue-500 hover:text-blue-600'
-    },
-    {
-      icon: TwitterLogoIcon,
-      label: 'Twitter',
-      href: 'https://twitter.com/joshualim30',
-      color: 'text-blue-400 hover:text-blue-500'
     }
   ];
 
