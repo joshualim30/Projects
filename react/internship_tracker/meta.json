@@ -7,12 +7,15 @@
     "supabase",
     "postgresql",
     "vite",
+    "electron",
+    "desktop-app",
     "react-hook-form",
     "context-api",
     "dashboard",
-    "csv-export"
+    "csv-export",
+    "cross-platform"
   ],
-  "description": "A comprehensive internship application tracker with dashboard analytics, filtering, and data export capabilities",
+  "description": "A comprehensive internship application tracker with desktop app support, dashboard analytics, filtering, and data export capabilities",
   "liveUrl": "",
   "featured": true,
   "difficulty": "intermediate",
@@ -24,17 +27,21 @@
     "Framer Motion",
     "Supabase",
     "PostgreSQL",
+    "Electron",
     "React Hook Form",
     "Context API",
     "Vite"
   ],
   "highlights": [
+    "Cross-platform desktop application with Electron",
     "Full-stack application with Supabase backend",
+    "Smart credentials management with setup wizard",
     "Real-time data synchronization",
     "Advanced filtering and search",
     "Dashboard with analytics",
     "CSV export functionality",
     "Responsive design with animations",
-    "Form validation with React Hook Form"
+    "Form validation with React Hook Form",
+    "Native desktop features and shortcuts"
   ]
 }

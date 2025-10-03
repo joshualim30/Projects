@@ -10,6 +10,7 @@ lerna-debug.log*
 dist/
 dist-ssr/
 build/
+dist-electron/
 
 # Environment variables
 .env
@@ -93,3 +94,60 @@ logs
 
 # Local files
 *.local
+
+# Electron build artifacts
+*.dmg
+*.exe
+*.appx
+*.deb
+*.rpm
+*.snap
+*.AppImage
+*.zip
+*.tar.gz
+release/
+build/
+installer/
+
+# Security and sensitive files
+*.key
+*.pem
+*.p12
+*.cer
+*.crt
+*.pfx
+secrets.json
+config.production.json
+
+# Package manager lock files (keep package-lock.json but exclude others)
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+
+# IDE and editor files
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+.vscode/tasks.json
+!.vscode/*.example.json
+
+# System files
+*.db
+*.sqlite
+*.sqlite3
+.fseventsd
+.Trashes
+.TemporaryItems
+.VolumeIcon.icns
+.AppleDouble
+.LSOverride
+Icon?
+
+# Application specific
+electron-builder.yml
+app-update.yml

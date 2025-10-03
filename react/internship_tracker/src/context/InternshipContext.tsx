@@ -1,4 +1,4 @@
-import { useReducer, useEffect, type ReactNode } from 'react';
+import { useReducer, useEffect, useCallback, type ReactNode } from 'react';
 import type { Internship, InternshipFilters } from '../types/internship';
 import { internshipService } from '../services/internshipService';
 import type { InternshipState, InternshipAction, InternshipContextType } from './InternshipContextTypes';
@@ -52,14 +52,21 @@ function internshipReducer(state: InternshipState, action: InternshipAction): In
   }
 }
 
-
-
 import { InternshipContext } from './InternshipContextInstance';
 
 export function InternshipProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(internshipReducer, initialState);
 
-  const loadInternships = async (filters?: InternshipFilters) => {
+  const loadStats = useCallback(async () => {
+    try {
+      const stats = await internshipService.getStats();
+      dispatch({ type: 'SET_STATS', payload: stats });
+    } catch (error) {
+      console.error('Failed to load stats:', error);
+    }
+  }, []);
+
+  const loadInternships = useCallback(async (filters?: InternshipFilters) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
       dispatch({ type: 'SET_ERROR', payload: null });
@@ -70,9 +77,9 @@ export function InternshipProvider({ children }: { children: ReactNode }) {
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
     }
-  };
+  }, []);
 
-  const createInternship = async (internship: Omit<Internship, 'id' | 'created_at' | 'updated_at'>) => {
+  const createInternship = useCallback(async (internship: Omit<Internship, 'id' | 'created_at' | 'updated_at'>) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
       dispatch({ type: 'SET_ERROR', payload: null });
@@ -84,9 +91,9 @@ export function InternshipProvider({ children }: { children: ReactNode }) {
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
     }
-  };
+  }, [loadStats]);
 
-  const updateInternship = async (id: number, internship: Partial<Internship>) => {
+  const updateInternship = useCallback(async (id: number, internship: Partial<Internship>) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
       dispatch({ type: 'SET_ERROR', payload: null });
@@ -100,9 +107,9 @@ export function InternshipProvider({ children }: { children: ReactNode }) {
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
     }
-  };
+  }, [loadStats]);
 
-  const deleteInternship = async (id: number) => {
+  const deleteInternship = useCallback(async (id: number) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
       dispatch({ type: 'SET_ERROR', payload: null });
@@ -116,24 +123,15 @@ export function InternshipProvider({ children }: { children: ReactNode }) {
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
     }
-  };
+  }, [loadStats]);
 
-  const loadStats = async () => {
-    try {
-      const stats = await internshipService.getStats();
-      dispatch({ type: 'SET_STATS', payload: stats });
-    } catch (error) {
-      console.error('Failed to load stats:', error);
-    }
-  };
-
-  const setFilters = (filters: InternshipFilters) => {
+  const setFilters = useCallback((filters: InternshipFilters) => {
     dispatch({ type: 'SET_FILTERS', payload: filters });
-  };
+  }, []);
 
-  const clearError = () => {
+  const clearError = useCallback(() => {
     dispatch({ type: 'SET_ERROR', payload: null });
-  };
+  }, []);
 
   useEffect(() => {
     loadInternships();

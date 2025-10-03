@@ -57,7 +57,7 @@ const Welcome = () => {
               sequence={[
                 "Software Engineer",
                 2500,
-                "College Student",
+                "Business Analyst",
                 2500,
                 "Entrepreneur",
                 2500,

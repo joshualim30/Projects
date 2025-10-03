@@ -3,6 +3,7 @@
 
 import { motion } from 'framer-motion';
 import { GitHubLogoIcon, LinkedInLogoIcon, EnvelopeClosedIcon } from '@radix-ui/react-icons';
+import Self from '../assets/images/joshua.jpg';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -36,11 +37,17 @@ const Footer = () => {
         >
           {/* Main Content */}
           <div className="space-y-4">
+            {/* Picture */}
+            <img src={Self} alt="Joshua Lim" className="w-24 h-24 rounded-full mx-auto" />
+
+            {/* Name */}
             <h3 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">
               Joshua Lim
             </h3>
+
+            {/* Description */}
             <p className="text-sm md:text-base text-gray-500 dark:text-gray-400 max-w-md mx-auto">
-              Software Developer & Entrepreneur passionate about creating innovative solutions
+              Software Engineer. Business Analyst. Entrepreneur.
             </p>
           </div>
 
@@ -66,7 +73,7 @@ const Footer = () => {
           {/* Copyright */}
           <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
             <p className="text-xs md:text-sm text-gray-400 dark:text-gray-500">
-              © {currentYear} Joshua Lim. Made with ❤️ in Orlando, FL
+              © {currentYear} Joshua Lim - Made with ❤️ in Orlando, FL
             </p>
           </div>
         </motion.div>

@@ -26,10 +26,10 @@ const Resume = () => {
       content: (
         <div className="space-y-4">
           <p className="text-base md:text-lg text-default-600 leading-relaxed">
-            Experienced Software Developer seeking an internship opportunity. Successfully launched a social media app on the Apple App Store in 2016. Skilled in frontend mobile development and well-versed in various web and backend development techniques.
+            Passionate Software Developer and Startup Founder with a proven track record of delivering innovative solutions. Successfully launched a social media app on the Apple App Store in 2016, demonstrating early entrepreneurial spirit and technical expertise. Currently pursuing Business Analytics with a Computer Science minor at UCF.
           </p>
           <p className="text-base md:text-lg text-default-600 leading-relaxed">
-            In addition to leading and developing a tech startup for the past 3 years, actively facilitated internship opportunities for fellow students. Eager to contribute technical prowess and drive for innovation to make a meaningful impact in the tech industry.
+            As Founder of Creating Real LLC, I've led cross-functional teams, secured funding through pitch competitions, and built extensive industry networks. Skilled in full-stack development with expertise in mobile, web, and backend technologies. Committed to leveraging technology to solve real-world problems and drive meaningful impact.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 p-4 bg-default-50/50 rounded-xl">
             <div>
@@ -70,19 +70,23 @@ const Resume = () => {
               <ul className="space-y-2 text-sm md:text-base">
                 <li className="flex items-start">
                   <span className="text-primary mr-3 text-lg">•</span>
-                  <span className="text-default-600">Conducted target market research to scope out industry competition and identify advantageous trends.</span>
+                  <span className="text-default-600">Founded and scaled a technology startup, leading a team of 10+ staff members and managing day-to-day operations.</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-3 text-lg">•</span>
-                  <span className="text-default-600">Built an extensive network of connections within the industry, facilitating collaboration and resource sharing.</span>
+                  <span className="text-default-600">Secured funding through successful pitch competitions, demonstrating strong business acumen and presentation skills.</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-3 text-lg">•</span>
-                  <span className="text-default-600">Improved software efficiency by troubleshooting and resolving coding issues.</span>
+                  <span className="text-default-600">Conducted comprehensive market research and competitive analysis to identify growth opportunities and strategic advantages.</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-3 text-lg">•</span>
-                  <span className="text-default-600">Saved time and resources by identifying and fixing bugs before product deployment.</span>
+                  <span className="text-default-600">Built extensive industry networks and partnerships, facilitating collaboration and resource sharing across the tech ecosystem.</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary mr-3 text-lg">•</span>
+                  <span className="text-default-600">Led software development initiatives, improving system efficiency and implementing best practices for code quality and deployment.</span>
                 </li>
               </ul>
             </CardBody>
@@ -100,15 +104,19 @@ const Resume = () => {
             <CardBody className="p-6">
               <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2">University of Central Florida</h3>
               <p className="text-default-500 mb-1">Bachelor of Business Administration</p>
-              <p className="text-sm text-default-400 mb-3">August 2022 - May 2026 • Orlando, FL</p>
-              <p className="text-default-600">Business Analytics, Minor in Computer Science</p>
+              <p className="text-sm text-default-400 mb-3">August 2022 - December 2026 • Orlando, FL</p>
+              <p className="text-default-600">Major: Business Analytics • Minor: Computer Science</p>
+              <div className="mt-3">
+                <p className="text-sm font-medium text-default-700 mb-1">Relevant Coursework:</p>
+                <p className="text-sm text-default-500">Business Analytics, Computer Science I & II</p>
+              </div>
             </CardBody>
           </Card>
           
           <Card className="bg-default-50/50 shadow-lg">
             <CardBody className="p-6">
               <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2">Mechanicsburg High School</h3>
-              <p className="text-default-500 mb-1">Honors High School Diploma</p>
+              <p className="text-default-500 mb-1">Honors High School Diploma (Cont.)</p>
               <p className="text-sm text-default-400 mb-3">August 2020 - May 2022 • Mechanicsburg, OH</p>
             </CardBody>
           </Card>
@@ -138,23 +146,27 @@ const Resume = () => {
                 <div className="grid grid-cols-1 gap-3">
                   <div>
                     <p className="font-medium text-sm text-default-700 mb-1">Mobile Development</p>
-                    <p className="text-xs text-default-500">Flutter, Swift/SwiftUI</p>
+                    <p className="text-xs text-default-500">Flutter, Swift/SwiftUI, UIKit, Android Development</p>
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm text-default-700 mb-1">Frontend Development</p>
+                    <p className="text-xs text-default-500">React, TypeScript, Vite, Tailwind CSS, HTML5/CSS3</p>
                   </div>
                   <div>
                     <p className="font-medium text-sm text-default-700 mb-1">Backend Development</p>
-                    <p className="text-xs text-default-500">Golang, C#, Python</p>
+                    <p className="text-xs text-default-500">Node.js, Python, Golang, C#, Express.js, RESTful APIs</p>
                   </div>
                   <div>
-                    <p className="font-medium text-sm text-default-700 mb-1">Database</p>
-                    <p className="text-xs text-default-500">MongoDB, SQL</p>
+                    <p className="font-medium text-sm text-default-700 mb-1">Database & Analytics</p>
+                    <p className="text-xs text-default-500">MongoDB, SQL, PostgreSQL, Data Visualization, Business Intelligence</p>
                   </div>
                   <div>
-                    <p className="font-medium text-sm text-default-700 mb-1">Cloud Services</p>
-                    <p className="text-xs text-default-500">AWS, GCP, Firebase, Azure</p>
+                    <p className="font-medium text-sm text-default-700 mb-1">Cloud & DevOps</p>
+                    <p className="text-xs text-default-500">AWS, GCP, Firebase, Azure, Docker, CI/CD</p>
                   </div>
                   <div>
-                    <p className="font-medium text-sm text-default-700 mb-1">Tools</p>
-                    <p className="text-xs text-default-500">Git, GitHub, Slack, ClickUp</p>
+                    <p className="font-medium text-sm text-default-700 mb-1">Development Tools</p>
+                    <p className="text-xs text-default-500">Git, GitHub, VS Code, Xcode, Android Studio, Slack, ClickUp, Linear</p>
                   </div>
                 </div>
               </CardBody>
@@ -168,23 +180,31 @@ const Resume = () => {
                 <div className="space-y-3">
                   <div className="flex items-start">
                     <span className="text-primary mr-2 text-sm">🏆</span>
-                    <span className="text-sm text-default-600">Supervised team of 10+ staff members</span>
+                    <span className="text-sm text-default-600">Founded and led technology startup with 10+ team members</span>
                   </div>
                   <div className="flex items-start">
                     <span className="text-primary mr-2 text-sm">💰</span>
-                    <span className="text-sm text-default-600">Achieved funding in pitch competition</span>
+                    <span className="text-sm text-default-600">Secured funding through successful pitch competitions</span>
                   </div>
                   <div className="flex items-start">
                     <span className="text-primary mr-2 text-sm">💻</span>
-                    <span className="text-sm text-default-600">Lead Software Developer on team of 6</span>
+                    <span className="text-sm text-default-600">Lead Software Developer managing cross-functional teams</span>
                   </div>
                   <div className="flex items-start">
                     <span className="text-primary mr-2 text-sm">👥</span>
-                    <span className="text-sm text-default-600">Mentored numerous new employees</span>
+                    <span className="text-sm text-default-600">Mentored team members and facilitated internship opportunities</span>
                   </div>
                   <div className="flex items-start">
                     <span className="text-primary mr-2 text-sm">📱</span>
-                    <span className="text-sm text-default-600">Published app on Apple App Store (2016)</span>
+                    <span className="text-sm text-default-600">Published social media app on Apple App Store (2016)</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-primary mr-2 text-sm">🌐</span>
+                    <span className="text-sm text-default-600">Built extensive industry networks and partnerships</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-primary mr-2 text-sm">📊</span>
+                    <span className="text-sm text-default-600">Conducted comprehensive market research and competitive analysis</span>
                   </div>
                 </div>
               </CardBody>
@@ -203,6 +223,12 @@ const Resume = () => {
                 <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Problem Solving</span>
                 <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Team Collaboration</span>
                 <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Innovation</span>
+                <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Communication</span>
+                <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Project Management</span>
+                <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Mentoring</span>
+                <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Analytical Thinking</span>
+                <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Networking</span>
+                <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Presentation Skills</span>
               </div>
             </CardBody>
           </Card>

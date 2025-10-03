@@ -2,7 +2,31 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { AnimatePresence } from 'framer-motion';
 import { useInternships } from '../hooks/useInternships';
+import { internshipService } from '../services/internshipService';
 import Logo from '../assets/internship_tracker_logo.png';
+
+// TypeScript declarations for Electron API
+declare global {
+  interface Window {
+    electronAPI?: {
+      getAppVersion: () => Promise<string>;
+      getAppName: () => Promise<string>;
+      getAppInfo: () => Promise<any>;
+      onMenuNewInternship: (callback: () => void) => void;
+      onMenuAbout: (callback: () => void) => void;
+      onMenuImportData: (callback: () => void) => void;
+      onMenuExportData: (callback: () => void) => void;
+      onMenuPreferences: (callback: () => void) => void;
+      onMenuToggleView: (callback: (view: string) => void) => void;
+      onMenuShortcuts: (callback: () => void) => void;
+      onMenuCheckUpdates: (callback: () => void) => void;
+      showSaveDialog: (options: any) => Promise<any>;
+      showOpenDialog: (options: any) => Promise<any>;
+      showMessageBox: (options: any) => Promise<any>;
+      removeAllListeners: (channel: string) => void;
+    };
+  }
+}
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,6 +37,9 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children, viewMode = 'cards', onViewModeChange }) => {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const { state } = useInternships();
+  const isDemoMode = internshipService.isDemoMode();
+
+
 
   const handleViewToggle = () => {
     const newMode = viewMode === 'cards' ? 'grid' : 'cards';
@@ -82,12 +109,34 @@ const Layout: React.FC<LayoutProps> = ({ children, viewMode = 'cards', onViewMod
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pastel-50 via-white to-soft-blue dark:from-dark-950 dark:via-dark-900 dark:to-dark-800 flex flex-col">
+      {/* Title Bar spacer: visible on macOS, harmless on others */}
+      <div className="mac-titlebar"></div>
+      
+      {/* Demo Mode Banner */}
+      {isDemoMode && (
+        <motion.div
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="bg-yellow-100 border-b border-yellow-300 dark:bg-yellow-900/20 dark:border-yellow-700/50"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+            <div className="flex items-center justify-center text-sm text-yellow-800 dark:text-yellow-200">
+              <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+              Demo Mode: Showing sample data. Create a .env file with your Supabase credentials to connect to your database.
+            </div>
+          </div>
+        </motion.div>
+      )}
+
       {/* Header */}
       <motion.header 
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="glass-effect sticky top-0 z-50 border-b border-pastel-200/50 dark:border-dark-700/50 shadow-lg"
+        className="glass-effect sticky top-0 z-50 border-b border-pastel-200/50 dark:border-dark-700/50 shadow-lg mac-content"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -234,7 +283,7 @@ const Layout: React.FC<LayoutProps> = ({ children, viewMode = 'cards', onViewMod
       </motion.header>
 
       {/* Main Content */}
-      <main className="flex-1">
+      <main className="flex-1 mac-content">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -250,7 +299,7 @@ const Layout: React.FC<LayoutProps> = ({ children, viewMode = 'cards', onViewMod
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="glass-effect border-t border-pastel-200/50 dark:border-dark-700/50 shadow-lg"
+        className="glass-effect border-t border-pastel-200/50 dark:border-dark-700/50 shadow-lg mac-content"
       >
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">

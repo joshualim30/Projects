@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Internship, InternshipFilters, InternshipStatus } from '../types/internship';
 import { statusOptions } from '../utils/statusUtils';
@@ -29,6 +29,7 @@ const InternshipList: React.FC<InternshipListProps> = ({
   const parseSearchTerm = (term: string) => {
     const fieldPrefixes = {
       'company:': 'company_name',
+      'company_name:': 'company_name',
       'position:': 'title',
       'status:': 'status',
       'location:': 'company_location',
@@ -61,14 +62,37 @@ const InternshipList: React.FC<InternshipListProps> = ({
   const handleFilterChange = () => {
     const filters: InternshipFilters = {};
     if (statusFilter) filters.status = statusFilter as InternshipStatus;
+    
+    // Handle company filter from search term
+    if (searchTerm.trim()) {
+      const searchQuery = parseSearchTerm(searchTerm);
+      if (searchQuery.type === 'field' && searchQuery.field === 'company_name') {
+        filters.company = searchQuery.value;
+      }
+    }
+    
     onFilterChange(filters);
   };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // For now, we'll just filter locally
-    // In a real app, you might want to send this to the backend
+    handleFilterChange();
   };
+
+  // Auto-trigger filtering for field-specific searches
+  useEffect(() => {
+    if (searchTerm.trim()) {
+      const searchQuery = parseSearchTerm(searchTerm);
+      if (searchQuery.type === 'field') {
+        handleFilterChange();
+      }
+    } else {
+      // Clear filters when search term is empty
+      const filters: InternshipFilters = {};
+      if (statusFilter) filters.status = statusFilter as InternshipStatus;
+      onFilterChange(filters);
+    }
+  }, [searchTerm]);
 
   // Smart search filtering with edge case handling
   const filteredInternships = useMemo(() => {
@@ -127,7 +151,7 @@ const InternshipList: React.FC<InternshipListProps> = ({
     
     // Field prefix suggestions
     const fieldPrefixes = [
-      'company:', 'position:', 'status:', 'location:', 'industry:', 
+      'company:', 'company_name:', 'position:', 'status:', 'location:', 'industry:', 
       'contact:', 'email:', 'notes:', 'salary:', 'url:', 'website:'
     ];
     
@@ -140,6 +164,21 @@ const InternshipList: React.FC<InternshipListProps> = ({
     // If it's a field-specific search, show values for that field
     const searchQuery = parseSearchTerm(searchTerm);
     if (searchQuery.type === 'field') {
+      // Map field names to display prefixes
+      const fieldToDisplayPrefix: Record<string, string> = {
+        'company_name': 'company',
+        'title': 'position',
+        'company_location': 'location',
+        'company_industry': 'industry',
+        'contact_person': 'contact',
+        'contact_email': 'email',
+        'salary_range': 'salary',
+        'application_url': 'url',
+        'company_website': 'website'
+      };
+      
+      const displayPrefix = fieldToDisplayPrefix[searchQuery.field] || searchQuery.field;
+      
       const uniqueValues = [...new Set(
         internships
           .map(internship => internship[searchQuery.field as keyof Internship])
@@ -148,7 +187,7 @@ const InternshipList: React.FC<InternshipListProps> = ({
       
       uniqueValues.forEach(value => {
         if (value.toLowerCase().includes(searchQuery.value.toLowerCase())) {
-          suggestions.push(`${searchQuery.field}: ${value}`);
+          suggestions.push(`${displayPrefix}: ${value}`);
         }
       });
     } else {

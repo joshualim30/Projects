@@ -14,6 +14,9 @@ A modern, comprehensive React application for tracking internship applications w
 - **📈 Modern Statistics Dashboard**: Interactive charts and progress bars showing application insights
 - **🔍 Smart Search & Filtering**: Advanced search with field-specific queries and real-time filtering
 - **📱 Responsive Design**: Beautiful UI that works seamlessly on desktop and mobile devices
+- **🖥️ Desktop App**: Run as a native desktop application on Windows, macOS, and Linux
+- **🔐 Smart Credentials Management**: Setup wizard for database configuration with connection testing
+- **⚙️ Native Desktop Features**: Menu bar integration, keyboard shortcuts, and native dialogs
 - **🎨 Modern UI/UX**: Glass morphism effects, smooth animations, and dark/light mode support
 - **📋 Dual View Modes**: Switch between card view and Excel-like table view
 - **📤 Data Export**: Export your internship data to CSV format
@@ -23,6 +26,7 @@ A modern, comprehensive React application for tracking internship applications w
 ## 🛠️ Tech Stack
 
 - **Frontend**: React 19, TypeScript, Tailwind CSS
+- **Desktop**: Electron for cross-platform desktop app
 - **Animations**: Framer Motion
 - **Database**: Supabase (PostgreSQL)
 - **State Management**: React Context API
@@ -52,9 +56,9 @@ npm install
 2. Go to your project's SQL Editor
 3. Run the SQL commands from `src/sql/INIT.sql` to create the database schema
 
-### 3. Configure Environment Variables
+### 3. Configure Environment Variables (Optional)
 
-Create a `.env` file in the root directory:
+For web development, create a `.env` file in the root directory:
 
 ```env
 VITE_SUPABASE_URL=your_supabase_project_url
@@ -66,6 +70,8 @@ To get your Supabase credentials:
 2. Navigate to Settings > API
 3. Copy the "Project URL" and "anon public" key
 4. Paste them into your `.env` file
+
+> **Note**: For the desktop app, you can configure credentials through the setup wizard when you first launch the application.
 
 ### 4. Start the Development Server
 
@@ -103,9 +109,18 @@ The application tracks 8 different statuses with color-coded indicators:
 
 ## 🎯 Usage Guide
 
+### Desktop App Setup
+
+When you first launch the desktop application:
+
+1. **Setup Wizard**: If no database credentials are found, a setup wizard will guide you through configuration
+2. **Enter Credentials**: Provide your Supabase project URL and anonymous key
+3. **Test Connection**: The app will test your credentials before saving
+4. **Start Using**: Once configured, the app will load your internship data
+
 ### Adding a New Internship
 
-1. Click the "Add Internship" button
+1. Click the "Add Internship" button or use `Cmd/Ctrl+N`
 2. Fill in the required fields (Position Title, Company Name, Application Date, Status)
 3. Optionally fill in additional details like company information, contact details, etc.
 4. Watch the progress indicator fill as you complete each section
@@ -123,11 +138,12 @@ The application tracks 8 different statuses with color-coded indicators:
 - **Field-Specific Search**: Use prefixes like `company:`, `position:`, `status:` for targeted searches
 - **Status Filter**: Use the dropdown to filter by application status
 - **Real-time Results**: See results update as you type
+- **Quick Search**: Use `Cmd/Ctrl+F` to focus the search field
 
 ### View Modes
 
-- **Card View**: Beautiful cards with all application details
-- **Table View**: Excel-like table view for data-heavy analysis
+- **Card View**: Beautiful cards with all application details (`Cmd/Ctrl+1`)
+- **Table View**: Excel-like table view for data-heavy analysis (`Cmd/Ctrl+2`)
 - **Toggle**: Use the view toggle button in the header to switch between modes
 
 ### Statistics Dashboard
@@ -138,8 +154,15 @@ The application tracks 8 different statuses with color-coded indicators:
 
 ### Data Export
 
-- Click the export button in the header to download all internship data as CSV
+- Click the export button in the header or use `Cmd/Ctrl+E` to download all internship data as CSV
 - Export includes all major fields for external analysis
+
+### Desktop Features
+
+- **Menu Bar**: Access features through the native menu bar
+- **Keyboard Shortcuts**: Use `Cmd/Ctrl+,` for settings, `Cmd/Ctrl+/` for shortcuts help
+- **Settings**: Configure database credentials and test connections
+- **Native Dialogs**: About panel, preferences, and system integration
 
 ## 🏗️ Project Structure
 
@@ -151,28 +174,48 @@ src/
 │   ├── InternshipCard.tsx # Individual internship card
 │   ├── InternshipList.tsx # List with search and filtering
 │   ├── InternshipForm.tsx # Add/edit form with autocomplete
-│   └── Modal.tsx       # Modal component
+│   ├── Modal.tsx       # Modal component
+│   ├── SetupWizard.tsx # Database setup wizard
+│   ├── Settings.tsx    # Settings panel
+│   └── ErrorScreen.tsx # Error handling screen
 ├── context/            # React context
 │   └── InternshipContext.tsx # State management
 ├── hooks/              # Custom hooks
 │   └── useInternships.ts # Internship context hook
 ├── services/           # API services
-│   └── internshipService.ts # Database operations
+│   ├── internshipService.ts # Database operations
+│   └── credentialsService.ts # Credentials management
 ├── types/              # TypeScript types
 │   └── internship.ts   # Internship interfaces
 ├── utils/              # Utility functions
 │   └── statusUtils.ts  # Status management utilities
 ├── sql/                # Database schema
 │   └── INIT.sql        # Database initialization
+├── electron/           # Electron configuration
+│   ├── main.js         # Main process
+│   └── preload.js      # Preload script
+├── scripts/            # Build scripts
+│   └── build-electron.js # Electron build script
 └── db.ts               # Database connection
 ```
 
 ## 🛠️ Available Scripts
 
+### Web App
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
 - `npm run lint` - Run ESLint
 - `npm run preview` - Preview production build
+
+### Desktop App (Electron)
+- `npm run electron:dev` - Start development mode with hot reload
+- `npm run electron` - Run Electron with built app
+- `npm run electron:build` - Build for all platforms
+- `npm run electron:build:mac` - Build for macOS (DMG + ZIP)
+- `npm run electron:build:win` - Build for Windows (EXE installer)
+- `npm run electron:build:linux` - Build for Linux (AppImage)
+
+> 📱 **Desktop App**: This app can also run as a native desktop application with full database integration and native features!
 
 ## 🎨 Design System
 
@@ -204,6 +247,8 @@ The application uses a custom design system built with Tailwind CSS:
 - Maintain responsive design principles
 - Add animations for better UX
 - Test on multiple screen sizes
+- Test both web and desktop versions
+- Ensure cross-platform compatibility for Electron features
 
 ## 📄 License
 
@@ -223,6 +268,7 @@ If you encounter any issues or have questions:
 - Styled with [Tailwind CSS](https://tailwindcss.com/)
 - Animated with [Framer Motion](https://www.framer.com/motion/)
 - Powered by [Supabase](https://supabase.com/)
+- Desktop app built with [Electron](https://www.electronjs.org/)
 
 ---
 

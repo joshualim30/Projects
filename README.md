@@ -38,16 +38,7 @@ My projects span across various technologies:
 
 ### 🎨 **Web Applications**
 - **Internship Tracker** - React/TypeScript application for managing internship applications
-- **Morse Code Messenger** - Flutter app for learning and practicing Morse code
-
-### 🤖 **Automation & Bots**
-- **Dune Bot** - Python automation project
-- **Promo Bot** - Automated promotional content management
-- **NBA Data** - Sports data analysis and visualization
-
-### 📱 **Mobile Development**
-- **Think** - Flutter-based mobile application
-- **Morse Code Messenger** - Cross-platform mobile learning tool
+- **Portfolio** - React/TypeScript application for showcasing my projects
 
 ## 🚀 Getting Started
 
@@ -85,4 +76,4 @@ While these projects showcase my skills and learning approach, I also work on la
 
 *Built with ❤️ by Joshua Lim*
 
-*Last updated: August 2025*
+*Last updated: October 2025*

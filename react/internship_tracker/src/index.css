@@ -17,6 +17,37 @@
   * {
     @apply transition-colors duration-200 ease-in-out;
   }
+  
+  /* macOS title bar padding */
+  .mac-titlebar-padding {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  
+  /* Electron-specific styles */
+  .electron-app {
+    -webkit-app-region: drag;
+  }
+  
+  .electron-app * {
+    -webkit-app-region: no-drag;
+  }
+  
+  /* macOS specific title bar styles */
+  .mac-titlebar {
+    height: 30px;
+    background: transparent;
+    -webkit-app-region: drag;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+  
+  /* Ensure content doesn't overlap with title bar */
+  .mac-content {
+    padding-top: 30px;
+  }
 }
 
 /* Custom utilities */

@@ -1,7 +1,8 @@
 # .gitignore for react projects
 
-# Ignore wave-bball project
+# Ignore certain projects
 wave-bball/
+bouncer/
 
 # Dependencies
 node_modules/

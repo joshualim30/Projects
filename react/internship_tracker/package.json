@@ -1,13 +1,23 @@
 {
   "name": "internship_tracker",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "main": "dist-electron/main.js",
+  "homepage": "./",
+  "author": "Joshua Lim",
+  "description": "A modern application for tracking internship applications with beautiful UI, smooth animations, and native desktop features.",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "electron": "electron .",
+    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && node scripts/build-electron.js && electron .\"",
+    "electron:build": "npm run build && node scripts/build-electron.js && electron-builder",
+    "electron:build:mac": "npm run build && node scripts/build-electron.js && electron-builder --mac",
+    "electron:build:win": "npm run build && node scripts/build-electron.js && electron-builder --win",
+    "electron:build:linux": "npm run build && node scripts/build-electron.js && electron-builder --linux"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.55.0",
@@ -22,6 +32,10 @@
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.4.21",
+    "concurrently": "^9.1.0",
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.0",
+    "fs-extra": "^11.2.0",
     "eslint": "^9.33.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
@@ -30,6 +44,36 @@
     "tailwindcss": "^3.4.17",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.39.1",
-    "vite": "^7.1.2"
+    "vite": "^7.1.2",
+    "wait-on": "^8.0.1"
+  },
+  "build": {
+    "appId": "com.joshualim.internship-tracker",
+    "productName": "Internship Tracker",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "dist/**/*",
+      "main.js",
+      "preload.js"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "public/app-icon.png"
+    },
+    "win": {
+      "icon": "public/app-icon.png",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "linux": {
+      "icon": "public/app-icon.png",
+      "target": ["AppImage"]
+    }
   }
 }

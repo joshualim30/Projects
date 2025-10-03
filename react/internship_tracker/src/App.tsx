@@ -1,18 +1,221 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Layout from './components/Layout';
 import StatsCards from './components/StatsCards';
 import InternshipList from './components/InternshipList';
 import InternshipForm from './components/InternshipForm';
 import Modal from './components/Modal';
+import { SetupWizard } from './components/SetupWizard';
+import { Settings } from './components/Settings';
+import { ErrorScreen } from './components/ErrorScreen';
 import { useInternships } from './hooks/useInternships';
+import { initializeSupabase, reinitializeSupabase } from './db';
+import { CredentialsService } from './services/credentialsService';
 import type { Internship, InternshipFilters } from './types/internship';
+
+// TypeScript declarations for Electron API
+declare global {
+  interface Window {
+    electronAPI?: {
+      getAppVersion: () => Promise<string>;
+      getAppName: () => Promise<string>;
+      getAppInfo: () => Promise<any>;
+      onMenuNewInternship: (callback: () => void) => void;
+      onMenuAbout: (callback: () => void) => void;
+      onMenuImportData: (callback: () => void) => void;
+      onMenuExportData: (callback: () => void) => void;
+      onMenuPreferences: (callback: () => void) => void;
+      onMenuToggleView: (callback: (view: string) => void) => void;
+      onMenuShortcuts: (callback: () => void) => void;
+      onMenuCheckUpdates: (callback: () => void) => void;
+      showSaveDialog: (options: any) => Promise<any>;
+      showOpenDialog: (options: any) => Promise<any>;
+      showMessageBox: (options: any) => Promise<any>;
+      removeAllListeners: (channel: string) => void;
+    };
+  }
+}
 
 function App() {
   const { state, createInternship, updateInternship, deleteInternship, loadInternships, setFilters, clearError } = useInternships();
   const [showForm, setShowForm] = useState(false);
   const [editingInternship, setEditingInternship] = useState<Internship | undefined>();
   const [viewMode, setViewMode] = useState<'cards' | 'grid'>('cards');
+  
+  // Setup and error states
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [showSetup, setShowSetup] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Initialize app and check credentials
+  useEffect(() => {
+    const initializeApp = async () => {
+      try {
+        setIsLoading(true);
+        setConnectionError(null);
+        
+        // Add a timeout to prevent hanging
+        const timeoutPromise = new Promise((_, reject) => {
+          setTimeout(() => reject(new Error('Initialization timeout')), 5000);
+        });
+        
+        const initPromise = (async () => {
+          // Check if we're running in Electron (desktop app)
+          const isElectron = window.electronAPI !== undefined;
+          
+          if (isElectron) {
+            // Desktop app: Use the setup flow
+            const credentials = await CredentialsService.getCredentials();
+            
+            if (!credentials) {
+              setShowSetup(true);
+              setIsLoading(false);
+              return;
+            }
+            
+            // Try to initialize Supabase
+            await initializeSupabase();
+            setIsInitialized(true);
+            
+            // Load internships
+            await loadInternships();
+          } else {
+            // Web app: Use traditional environment variables
+            const envUrl = import.meta.env.VITE_SUPABASE_URL;
+            const envKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+            
+            if (!envUrl || !envKey) {
+              console.warn('Missing Supabase environment variables. Running in demo mode.');
+              // For development, let's just show the app without database connection
+              setIsInitialized(true);
+              setIsLoading(false);
+              return;
+            }
+            
+            // Initialize Supabase with env variables
+            await initializeSupabase();
+            setIsInitialized(true);
+            
+            // Load internships
+            await loadInternships();
+          }
+        })();
+        
+        await Promise.race([initPromise, timeoutPromise]);
+        
+      } catch (error) {
+        console.error('Initialization error:', error);
+        // For development, don't block the app on database errors
+        console.warn('Database connection failed, running in demo mode.');
+        setIsInitialized(true);
+        setConnectionError(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializeApp();
+  }, [loadInternships]);
+
+  // Handle Electron menu events
+  useEffect(() => {
+    if (window.electronAPI) {
+      // New internship from menu
+      window.electronAPI.onMenuNewInternship(() => {
+        handleAddInternship();
+      });
+
+      // Toggle view from menu
+      window.electronAPI.onMenuToggleView((view) => {
+        const newMode = view === 'table' ? 'grid' : 'cards';
+        setViewMode(newMode);
+      });
+
+      // About dialog
+      window.electronAPI.onMenuAbout(() => {
+        if (window.electronAPI) {
+          window.electronAPI.showMessageBox({
+            type: 'info',
+            title: 'About Internship Tracker',
+            message: 'Internship Tracker',
+            detail: 'A modern application for tracking internship applications.\n\nBuilt with React, TypeScript, and Electron.',
+            buttons: ['OK']
+          });
+        }
+      });
+
+      // Preferences/Settings
+      window.electronAPI.onMenuPreferences(() => {
+        setShowSettings(true);
+      });
+
+      // Keyboard shortcuts help
+      window.electronAPI.onMenuShortcuts(() => {
+        if (window.electronAPI) {
+          window.electronAPI.showMessageBox({
+            type: 'info',
+            title: 'Keyboard Shortcuts',
+            message: 'Keyboard Shortcuts',
+            detail: `⌘N - New Internship
+⌘I - Import Data
+⌘E - Export Data
+⌘, - Preferences
+⌘1 - Card View
+⌘2 - Table View
+⌘/ - Show Shortcuts
+⌘Q - Quit`,
+            buttons: ['OK']
+          });
+        }
+      });
+
+      // Focus search (Cmd/Ctrl+F)
+      // Optional chaining in case preload hasn't exposed it yet
+      // @ts-ignore
+      window.electronAPI.onMenuFocusSearch?.(() => {
+        const input = document.querySelector('input[placeholder^="Search"]') as HTMLInputElement | null;
+        if (input) {
+          input.focus();
+          input.select();
+        }
+      });
+
+      // Clear filters
+      // @ts-ignore
+      window.electronAPI.onMenuClearFilters?.(() => {
+        const button = Array.from(document.querySelectorAll('button'))
+          .find(b => b.textContent?.toLowerCase().includes('clear filters')) as HTMLButtonElement | undefined;
+        button?.click();
+      });
+
+      // Check for updates
+      window.electronAPI.onMenuCheckUpdates(() => {
+        if (window.electronAPI) {
+          window.electronAPI.showMessageBox({
+            type: 'info',
+            title: 'Check for Updates',
+            message: 'Check for Updates',
+            detail: 'You are running the latest version of Internship Tracker.',
+            buttons: ['OK']
+          });
+        }
+      });
+    }
+
+    // Cleanup listeners
+    return () => {
+      if (window.electronAPI) {
+        window.electronAPI.removeAllListeners('menu-new-internship');
+        window.electronAPI.removeAllListeners('menu-toggle-view');
+        window.electronAPI.removeAllListeners('menu-about');
+        window.electronAPI.removeAllListeners('menu-preferences');
+        window.electronAPI.removeAllListeners('menu-shortcuts');
+        window.electronAPI.removeAllListeners('menu-check-updates');
+      }
+    };
+  }, []);
 
   const handleAddInternship = () => {
     setEditingInternship(undefined);
@@ -60,6 +263,59 @@ function App() {
     setViewMode(mode);
   };
 
+  // Setup and settings handlers
+  const handleSetupComplete = async () => {
+    try {
+      setShowSetup(false);
+      setIsLoading(true);
+      
+      await initializeSupabase();
+      setIsInitialized(true);
+      await loadInternships();
+      
+    } catch (error) {
+      console.error('Setup completion error:', error);
+      setConnectionError(error instanceof Error ? error.message : 'Failed to initialize after setup');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSettingsClose = () => {
+    setShowSettings(false);
+  };
+
+  const handleCredentialsUpdate = async () => {
+    try {
+      await reinitializeSupabase();
+      await loadInternships();
+    } catch (error) {
+      console.error('Credentials update error:', error);
+      setConnectionError(error instanceof Error ? error.message : 'Failed to reconnect after settings update');
+    }
+  };
+
+  const handleRetryConnection = async () => {
+    try {
+      setIsLoading(true);
+      setConnectionError(null);
+      
+      await initializeSupabase();
+      await loadInternships();
+      setIsInitialized(true);
+      
+    } catch (error) {
+      console.error('Retry connection error:', error);
+      setConnectionError(error instanceof Error ? error.message : 'Failed to reconnect to database');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleOpenSettings = () => {
+    setShowSettings(true);
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -83,6 +339,46 @@ function App() {
       },
     },
   };
+
+  // Show loading screen
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Initializing...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show setup wizard if credentials are missing
+  if (showSetup) {
+    return <SetupWizard onComplete={handleSetupComplete} />;
+  }
+
+  // Show error screen if connection failed
+  if (connectionError) {
+    return (
+      <ErrorScreen
+        error={connectionError}
+        onRetry={handleRetryConnection}
+        onOpenSettings={handleOpenSettings}
+      />
+    );
+  }
+
+  // Show main app if initialized
+  if (!isInitialized) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Layout viewMode={viewMode} onViewModeChange={handleViewModeChange}>
@@ -225,6 +521,13 @@ function App() {
           existingInternships={state.internships}
         />
       </Modal>
+
+      {/* Settings Modal */}
+      <Settings
+        isOpen={showSettings}
+        onClose={handleSettingsClose}
+        onCredentialsUpdate={handleCredentialsUpdate}
+      />
     </Layout>
   );
 }
