@@ -1,10 +1,13 @@
-// Resume.tsx - Resume page component (Mobile-First Redesign)
-// 10/22/2024 - Joshua Lim
 
 import { useState } from 'react';
-import { motion } from "framer-motion";
-import { Button, Card, CardBody, CardHeader } from "@nextui-org/react";
-import { DownloadIcon, PersonIcon, BackpackIcon, StarIcon } from '@radix-ui/react-icons';
+import { motion, AnimatePresence } from "framer-motion";
+import { Card, CardBody, Button } from "@nextui-org/react";
+import {
+  DownloadIcon,
+  PersonIcon,
+  BackpackIcon, // Used for Experience and Education
+  StarIcon
+} from '@radix-ui/react-icons';
 
 const Resume = () => {
   const [activeSection, setActiveSection] = useState<string>('about');
@@ -25,29 +28,25 @@ const Resume = () => {
       icon: PersonIcon,
       content: (
         <div className="space-y-4">
-          <p className="text-base md:text-lg text-default-600 leading-relaxed">
+          <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
             Passionate Software Developer and Startup Founder with a proven track record of delivering innovative solutions. Successfully launched a social media app on the Apple App Store in 2016, demonstrating early entrepreneurial spirit and technical expertise. Currently pursuing Business Analytics with a Computer Science minor at UCF.
           </p>
-          <p className="text-base md:text-lg text-default-600 leading-relaxed">
-            As Founder of Creating Real LLC, I've led cross-functional teams, secured funding through pitch competitions, and built extensive industry networks. Skilled in full-stack development with expertise in mobile, web, and backend technologies. Committed to leveraging technology to solve real-world problems and drive meaningful impact.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 p-4 bg-default-50/50 rounded-xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 p-6 md:p-8 rounded-2xl border border-light-border dark:border-dark-border bg-light-muted/30 dark:bg-dark-muted/30">
             <div>
-              <h4 className="font-semibold text-foreground mb-2">Contact Information</h4>
-              <div className="space-y-1 text-sm">
-                <p className="text-default-500">hi@joshualim.me</p>
-                <p className="text-default-500">+1 (937) 707-3022</p>
-                <p className="text-default-500">Orlando, FL 32817</p>
-                <a href="https://www.joshualim.me" className="text-primary hover:text-primary-600 transition-colors">www.joshualim.me</a>
+              <h4 className="font-bold text-lg text-light-foreground dark:text-dark-foreground mb-4">Contact Information</h4>
+              <div className="space-y-2 text-base text-gray-500 dark:text-gray-400">
+                <p>hi@joshualim.me</p>
+                <p>+1 (937) 707-3022</p>
+                <p>Orlando, FL 32817</p>
+                <a href="https://www.joshualim.me" className="text-light-primary dark:text-dark-primary hover:underline">www.joshualim.me</a>
               </div>
             </div>
             <div>
-              <h4 className="font-semibold text-foreground mb-2">Interests</h4>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-primary/20 text-primary text-xs rounded-full">Innovation</span>
-                <span className="px-2 py-1 bg-primary/20 text-primary text-xs rounded-full">Leadership</span>
-                <span className="px-2 py-1 bg-primary/20 text-primary text-xs rounded-full">Startups</span>
-                <span className="px-2 py-1 bg-primary/20 text-primary text-xs rounded-full">Technology</span>
+              <h4 className="font-bold text-lg text-light-foreground dark:text-dark-foreground mb-4">Interests</h4>
+              <div className="flex flex-wrap gap-3">
+                {["Innovation", "Leadership", "Startups", "Technology"].map((item) => (
+                  <span key={item} className="px-3 py-1.5 bg-light-primary/10 dark:bg-dark-primary/10 text-light-primary dark:text-dark-primary text-sm font-medium rounded-full">{item}</span>
+                ))}
               </div>
             </div>
           </div>
@@ -59,34 +58,26 @@ const Resume = () => {
       title: "Experience",
       icon: BackpackIcon,
       content: (
-        <div className="space-y-6">
-          <Card className="bg-default-50/50 shadow-lg border-l-4 border-l-primary">
-            <CardBody className="p-6">
+        <div className="space-y-8">
+          <Card className="glass-card shadow-none bg-transparent">
+            <CardBody className="p-6 md:p-8">
               <div className="flex flex-col md:flex-row md:items-center justify-between mb-3">
-                <h3 className="text-lg md:text-xl font-semibold text-foreground">Creating Real LLC</h3>
-                <span className="text-sm text-default-500 bg-primary/10 px-3 py-1 rounded-full">October 2022 - Present</span>
+                <h3 className="text-lg md:text-xl font-semibold text-light-foreground dark:text-dark-foreground">Creating Real LLC</h3>
+                <span className="text-sm text-light-primary dark:text-dark-primary bg-light-primary/10 dark:bg-dark-primary/10 px-3 py-1 rounded-full">October 2022 - Present</span>
               </div>
-              <p className="text-default-500 mb-4">Startup Founder • Orlando, FL</p>
-              <ul className="space-y-2 text-sm md:text-base">
-                <li className="flex items-start">
-                  <span className="text-primary mr-3 text-lg">•</span>
-                  <span className="text-default-600">Founded and scaled a technology startup, leading a team of 10+ staff members and managing day-to-day operations.</span>
+              <p className="text-gray-500 mb-6 font-TitilliumWebSemiBold">Startup Founder • Orlando, FL</p>
+              <ul className="space-y-4 text-base text-gray-600 dark:text-gray-300">
+                <li className="flex items-start gap-2">
+                  <span className="text-light-primary dark:text-dark-primary mt-1">•</span>
+                  <span>Founded and scaled a technology startup, leading a team of 10+ staff members and managing day-to-day operations.</span>
                 </li>
-                <li className="flex items-start">
-                  <span className="text-primary mr-3 text-lg">•</span>
-                  <span className="text-default-600">Secured funding through successful pitch competitions, demonstrating strong business acumen and presentation skills.</span>
+                <li className="flex items-start gap-2">
+                  <span className="text-light-primary dark:text-dark-primary mt-1">•</span>
+                  <span>Secured funding through successful pitch competitions, demonstrating strong business acumen.</span>
                 </li>
-                <li className="flex items-start">
-                  <span className="text-primary mr-3 text-lg">•</span>
-                  <span className="text-default-600">Conducted comprehensive market research and competitive analysis to identify growth opportunities and strategic advantages.</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-primary mr-3 text-lg">•</span>
-                  <span className="text-default-600">Built extensive industry networks and partnerships, facilitating collaboration and resource sharing across the tech ecosystem.</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-primary mr-3 text-lg">•</span>
-                  <span className="text-default-600">Led software development initiatives, improving system efficiency and implementing best practices for code quality and deployment.</span>
+                <li className="flex items-start gap-2">
+                  <span className="text-light-primary dark:text-dark-primary mt-1">•</span>
+                  <span>Built extensive industry networks and partnerships, facilitating collaboration and resource sharing.</span>
                 </li>
               </ul>
             </CardBody>
@@ -100,32 +91,15 @@ const Resume = () => {
       icon: BackpackIcon,
       content: (
         <div className="space-y-4">
-          <Card className="bg-default-50/50 shadow-lg">
-            <CardBody className="p-6">
-              <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2">University of Central Florida</h3>
-              <p className="text-default-500 mb-1">Bachelor of Business Administration</p>
-              <p className="text-sm text-default-400 mb-3">August 2022 - December 2026 • Orlando, FL</p>
-              <p className="text-default-600">Major: Business Analytics • Minor: Computer Science</p>
-              <div className="mt-3">
-                <p className="text-sm font-medium text-default-700 mb-1">Relevant Coursework:</p>
-                <p className="text-sm text-default-500">Business Analytics, Computer Science I & II</p>
+          <Card className="glass-card bg-transparent shadow-none">
+            <CardBody className="p-6 md:p-8">
+              <h3 className="text-lg md:text-xl font-semibold text-light-foreground dark:text-dark-foreground mb-1">University of Central Florida</h3>
+              <p className="text-gray-500 mb-1">Bachelor of Business Administration</p>
+              <p className="text-base text-gray-400 mb-4">August 2022 - December 2026 • Orlando, FL</p>
+              <div className="mt-4 p-4 bg-light-muted/30 dark:bg-dark-muted/30 rounded-xl">
+                <p className="font-semibold mb-2">Relevant Coursework</p>
+                <p className="text-gray-500 leading-relaxed">Business Analytics, Computer Science I & II</p>
               </div>
-            </CardBody>
-          </Card>
-          
-          <Card className="bg-default-50/50 shadow-lg">
-            <CardBody className="p-6">
-              <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2">Mechanicsburg High School</h3>
-              <p className="text-default-500 mb-1">Honors High School Diploma (Cont.)</p>
-              <p className="text-sm text-default-400 mb-3">August 2020 - May 2022 • Mechanicsburg, OH</p>
-            </CardBody>
-          </Card>
-          
-          <Card className="bg-default-50/50 shadow-lg">
-            <CardBody className="p-6">
-              <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2">Marysville Early College High School</h3>
-              <p className="text-default-500 mb-1">Honors High School Diploma</p>
-              <p className="text-sm text-default-400 mb-3">August 2018 - May 2020 • Marysville, OH</p>
             </CardBody>
           </Card>
         </div>
@@ -133,185 +107,103 @@ const Resume = () => {
     },
     {
       id: 'skills',
-      title: "Skills & Accomplishments",
+      title: "Skills",
       icon: StarIcon,
       content: (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="bg-default-50/50 shadow-lg">
-              <CardHeader className="pb-2">
-                <h3 className="text-lg font-semibold text-foreground">Technical Skills</h3>
-              </CardHeader>
-              <CardBody className="pt-0">
-                <div className="grid grid-cols-1 gap-3">
-                  <div>
-                    <p className="font-medium text-sm text-default-700 mb-1">Mobile Development</p>
-                    <p className="text-xs text-default-500">Flutter, Swift/SwiftUI, UIKit, Android Development</p>
-                  </div>
-                  <div>
-                    <p className="font-medium text-sm text-default-700 mb-1">Frontend Development</p>
-                    <p className="text-xs text-default-500">React, TypeScript, Vite, Tailwind CSS, HTML5/CSS3</p>
-                  </div>
-                  <div>
-                    <p className="font-medium text-sm text-default-700 mb-1">Backend Development</p>
-                    <p className="text-xs text-default-500">Node.js, Python, Golang, C#, Express.js, RESTful APIs</p>
-                  </div>
-                  <div>
-                    <p className="font-medium text-sm text-default-700 mb-1">Database & Analytics</p>
-                    <p className="text-xs text-default-500">MongoDB, SQL, PostgreSQL, Data Visualization, Business Intelligence</p>
-                  </div>
-                  <div>
-                    <p className="font-medium text-sm text-default-700 mb-1">Cloud & DevOps</p>
-                    <p className="text-xs text-default-500">AWS, GCP, Firebase, Azure, Docker, CI/CD</p>
-                  </div>
-                  <div>
-                    <p className="font-medium text-sm text-default-700 mb-1">Development Tools</p>
-                    <p className="text-xs text-default-500">Git, GitHub, VS Code, Xcode, Android Studio, Slack, ClickUp, Linear</p>
-                  </div>
+        <div className="grid grid-cols-1 gap-6">
+          <div className="space-y-4">
+            {[
+              { cat: "Mobile", tools: "Flutter, Swift/SwiftUI, UIKit, Android" },
+              { cat: "Frontend", tools: "React, TypeScript, Vite, Tailwind CSS" },
+              { cat: "Backend", tools: "Node.js, Python, Golang, C#, Express.js" },
+              { cat: "Cloud", tools: "AWS, GCP, Firebase, Azure, Docker" },
+            ].map((skill) => (
+              <div key={skill.cat}>
+                <h4 className="font-semibold text-sm text-gray-500 uppercase tracking-wider mb-2">{skill.cat}</h4>
+                <div className="flex flex-wrap gap-2">
+                  {skill.tools.split(', ').map(t => (
+                    <span key={t} className="px-3 py-1 rounded-md bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border text-sm">
+                      {t}
+                    </span>
+                  ))}
                 </div>
-              </CardBody>
-            </Card>
-
-            <Card className="bg-default-50/50 shadow-lg">
-              <CardHeader className="pb-2">
-                <h3 className="text-lg font-semibold text-foreground">Accomplishments</h3>
-              </CardHeader>
-              <CardBody className="pt-0">
-                <div className="space-y-3">
-                  <div className="flex items-start">
-                    <span className="text-primary mr-2 text-sm">🏆</span>
-                    <span className="text-sm text-default-600">Founded and led technology startup with 10+ team members</span>
-                  </div>
-                  <div className="flex items-start">
-                    <span className="text-primary mr-2 text-sm">💰</span>
-                    <span className="text-sm text-default-600">Secured funding through successful pitch competitions</span>
-                  </div>
-                  <div className="flex items-start">
-                    <span className="text-primary mr-2 text-sm">💻</span>
-                    <span className="text-sm text-default-600">Lead Software Developer managing cross-functional teams</span>
-                  </div>
-                  <div className="flex items-start">
-                    <span className="text-primary mr-2 text-sm">👥</span>
-                    <span className="text-sm text-default-600">Mentored team members and facilitated internship opportunities</span>
-                  </div>
-                  <div className="flex items-start">
-                    <span className="text-primary mr-2 text-sm">📱</span>
-                    <span className="text-sm text-default-600">Published social media app on Apple App Store (2016)</span>
-                  </div>
-                  <div className="flex items-start">
-                    <span className="text-primary mr-2 text-sm">🌐</span>
-                    <span className="text-sm text-default-600">Built extensive industry networks and partnerships</span>
-                  </div>
-                  <div className="flex items-start">
-                    <span className="text-primary mr-2 text-sm">📊</span>
-                    <span className="text-sm text-default-600">Conducted comprehensive market research and competitive analysis</span>
-                  </div>
-                </div>
-              </CardBody>
-            </Card>
-          </div>
-
-          <Card className="bg-default-50/50 shadow-lg">
-            <CardHeader className="pb-2">
-              <h3 className="text-lg font-semibold text-foreground">Soft Skills</h3>
-            </CardHeader>
-            <CardBody className="pt-0">
-              <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Strategic Thinking</span>
-                <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Adaptability</span>
-                <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Visionary Leadership</span>
-                <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Problem Solving</span>
-                <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Team Collaboration</span>
-                <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Innovation</span>
-                <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Communication</span>
-                <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Project Management</span>
-                <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Mentoring</span>
-                <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Analytical Thinking</span>
-                <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Networking</span>
-                <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">Presentation Skills</span>
               </div>
-            </CardBody>
-          </Card>
+            ))}
+          </div>
         </div>
       )
     }
   ];
 
   return (
-    <section id="resume" className='min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900'>
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
-        {/* Header */}
+    <section id="about" className='py-20 relative'>
+      <div className="container mx-auto px-4 md:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-8 md:mb-12"
+          className="text-center mb-12"
         >
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-            Resume
-          </h1>
-          <p className="text-base md:text-lg lg:text-xl text-gray-500 dark:text-gray-400 mb-6">
-            Download my full resume or explore my background below
-          </p>
-
-          {/* Download Button */}
+          <h2 className="text-4xl md:text-5xl font-TitilliumWebBold mb-4">
+            My <span className="text-gradient">Resume</span>
+          </h2>
           <Button
             onClick={handleDownload}
-            color="primary"
-            variant="shadow"
-            size="lg"
-            className="font-semibold shadow-xl hover:shadow-2xl transition-shadow"
-            startContent={<DownloadIcon className="w-5 h-5" />}
+            className="bg-light-primary dark:bg-dark-primary text-white font-semibold shadow-lg"
+            startContent={<DownloadIcon />}
+            radius="full"
           >
-            Download Resume
+            Download PDF
           </Button>
         </motion.div>
 
-        {/* Mobile-First Tab Navigation */}
-        <div className="mb-8">
-          <div className="flex flex-wrap gap-3 justify-center px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+          {/* Navigation - Vertical on Desktop */}
+          <div className="lg:col-span-1 flex lg:flex-col overflow-x-auto lg:overflow-visible gap-2 pb-4 lg:pb-0 scrollbar-hide">
             {sections.map((section) => {
               const Icon = section.icon;
               return (
-                <Button
+                <button
                   key={section.id}
-                  variant={activeSection === section.id ? 'shadow' : 'bordered'}
-                  color="primary"
                   onClick={() => setActiveSection(section.id)}
-                  size="md"
-                  className="font-semibold shadow-lg hover:shadow-xl transition-shadow px-6 py-2"
-                  startContent={<Icon className="w-4 h-4" />}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all whitespace-nowrap ${activeSection === section.id
+                    ? 'bg-light-primary dark:bg-dark-primary text-white shadow-md'
+                    : 'hover:bg-light-muted dark:hover:bg-dark-muted text-gray-500 dark:text-gray-400'
+                    }`}
                 >
-                  <span className="hidden sm:inline">{section.title}</span>
-                  <span className="sm:hidden">{section.title.split(' ')[0]}</span>
-                </Button>
+                  <Icon className="w-5 h-5" />
+                  <span className="font-semibold">{section.title}</span>
+                </button>
               );
             })}
           </div>
-        </div>
 
-        {/* Content Area */}
-        <motion.div
-          key={activeSection}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-2xl border border-gray-200 dark:border-gray-700"
-        >
-          <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
-            {(() => {
-              const section = sections.find(s => s.id === activeSection);
-              const Icon = section?.icon || PersonIcon;
-              return (
-                <>
-                  <Icon className="w-6 h-6 text-primary" />
-                  {section?.title}
-                </>
-              );
-            })()}
-          </h2>
-          {sections.find(s => s.id === activeSection)?.content}
-        </motion.div>
+          {/* Content */}
+          <div className="lg:col-span-3">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeSection}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="glass-card p-6 md:p-8 rounded-3xl min-h-[400px]">
+                  <div className="flex items-center gap-3 mb-6">
+                    {(() => {
+                      const s = sections.find(sec => sec.id === activeSection);
+                      const I = s?.icon || PersonIcon;
+                      return <I className="w-6 h-6 text-light-primary dark:text-dark-primary" />
+                    })()}
+                    <h3 className="text-2xl font-bold">{sections.find(s => s.id === activeSection)?.title}</h3>
+                  </div>
+                  {sections.find(s => s.id === activeSection)?.content}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
     </section>
   );

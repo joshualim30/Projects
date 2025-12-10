@@ -38,11 +38,7 @@ const ScrollToTop: React.FC = () => {
                 >
                     <Button
                         isIconOnly
-                        color="primary"
-                        variant="shadow"
-                        radius="full"
-                        size="lg"
-                        className="font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 p-4"
+                        className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-md border border-white/20 dark:border-gray-700/50 shadow-lg hover:shadow-light-primary/50 dark:hover:shadow-dark-primary/50 hover:bg-white/90 dark:hover:bg-gray-800/90 text-light-primary dark:text-dark-primary font-semibold transition-all duration-300 hover:scale-110 p-0 min-w-12 h-12 rounded-full"
                         onClick={scrollToTop}
                         aria-label="Scroll to top"
                     >
@@ -54,7 +50,7 @@ const ScrollToTop: React.FC = () => {
                                 ease: "easeInOut"
                             }}
                         >
-                            <ChevronUpIcon className="w-5 h-5" />
+                            <ChevronUpIcon className="w-6 h-6" />
                         </motion.div>
                     </Button>
                 </motion.div>

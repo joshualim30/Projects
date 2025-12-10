@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-light-background text-light-foreground dark:bg-dark-background dark:text-dark-foreground antialiased selection:bg-light-primary selection:text-white dark:selection:bg-dark-primary;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply backdrop-blur-md bg-glass-light/70 dark:bg-glass-dark/70 border border-light-border/50 dark:border-dark-border/50;
+  }
+  .glass-card {
+    @apply backdrop-blur-xl bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10 shadow-xl;
+  }
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-light-primary to-light-secondary dark:from-dark-primary dark:to-dark-secondary;
+  }
+}
+
 @font-face {
     font-family: TitilliumWebExtraLight;
     src: url('./assets/fonts/TitilliumWeb-ExtraLight.ttf') format('truetype');

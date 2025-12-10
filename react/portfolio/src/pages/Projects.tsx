@@ -1,6 +1,3 @@
-// Projects.tsx - Projects page component (Mobile-First Redesign)
-// 10/22/2024 - Joshua Lim
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardBody, CardFooter, Button, Chip, Image, Spinner } from "@nextui-org/react";
 import { motion } from "framer-motion";
@@ -39,16 +36,12 @@ const Projects: React.FC = () => {
     }
   };
 
-
-
-
-
   if (loading) {
     return (
-      <section id="projects-loading" className='min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800'>
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section id="projects-loading" className='min-h-[50vh] flex items-center justify-center'>
+        <div className="text-center">
           <Spinner size="lg" color="primary" />
-          <p className="mt-6 text-gray-500 dark:text-gray-400 text-lg">Loading projects...</p>
+          <p className="mt-4 text-gray-500 dark:text-gray-400">Loading projects...</p>
         </div>
       </section>
     );
@@ -56,189 +49,134 @@ const Projects: React.FC = () => {
 
   if (error) {
     return (
-      <section id="projects-error" className='min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800'>
-        <div className="w-full max-w-md mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-red-500 dark:text-red-400 mb-6 text-lg">{error}</p>
-          <Button 
-            color="primary" 
-            variant="shadow" 
-            size="lg" 
-            onClick={fetchProjects} 
-            className="font-semibold shadow-xl hover:shadow-2xl transition-shadow"
-          >
-            Retry
-          </Button>
+      <section id="projects-error" className='min-h-[50vh] flex items-center justify-center'>
+        <div className="text-center">
+          <p className="text-red-500 mb-4">{error}</p>
+          <Button onClick={fetchProjects} color="primary" variant="shadow">Retry</Button>
         </div>
       </section>
     );
   }
 
   return (
-    <section id="projects" className='min-h-screen bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800'>
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
-        {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          className="text-center mb-8 md:mb-12"
-          >
-                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-            My Projects
-            </h1>
-          <p className="text-gray-500 dark:text-gray-400 text-base md:text-lg lg:text-xl mb-6">
-            Open-source projects and contributions across different technologies
+    <section id="projects" className='py-20 relative'>
+      <div className="container mx-auto px-4 md:px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-12 md:mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-TitilliumWebBold mb-4">
+            My <span className="text-gradient">Projects</span>
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Open-source contributions and personal projects exploring new technologies.
           </p>
-            
-          {/* Language Filter - Mobile Optimized */}
-                    <div className="flex flex-wrap gap-3 justify-center mb-8 px-4">
+        </motion.div>
+
+        {/* Filter Buttons */}
+        <div className="flex flex-wrap gap-3 justify-center mb-12">
+          {['all', ...availableLanguages].map((lang) => (
             <Button
-              variant={selectedLanguage === 'all' ? 'shadow' : 'bordered'}
-              color="primary"
-              onClick={() => setSelectedLanguage('all')}
-              size="md"
-              className="font-semibold shadow-lg hover:shadow-xl transition-shadow px-6 py-2"
+              key={lang}
+              variant={selectedLanguage === lang ? 'solid' : 'bordered'}
+              className={`capitalize ${selectedLanguage === lang ? 'bg-light-primary dark:bg-dark-primary text-white' : 'border-light-primary/50 dark:border-dark-primary/50 text-light-primary dark:text-dark-primary'}`}
+              onClick={() => setSelectedLanguage(lang)}
+              radius="full"
+              size="sm"
             >
-              All
+              {lang}
             </Button>
-            {availableLanguages.map((lang) => (
-              <Button
-                key={lang}
-                variant={selectedLanguage === lang ? 'shadow' : 'bordered'}
-                color="primary"
-                onClick={() => setSelectedLanguage(lang)}
-                size="md"
-                className="font-semibold shadow-lg hover:shadow-xl transition-shadow px-6 py-2"
-              >
-                {lang.charAt(0).toUpperCase() + lang.slice(1)}
-              </Button>
-            ))}
-          </div>
-          </motion.div>
-
-                {/* Projects Grid - Mobile First Design */}
-        {filteredProjects.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500 dark:text-gray-400 text-lg">No projects found for the selected language.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {filteredProjects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="h-full"
-              >
-                <Card className="h-full flex flex-col bg-white/90 dark:bg-gray-800/90 backdrop-blur-md shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 border border-gray-200/50 dark:border-gray-700/50 rounded-2xl overflow-hidden">
-                  <CardHeader className="p-0 relative">
-                    <div className="relative w-full h-48 md:h-56 overflow-hidden">
-                      <Image
-                        src={project.image}
-                        alt={project.name}
-                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                        fallbackSrc={getFallbackImage(project.name)}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                    </div>
-                  </CardHeader>
-
-                  <CardBody className="p-4 md:p-6 flex-1 flex flex-col">
-                    {/* Project Header */}
-                    <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-4 line-clamp-2">
-                      {project.name}
-                    </h3>
-                    <p className="text-default-600 text-sm md:text-base leading-relaxed mb-4 line-clamp-3 flex-1">
-                      {project.description}
-                    </p>
-
-                                        {/* Tags */}
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {project.topics.slice(0, 4).map((topic) => (
-                        <Chip 
-                          key={topic} 
-                          size="sm" 
-                          variant="flat" 
-                          color="primary" 
-                          className="text-xs px-3 py-1"
-                        >
-                          {topic}
-                        </Chip>
-                      ))}
-                      {project.language && (
-                        <Chip 
-                          size="sm" 
-                          variant="flat" 
-                          color="secondary" 
-                          className="text-xs px-3 py-1"
-                        >
-                          {project.language}
-                        </Chip>
-                      )}
-                    </div>
-
-                                        {/* Stats */}
-                    <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400 pt-4 border-t border-gray-200 dark:border-gray-700">
-                      <span className="flex items-center gap-1">⭐ {project.stargazers_count}</span>
-                      <span className="flex items-center gap-1">🍴 {project.forks_count}</span>
-                      <span className="hidden sm:block">Updated {formatDate(project.updated_at)}</span>
-                    </div>
-                    </CardBody>
-
-                                    <CardFooter className="p-6 pt-0 mt-auto">
-                    <div className="flex gap-3 w-full">
-                      <Button
-                        as="a"
-                        href={project.html_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        color="primary"
-                        variant="shadow"
-                        size="md"
-                        className="flex-1 font-semibold shadow-lg hover:shadow-xl transition-shadow px-4 py-2"
-                        startContent={<GitHubLogoIcon className="w-4 h-4" />}
-                      >
-                        GitHub
-                      </Button>
-                      {project.homepage && (
-                        <Button
-                          as="a"
-                          href={project.homepage}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          variant="bordered"
-                          color="primary"
-                          size="md"
-                          className="font-semibold shadow-lg hover:shadow-xl transition-shadow px-4 py-2"
-                          startContent={<ExternalLinkIcon className="w-4 h-4" />}
-                        >
-                          Demo
-                        </Button>
-                      )}
-                    </div>
-                  </CardFooter>
-                  </Card>
-                </motion.div>
-                ))}
-              </div>
-        )}
-
-        {/* Load More Button for Mobile UX */}
-        {filteredProjects.length > 6 && (
-          <div className="text-center mt-8">
-              <Button
-                color="primary"
-              variant="bordered"
-                size="lg"
-              className="font-semibold shadow-lg hover:shadow-xl transition-shadow"
-              >
-              View All Projects
-              </Button>
-          </div>
-        )}
+          ))}
         </div>
-      </section>
+
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredProjects.map((project, index) => (
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <Card className="glass-card mb-4 h-full hover:scale-[1.02] transition-transform duration-300">
+                <CardHeader className="p-0 z-0">
+                  <div className="relative w-full h-48 overflow-hidden">
+                    <Image
+                      removeWrapper
+                      alt={project.name}
+                      className="z-0 w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
+                      src={project.image}
+                      fallbackSrc={getFallbackImage(project.name)}
+                    />
+                    <div className="absolute inset-0 bg-black/40" />
+                  </div>
+                </CardHeader>
+                <CardBody className="p-8">
+                  <h3 className="text-2xl font-bold mb-3 text-light-foreground dark:text-dark-foreground line-clamp-1">
+                    {project.name}
+                  </h3>
+                  <p className="text-base text-gray-600 dark:text-gray-400 mb-6 line-clamp-3 min-h-[72px]">
+                    {project.description || "No description available."}
+                  </p>
+
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {project.language && (
+                      <Chip size="sm" variant="dot" color="primary" className="p-2">
+                        {/* Spacer */}
+                        &nbsp;
+                        {project.language}
+                      </Chip>
+                    )}
+                    {project.topics.slice(0, 3).map(topic => (
+                      <Chip key={topic} size="sm" variant="flat" className="text-xs p-2">
+                        {topic}
+                      </Chip>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-4 text-xs text-gray-500 mt-auto">
+                    <span>⭐ {project.stargazers_count}</span>
+                    <span>Updated {formatDate(project.updated_at)}</span>
+                  </div>
+                </CardBody>
+                <CardFooter className="px-8 pb-8 pt-0 gap-3">
+                  <Button
+                    as="a"
+                    href={project.html_url}
+                    target="_blank"
+                    className="flex-1 bg-dark-surface hover:bg-light-muted dark:hover:bg-dark-muted shadow-sm font-semibold"
+                    size="sm"
+                    startContent={<GitHubLogoIcon />}
+                  >
+                    Code
+                  </Button>
+                  {project.homepage && (
+                    <Button
+                      as="a"
+                      href={project.homepage}
+                      target="_blank"
+                      className="flex-1 bg-light-primary dark:bg-dark-primary text-white shadow-md font-semibold"
+                      size="sm"
+                      startContent={<ExternalLinkIcon />}
+                    >
+                      Demo
+                    </Button>
+                  )}
+                </CardFooter>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+
+        {filteredProjects.length === 0 && (
+          <p className="text-center text-gray-500 mt-8">No projects found for this category.</p>
+        )}
+      </div>
+    </section>
   );
 };
 
