@@ -89,8 +89,8 @@ const Contact = () => {
           >
             <Card className="glass-card p-6 md:p-8">
               <CardHeader className="pb-6 pt-0 px-0">
-                <h3 className="text-2xl font-bold flex items-center gap-3">
-                  <ChatBubbleIcon className="w-6 h-6 text-light-primary dark:text-dark-primary" />
+                <h3 className="text-2xl font-bold flex items-center gap-3 text-light-foreground dark:text-dark-foreground">
+                  <ChatBubbleIcon className="w-6 h-6" />
                   Send me a message
                 </h3>
               </CardHeader>
@@ -101,7 +101,7 @@ const Contact = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     className="text-center py-12"
                   >
-                    <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-light-muted/20 dark:bg-dark-muted/20 rounded-full flex items-center justify-center mx-auto mb-4">
                       <EnvelopeClosedIcon className="w-8 h-8 text-green-500" />
                     </div>
                     <h3 className="text-xl font-semibold mb-2">Message Sent!</h3>
@@ -185,7 +185,7 @@ const Contact = () => {
           >
             {/* Contact Info Card */}
             <Card className="glass-card p-6 md:p-8">
-              <CardHeader className="pb-6 pt-0 px-0">
+              <CardHeader className="pb-6 pt-0 px-0 text-light-foreground dark:text-dark-foreground">
                 <h3 className="text-2xl font-bold">Contact Information</h3>
               </CardHeader>
               <CardBody className="space-y-4 p-0">
@@ -201,12 +201,12 @@ const Contact = () => {
                         {info.href ? (
                           <a
                             href={info.href}
-                            className="text-base md:text-lg font-medium hover:text-light-primary dark:hover:text-dark-primary transition-colors"
+                            className="text-light-foreground dark:text-dark-foreground hover:text-light-primary dark:hover:text-dark-primary transition-colors"
                           >
                             {info.value}
                           </a>
                         ) : (
-                          <p className="text-base md:text-lg font-medium">{info.value}</p>
+                          <p className="text-light-foreground dark:text-dark-foreground md:text-lg font-medium">{info.value}</p>
                         )}
                       </div>
                     </div>
