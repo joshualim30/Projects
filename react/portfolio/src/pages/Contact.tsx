@@ -7,8 +7,6 @@ import {
   PersonIcon,
   MobileIcon,
   ChatBubbleIcon,
-  GitHubLogoIcon,
-  LinkedInLogoIcon
 } from '@radix-ui/react-icons';
 
 const Contact = () => {
@@ -60,21 +58,6 @@ const Contact = () => {
       label: 'Location',
       value: 'Orlando, FL 32817',
       href: null
-    }
-  ];
-
-  const socialLinks = [
-    {
-      icon: GitHubLogoIcon,
-      label: 'GitHub',
-      href: 'https://github.com/joshualim30',
-      color: 'text-gray-600 dark:text-gray-400 group-hover:text-black dark:group-hover:text-white'
-    },
-    {
-      icon: LinkedInLogoIcon,
-      label: 'LinkedIn',
-      href: 'https://linkedin.com/in/joshualim30',
-      color: 'text-blue-500 group-hover:text-blue-600'
     }
   ];
 

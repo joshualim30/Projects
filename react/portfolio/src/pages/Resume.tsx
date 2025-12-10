@@ -96,7 +96,7 @@ const Resume = () => {
               <h3 className="text-lg md:text-xl font-semibold text-light-foreground dark:text-dark-foreground mb-1">University of Central Florida</h3>
               <p className="text-gray-500 mb-1">Bachelor of Business Administration</p>
               <p className="text-base text-gray-400 mb-4">August 2022 - December 2026 • Orlando, FL</p>
-              <div className="mt-4 p-4 bg-light-muted/30 dark:bg-dark-muted/30 rounded-xl">
+              <div className="mt-4 p-4 bg-light-muted/30 dark:bg-dark-muted/30 rounded-xl text-light-foreground dark:text-dark-foreground">
                 <p className="font-semibold mb-2">Relevant Coursework</p>
                 <p className="text-gray-500 leading-relaxed">Business Analytics, Computer Science I & II</p>
               </div>
