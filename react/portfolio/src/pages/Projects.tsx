@@ -125,14 +125,14 @@ const Projects: React.FC = () => {
 
                   <div className="flex flex-wrap gap-2 mb-6">
                     {project.language && (
-                      <Chip size="sm" variant="dot" color="primary" className="p-2">
+                      <Chip size="sm" variant="dot" color="primary" className="p-2 text-black dark:text-white">
                         {/* Spacer */}
                         &nbsp;
                         {project.language}
                       </Chip>
                     )}
                     {project.topics.slice(0, 3).map(topic => (
-                      <Chip key={topic} size="sm" variant="flat" className="text-xs p-2">
+                      <Chip key={topic} size="sm" variant="flat" className="text-xs p-2 text-white dark:text-black bg-gray-800 dark:bg-gray-200">
                         {topic}
                       </Chip>
                     ))}
@@ -148,7 +148,7 @@ const Projects: React.FC = () => {
                     as="a"
                     href={project.html_url}
                     target="_blank"
-                    className="flex-1 bg-dark-surface hover:bg-light-muted dark:hover:bg-dark-muted shadow-sm font-semibold"
+                    className="flex-1 bg-dark-surface hover:bg-dark-muted dark:hover:bg-dark-muted shadow-sm font-semibold"
                     size="sm"
                     startContent={<GitHubLogoIcon />}
                   >

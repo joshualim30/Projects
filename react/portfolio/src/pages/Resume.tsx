@@ -38,7 +38,7 @@ const Resume = () => {
                 <p>hi@joshualim.me</p>
                 <p>+1 (937) 707-3022</p>
                 <p>Orlando, FL 32817</p>
-                <a href="https://www.joshualim.me" className="text-light-primary dark:text-dark-primary hover:underline">www.joshualim.me</a>
+                <a href="https://joshualim.me" className="text-light-primary dark:text-dark-primary hover:underline">https://joshualim.me</a>
               </div>
             </div>
             <div>
