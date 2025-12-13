@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "wave-bball"
+  },
+  "targets": {},
+  "etags": {
+    "wave-bball": {
+      "extensionInstances": {
+        "firestore-send-email": "d63297b7196b2917d454ce9ec9a24bcc8cc9b8d27d9b8fbcbd9cb8f9f4702e91",
+        "firestore-stripe-payments": "2fae6178cf737da9d3be1dbe9d4898c36db597da8c9fd6968debb08ee7562a1e"
+      }
+    }
+  }
+}

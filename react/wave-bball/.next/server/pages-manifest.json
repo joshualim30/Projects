@@ -1,0 +1,13 @@
+{
+  "/CoachPortal": "pages/CoachPortal.js",
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/Contact": "pages/Contact.js",
+  "/CustomerPortal": "pages/CustomerPortal.js",
+  "/Events": "pages/Events.js",
+  "/Home": "pages/Home.js",
+  "/OurStory": "pages/OurStory.js",
+  "/TrainingDashboard": "pages/TrainingDashboard.js",
+  "/Training": "pages/Training.js",
+  "/_document": "pages/_document.js"
+}

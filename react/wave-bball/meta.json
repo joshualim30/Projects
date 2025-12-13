@@ -1,0 +1,30 @@
+{
+  "tags": [
+    "react",
+    "basketball",
+    "game",
+    "typescript",
+    "tailwind",
+    "framer-motion",
+    "vite"
+  ],
+  "description": "A basketball-themed game or application built with React and modern web technologies",
+  "liveUrl": "",
+  "featured": false,
+  "difficulty": "intermediate",
+  "status": "active",
+  "technologies": [
+    "React 18",
+    "TypeScript",
+    "Tailwind CSS",
+    "Framer Motion",
+    "Vite"
+  ],
+  "highlights": [
+    "Basketball-themed interface",
+    "Interactive game elements",
+    "Responsive design",
+    "Smooth animations",
+    "Modern React patterns"
+  ]
+}
