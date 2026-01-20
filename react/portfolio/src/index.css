@@ -3,61 +3,29 @@
 @tailwind utilities;
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
-  }
   body {
-    @apply bg-light-background text-light-foreground dark:bg-dark-background dark:text-dark-foreground antialiased selection:bg-light-primary selection:text-white dark:selection:bg-dark-primary;
+    @apply bg-gray-50 text-gray-900 dark:bg-[#131314] dark:text-[#E3E3E3] antialiased selection:bg-blue-100 selection:text-blue-900 dark:selection:bg-[#4a4a4b] dark:selection:text-white;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
 @layer utilities {
-  .glass {
-    @apply backdrop-blur-md bg-glass-light/70 dark:bg-glass-dark/70 border border-light-border/50 dark:border-dark-border/50;
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
-  .glass-card {
-    @apply backdrop-blur-xl bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10 shadow-xl;
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
+
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-light-primary to-light-secondary dark:from-dark-primary dark:to-dark-secondary;
+    @apply bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400;
+  }
+
+  .mask-gradient {
+    mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent);
   }
 }
-
-@font-face {
-    font-family: TitilliumWebExtraLight;
-    src: url('./assets/fonts/TitilliumWeb-ExtraLight.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: TitilliumWebLight;
-    src: url('./assets/fonts/TitilliumWeb-Light.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'TitilliumWebRegular';
-    src: url('./assets/fonts/TitilliumWeb-Regular.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: TitilliumWebSemiBold;
-    src: url('./assets/fonts/TitilliumWeb-SemiBold.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: TitilliumWebBold;
-    src: url('./assets/fonts/TitilliumWeb-Bold.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: TitilliumWebBlack;
-    src: url('./assets/fonts/TitilliumWeb-Black.ttf') format('truetype');
-}
-
-
-
-/* Use Tailwind's base styles */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Only keep font imports */

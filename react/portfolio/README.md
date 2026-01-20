@@ -1,166 +1,86 @@
-# Personal Portfolio Website
+# Joshua Lim's AI Portfolio
 
-> A modern, responsive portfolio website showcasing my skills and projects with smooth animations and interactive elements
+> A next-generation portfolio website featuring an interactive AI chatbot powered by Google's Gemini API.
 
 ## ✨ Features
 
-- 🎨 **Modern UI** - Built with NextUI components for a sleek, professional look
-- 🎭 **Smooth Animations** - Framer Motion powered transitions and micro-interactions
-- 🎯 **Interactive Elements** - Custom cursor with hover effects and dynamic interactions
-- 📱 **Fully Responsive** - Optimized for mobile, tablet, and desktop devices
-- 🌙 **Dark/Light Mode** - Theme switching with persistent preferences
-- 📊 **Progress Indicators** - Scroll progress bar and smooth scroll-to-top functionality
-- 🎯 **Project Showcase** - Interactive project gallery with detailed information
-- 📝 **Dynamic Resume** - Downloadable resume with professional formatting
-- 📧 **Contact Integration** - EmailJS powered contact form with validation
-- 🎨 **Custom Design** - Tailored color scheme and typography using Titillium Web fonts
+- 🤖 **AI-Powered Personality** - A conversational interface powered by **Google Gemini**, capable of answering questions about my background, skills, and experience.
+- 💬 **Interactive Chat** - A sleek chat interface familiar to users of modern LLMs, featuring streaming responses and rich UI elements.
+- 📱 **Mobile-First Design** - Fully responsive layout with an adaptive sidebar and mobile-optimized input areas.
+- ⚡ **Real-time Streaming** - Serverless backend using Firebase Functions to stream AI responses directly to the client.
+- 🎨 **Modern Aesthetics** - Built with Tailwind CSS for a clean, professional, and dark-mode-friendly look.
+- 📁 **Dynamic Project Showcase** - Rich project cards and details integrated directly into the chat flow.
 
-## 🛠️ Technologies Used
+## 🛠️ Tech Stack
 
-### **Frontend Framework**
-- **React 18** - Modern React with hooks and functional components
-- **TypeScript** - Type-safe development for better code quality
-- **Vite** - Fast build tool and development server
+### **Frontend**
+- **React 18** - Component-based UI architecture
+- **TypeScript** - Type safety and developer ergonomics
+- **Tailwind CSS** - Utility-first styling with dark mode support
+- **Framer Motion** - Smooth animations for message bubbles and transitions
+- **Vite** - High-performance build tooling
 
-### **UI & Styling**
-- **NextUI** - Beautiful, accessible UI components
-- **Tailwind CSS** - Utility-first CSS framework
-- **Framer Motion** - Animation library for smooth transitions
-
-### **Routing & Navigation**
-- **React Router DOM** - Client-side routing
-- **React Icons** - Comprehensive icon library
-
-### **External Services**
-- **EmailJS** - Email integration for contact forms
-- **Firebase** - Backend services and hosting
+### **Backend & AI**
+- **Firebase Functions** - Serverless compute for secure API handling
+- **Google Gemini API** - The intelligence behind the chatbot persona
+- **Firebase Hosting** - Fast and secure global content delivery
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- npm or yarn package manager
+- Node.js (v18 or higher)
+- npm package manager
 
 ### Installation
 
-1. **Navigate to the project directory:**
+1. **Clone the repository:**
    ```bash
+   git clone https://github.com/joshualim30/portfolio.git
    cd portfolio
    ```
 
 2. **Install dependencies:**
    ```bash
    npm install
-   # or
-   yarn install
    ```
 
 3. **Start the development server:**
    ```bash
    npm run dev
-   # or
-   yarn dev
    ```
 
-4. **Open your browser and visit:** `http://localhost:5173`
+4. **Open your browser:** Visit `http://localhost:5173`
 
 ## 📁 Project Structure
 
 ```
 src/
-├── components/         # Reusable UI components
-│   ├── Navbar.tsx     # Navigation component
-│   ├── Footer.tsx     # Footer component
-│   ├── ProgressBar.tsx # Scroll progress indicator
-│   └── ScrollToTop.tsx # Scroll to top button
-├── pages/             # Page components
-│   ├── Welcome.tsx    # Landing page
-│   ├── About.tsx      # About section
-│   ├── Projects.tsx   # Project showcase
-│   ├── Resume.tsx     # Resume section
-│   └── Contact.tsx    # Contact form
-├── assets/            # Static assets
-│   ├── images/        # Project images and icons
-│   └── fonts/         # Custom fonts (Titillium Web)
-├── styles/            # Global styles
-└── App.tsx            # Main application component
+├── components/
+│   ├── chat/          # Chat interface, message list, input area
+│   │   ├── actions/   # Rich UI widgets (Project cards, etc.)
+│   └── layout/        # Sidebar, main layout containers
+├── services/          # API integrations (Gemini, Firebase)
+├── styles/           # Tailwind and global styles
+└── types/            # TypeScript definitions
+functions/            # Firebase Cloud Functions (Backend)
 ```
-
-## 🎨 Customization
-
-### **Colors and Theme**
-
-The website uses a custom color scheme defined in `tailwind.config.js`. You can modify the colors by updating the theme configuration:
-
-```javascript
-theme: {
-  extend: {
-    colors: {
-      primary: {
-        DEFAULT: '#7C3AED',
-        foreground: '#FFFFFF',
-      },
-      // ... other colors
-    }
-  }
-}
-```
-
-### **Content Updates**
-
-- **Personal Information** - Update details in respective page components
-- **Project Details** - Modify project information in `src/pages/Projects.tsx`
-- **Resume Content** - Update resume in `src/pages/Resume.tsx`
-- **Contact Form** - Customize contact form in `src/pages/Contact.tsx`
 
 ## 🚀 Deployment
 
-The website is configured for easy deployment on Firebase:
+This project is deployed using Firebase Hosting.
 
-1. **Build the project:**
-   ```bash
-   npm run build
-   ```
+```bash
+npm run deploy
+```
 
-2. **Deploy to Firebase:**
-   ```bash
-   firebase deploy
-   ```
-
-### **Alternative Deployment Options**
-
-- **Vercel** - Connect repository and deploy automatically
-- **Netlify** - Drag and drop the `dist` folder
-- **GitHub Pages** - Configure for static site hosting
-
-## 📈 Development
-
-### **Available Scripts**
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run lint` - Run ESLint
-- `npm run preview` - Preview production build
-
-### **Code Quality**
-
-- **ESLint** - Code linting and formatting
-- **TypeScript** - Type checking and IntelliSense
-- **Prettier** - Code formatting (if configured)
+This command builds the React application and deploys it along with the Cloud Functions to Firebase.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [NextUI](https://nextui.org/) - Beautiful UI components
-- [Framer Motion](https://www.framer.com/motion/) - Smooth animations
-- [React Icons](https://react-icons.github.io/react-icons/) - Icon library
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-- [EmailJS](https://www.emailjs.com/) - Email integration service
+This project is licensed under the MIT License.
 
 ---
 
 *Built with ❤️ by Joshua Lim*
+

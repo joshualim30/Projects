@@ -5,3 +5,10 @@
 
 # Mac OS X (all occurences of .DS_Store)
 **/.DS_Store
+
+# Common Global Ignores
+**/node_modules/
+**/dist/
+**/build/
+**/release/
+.env

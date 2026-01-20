@@ -1,0 +1,33 @@
+rules_version = '2';
+
+// Craft rules based on data knowlege.
+// High level: 
+// - Public Read access for resume.pdf 
+// - No write access for anyone (upload via console only for now to be safe)
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Explicitly allow access to the resume
+    match /resume.pdf {
+      allow read;
+      allow write: if false; // Only admin upload via console
+    }
+
+    // Explicitly allow access to the background context
+    match /background.txt {
+      allow read;
+      allow write: if false;
+    }
+
+    // Allow read access to any images/assets if we add them later
+    match /assets/{imageId} {
+      allow read;
+      allow write: if false;
+    }
+
+    // Default deny all
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
