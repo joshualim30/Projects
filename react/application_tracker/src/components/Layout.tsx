@@ -77,9 +77,12 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, onClose }: SidebarProps) => 
             />
 
             <div className={cn(
-                "fixed top-0 left-0 h-screen bg-app-bg border-r border-white/5 flex flex-col p-6 z-50 transition-transform duration-500 cubic-[0.32, 0.72, 0, 1] w-72 md:translate-x-0 shadow-2xl md:shadow-none",
+                "fixed top-0 left-0 h-screen bg-app-bg border-r border-white/5 flex flex-col p-6 pt-16 z-50 transition-transform duration-500 cubic-[0.32, 0.72, 0, 1] w-72 md:translate-x-0 shadow-2xl md:shadow-none",
                 isOpen ? "translate-x-0" : "-translate-x-full"
             )}>
+                {/* Drag Region for macOS */}
+                <div className="absolute top-0 left-0 right-0 h-16 w-full -z-10" style={{ WebkitAppRegion: 'drag' } as any} />
+
                 {/* Logo Area */}
                 <div className="flex items-center gap-4 mb-12 px-2">
                     <div className="relative group">
@@ -175,6 +178,9 @@ export const AppLayout = ({ children, activeTab, setActiveTab }: { children: Rea
             />
 
             <main className="flex-1 md:ml-72 h-screen overflow-hidden relative">
+                {/* Drag Region for macOS */}
+                <div className="absolute top-0 left-0 right-0 h-8 w-full z-50" style={{ WebkitAppRegion: 'drag' } as any} />
+
                 {/* Background Ambient Glows */}
                 <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[128px] pointer-events-none opacity-50 mix-blend-screen" />
                 <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-[#a855f7]/10 rounded-full blur-[128px] pointer-events-none opacity-50 mix-blend-screen" />

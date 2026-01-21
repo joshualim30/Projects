@@ -5,12 +5,12 @@ import { AppStorage } from './storage';
 
 const getFirebaseConfig = async () => {
     return {
-        apiKey: await AppStorage.getItem('FIREBASE_API_KEY') || '',
-        authDomain: await AppStorage.getItem('FIREBASE_AUTH_DOMAIN') || '',
-        projectId: await AppStorage.getItem('FIREBASE_PROJECT_ID') || '',
-        storageBucket: await AppStorage.getItem('FIREBASE_STORAGE_BUCKET') || '',
-        messagingSenderId: await AppStorage.getItem('FIREBASE_MESSAGING_SENDER_ID') || '',
-        appId: await AppStorage.getItem('FIREBASE_APP_ID') || '',
+        apiKey: await AppStorage.getItem('FIREBASE_API_KEY') || import.meta.env.VITE_FIREBASE_API_KEY || '',
+        authDomain: await AppStorage.getItem('FIREBASE_AUTH_DOMAIN') || import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || '',
+        projectId: await AppStorage.getItem('FIREBASE_PROJECT_ID') || import.meta.env.VITE_FIREBASE_PROJECT_ID || '',
+        storageBucket: await AppStorage.getItem('FIREBASE_STORAGE_BUCKET') || import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || '',
+        messagingSenderId: await AppStorage.getItem('FIREBASE_MESSAGING_SENDER_ID') || import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '',
+        appId: await AppStorage.getItem('FIREBASE_APP_ID') || import.meta.env.VITE_FIREBASE_APP_ID || '',
     };
 };
 

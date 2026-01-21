@@ -3,6 +3,8 @@ import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import Store from 'electron-store'
+import http from 'node:http'
+import handler from 'serve-handler'
 
 createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -31,6 +33,8 @@ const store = new Store()
 function createWindow() {
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, 'app_icon.png'),
+    titleBarStyle: 'hidden',
+    trafficLightPosition: { x: 20, y: 20 },
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
     },
@@ -44,8 +48,22 @@ function createWindow() {
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL)
   } else {
-    // win.loadFile('dist/index.html')
-    win.loadFile(path.join(RENDERER_DIST, 'index.html'))
+    const server = http.createServer((request, response) => {
+      return handler(request, response, {
+        public: RENDERER_DIST,
+        rewrites: [
+          { source: '**', destination: '/index.html' }
+        ]
+      })
+    })
+
+    server.listen(0, () => {
+      const address = server.address()
+      if (address && typeof address === 'object') {
+        console.log(`Server listening on port ${address.port}`)
+        win?.loadURL(`http://localhost:${address.port}`)
+      }
+    })
   }
 }
 

@@ -25,13 +25,13 @@ export const Settings = () => {
 
     useEffect(() => {
         const loadSettings = async () => {
-            setUrl(await AppStorage.getItem('SUPABASE_URL') || '');
-            setKey(await AppStorage.getItem('SUPABASE_ANON_KEY') || '');
+            setUrl(await AppStorage.getItem('SUPABASE_URL') || import.meta.env.VITE_SUPABASE_URL || '');
+            setKey(await AppStorage.getItem('SUPABASE_ANON_KEY') || import.meta.env.VITE_SUPABASE_ANON_KEY || '');
 
-            setFbApiKey(await AppStorage.getItem('FIREBASE_API_KEY') || '');
-            setFbAuthDomain(await AppStorage.getItem('FIREBASE_AUTH_DOMAIN') || '');
-            setFbProjectId(await AppStorage.getItem('FIREBASE_PROJECT_ID') || '');
-            setFbAppId(await AppStorage.getItem('FIREBASE_APP_ID') || '');
+            setFbApiKey(await AppStorage.getItem('FIREBASE_API_KEY') || import.meta.env.VITE_FIREBASE_API_KEY || '');
+            setFbAuthDomain(await AppStorage.getItem('FIREBASE_AUTH_DOMAIN') || import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || '');
+            setFbProjectId(await AppStorage.getItem('FIREBASE_PROJECT_ID') || import.meta.env.VITE_FIREBASE_PROJECT_ID || '');
+            setFbAppId(await AppStorage.getItem('FIREBASE_APP_ID') || import.meta.env.VITE_FIREBASE_APP_ID || '');
 
             setGithubUrl(await AppStorage.getItem('GITHUB_SOURCE_URL') || 'https://raw.githubusercontent.com/SimplifyJobs/Summer2025-Internships/dev/.github/scripts/data.json');
             setDorkingTargets(await AppStorage.getItem('DORKING_TARGETS') || 'Greenhouse, Lever, Ashby, Workable');

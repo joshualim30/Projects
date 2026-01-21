@@ -2,8 +2,8 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { AppStorage } from './storage';
 
 export const getSupabaseConfig = async () => {
-    const url = await AppStorage.getItem('SUPABASE_URL');
-    const key = await AppStorage.getItem('SUPABASE_ANON_KEY');
+    const url = await AppStorage.getItem('SUPABASE_URL') || import.meta.env.VITE_SUPABASE_URL;
+    const key = await AppStorage.getItem('SUPABASE_ANON_KEY') || import.meta.env.VITE_SUPABASE_ANON_KEY;
     return { url, key };
 };
 
