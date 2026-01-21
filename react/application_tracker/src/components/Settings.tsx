@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Save, RefreshCw, Globe, FileCode, Shield, Database, Server, Settings2 } from 'lucide-react';
+import { Save, RefreshCw, Globe, FileCode, Shield, Database, Server, Settings2, CheckCircle2, AlertCircle } from 'lucide-react';
 import { getSupabaseClient, saveSupabaseConfig } from '../lib/supabase';
 import { AppStorage } from '../lib/storage';
 import { initFirebase, testFirebaseConnection } from '../lib/firebase';
 import { motion } from 'framer-motion';
+
 
 export const Settings = () => {
     // Supabase
@@ -176,6 +177,14 @@ alter table user_profiles enable row level security;
 drop policy if exists "Allow all access" on user_profiles;
 create policy "Allow all access" on user_profiles for all using (true);`;
 
+    const StatusBadge = ({ status }: { status: 'idle' | 'testing' | 'success' | 'error' }) => {
+        if (status === 'idle') return null;
+        if (status === 'testing') return <RefreshCw className="w-4 h-4 animate-spin text-slate-400" />;
+        if (status === 'success') return <CheckCircle2 className="w-4 h-4 text-emerald-400" />;
+        if (status === 'error') return <AlertCircle className="w-4 h-4 text-rose-400" />;
+        return null;
+    };
+
     return (
         <div className="w-full max-w-7xl mx-auto space-y-12 pb-24 relative px-4 md:px-8">
             {/* Header */}
@@ -183,7 +192,7 @@ create policy "Allow all access" on user_profiles for all using (true);`;
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 shadow-sm"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest text-slate-300 mb-2 shadow-sm backdrop-blur-md"
                 >
                     <Settings2 className="w-3 h-3" />
                     System Configuration
@@ -193,7 +202,7 @@ create policy "Allow all access" on user_profiles for all using (true);`;
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="text-4xl md:text-5xl font-black text-white tracking-tighter"
+                        className="text-4xl md:text-5xl font-black text-white tracking-tighter glow-text"
                     >
                         Control Center
                     </motion.h2>
@@ -214,19 +223,21 @@ create policy "Allow all access" on user_profiles for all using (true);`;
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="col-span-1 lg:col-span-2 bg-linear-to-b from-slate-900 to-slate-950 border border-slate-800 rounded-3xl p-8 w-full shadow-2xl shadow-black/20"
+                    className="col-span-1 lg:col-span-2 glass-card rounded-3xl p-8 w-full relative overflow-hidden group"
                 >
-                    <div className="flex items-center gap-4 mb-8 border-b border-slate-800 pb-6">
-                        <div className="w-12 h-12 rounded-2xl bg-slate-950 flex items-center justify-center border border-slate-800 shadow-inner">
-                            <Database className="w-6 h-6 text-indigo-400" />
+                    <div className="absolute top-0 left-0 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2 pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity" />
+
+                    <div className="flex items-center gap-5 mb-8 border-b border-white/10 pb-6 relative z-10">
+                        <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20 shadow-lg shadow-indigo-500/10">
+                            <Database className="w-7 h-7 text-indigo-400" />
                         </div>
                         <div>
                             <h3 className="text-xl font-bold text-white">Discovery Sources</h3>
-                            <p className="text-sm text-slate-400 font-medium">Configure where your job feed and search targets come from.</p>
+                            <p className="text-sm text-slate-400 font-medium mt-1">Configure where your job feed and search targets come from.</p>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
                         <div className="space-y-3">
                             <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">GitHub Data URL</label>
                             <input
@@ -234,7 +245,7 @@ create policy "Allow all access" on user_profiles for all using (true);`;
                                 value={githubUrl}
                                 onChange={(e) => setGithubUrl(e.target.value)}
                                 placeholder="https://raw.githubusercontent.com/..."
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500/50 transition-all font-mono text-xs shadow-inner"
+                                className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all font-mono text-xs shadow-inner backdrop-blur-sm"
                             />
                         </div>
                         <div className="space-y-3">
@@ -244,7 +255,7 @@ create policy "Allow all access" on user_profiles for all using (true);`;
                                 value={dorkingTargets}
                                 onChange={(e) => setDorkingTargets(e.target.value)}
                                 placeholder="Greenhouse, Lever, Ashby"
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500/50 transition-all font-mono text-xs shadow-inner"
+                                className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all font-mono text-xs shadow-inner backdrop-blur-sm"
                             />
                         </div>
                     </div>
@@ -255,16 +266,19 @@ create policy "Allow all access" on user_profiles for all using (true);`;
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="bg-slate-900 border border-slate-800 rounded-3xl p-8 flex flex-col justify-between shadow-xl shadow-black/20"
+                    className="glass-card rounded-3xl p-8 flex flex-col justify-between"
                 >
                     <div className="space-y-8">
-                        <div className="flex items-center gap-4 mb-2">
-                            <div className="w-12 h-12 rounded-2xl bg-slate-950 flex items-center justify-center border border-slate-800 shadow-inner">
-                                <Globe className="w-6 h-6 text-emerald-400" />
+                        <div className="flex items-center gap-5 mb-2">
+                            <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 shadow-lg shadow-emerald-500/10">
+                                <Globe className="w-7 h-7 text-emerald-400" />
                             </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-white">Supabase Connection</h3>
-                                <p className="text-sm text-slate-400 font-medium">Primary database for application tracking.</p>
+                            <div className="flex-1">
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-xl font-bold text-white">Supabase Connection</h3>
+                                    <StatusBadge status={sbStatus} />
+                                </div>
+                                <p className="text-sm text-slate-400 font-medium mt-1">Primary database for application tracking.</p>
                             </div>
                         </div>
 
@@ -275,7 +289,7 @@ create policy "Allow all access" on user_profiles for all using (true);`;
                                     type="text"
                                     value={url}
                                     onChange={(e) => setUrl(e.target.value)}
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3.5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all font-mono text-xs shadow-inner"
+                                    className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3.5 text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all font-mono text-xs shadow-inner backdrop-blur-sm"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -284,7 +298,7 @@ create policy "Allow all access" on user_profiles for all using (true);`;
                                     type="password"
                                     value={key}
                                     onChange={(e) => setKey(e.target.value)}
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3.5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all font-mono text-xs shadow-inner"
+                                    className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3.5 text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all font-mono text-xs shadow-inner backdrop-blur-sm"
                                 />
                             </div>
                         </div>
@@ -292,7 +306,8 @@ create policy "Allow all access" on user_profiles for all using (true);`;
 
                     <button
                         onClick={testConnection}
-                        className="mt-8 w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-slate-950 border border-slate-800 text-slate-300 font-bold hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/30 transition-all text-xs uppercase tracking-wider shadow-sm hover:shadow-emerald-900/10"
+                        disabled={sbStatus === 'testing'}
+                        className="mt-8 w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-white/5 border border-white/10 text-slate-300 font-bold hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/30 transition-all text-xs uppercase tracking-wider"
                     >
                         {sbStatus === 'testing' ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Server className="w-4 h-4" />}
                         {sbStatus === 'success' ? 'Connected Successfully' : 'Test Connection'}
@@ -304,16 +319,19 @@ create policy "Allow all access" on user_profiles for all using (true);`;
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
-                    className="bg-slate-900 border border-slate-800 rounded-3xl p-8 flex flex-col justify-between shadow-xl shadow-black/20"
+                    className="glass-card rounded-3xl p-8 flex flex-col justify-between"
                 >
                     <div className="space-y-8">
-                        <div className="flex items-center gap-4 mb-2">
-                            <div className="w-12 h-12 rounded-2xl bg-slate-950 flex items-center justify-center border border-slate-800 shadow-inner">
-                                <Shield className="w-6 h-6 text-rose-400" />
+                        <div className="flex items-center gap-5 mb-2">
+                            <div className="w-14 h-14 rounded-2xl bg-rose-500/10 flex items-center justify-center border border-rose-500/20 shadow-lg shadow-rose-500/10">
+                                <Shield className="w-7 h-7 text-rose-400" />
                             </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-white">Firebase Auth</h3>
-                                <p className="text-sm text-slate-400 font-medium">Secure entry point for user sessions.</p>
+                            <div className="flex-1">
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-xl font-bold text-white">Firebase Auth</h3>
+                                    <StatusBadge status={fbStatus} />
+                                </div>
+                                <p className="text-sm text-slate-400 font-medium mt-1">Secure entry point for user sessions.</p>
                             </div>
                         </div>
 
@@ -324,7 +342,7 @@ create policy "Allow all access" on user_profiles for all using (true);`;
                                     type="password"
                                     value={fbApiKey}
                                     onChange={(e) => setFbApiKey(e.target.value)}
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3.5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500/50 transition-all font-mono text-xs shadow-inner"
+                                    className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3.5 text-slate-200 focus:outline-none focus:ring-1 focus:ring-rose-500/50 focus:border-rose-500/50 transition-all font-mono text-xs shadow-inner backdrop-blur-sm"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -333,7 +351,7 @@ create policy "Allow all access" on user_profiles for all using (true);`;
                                     type="text"
                                     value={fbAuthDomain}
                                     onChange={(e) => setFbAuthDomain(e.target.value)}
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3.5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500/50 transition-all font-mono text-xs shadow-inner"
+                                    className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3.5 text-slate-200 focus:outline-none focus:ring-1 focus:ring-rose-500/50 focus:border-rose-500/50 transition-all font-mono text-xs shadow-inner backdrop-blur-sm"
                                 />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
@@ -343,7 +361,7 @@ create policy "Allow all access" on user_profiles for all using (true);`;
                                         type="text"
                                         value={fbProjectId}
                                         onChange={(e) => setFbProjectId(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3.5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500/50 transition-all font-mono text-xs shadow-inner"
+                                        className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3.5 text-slate-200 focus:outline-none focus:ring-1 focus:ring-rose-500/50 focus:border-rose-500/50 transition-all font-mono text-xs shadow-inner backdrop-blur-sm"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -352,7 +370,7 @@ create policy "Allow all access" on user_profiles for all using (true);`;
                                         type="text"
                                         value={fbAppId}
                                         onChange={(e) => setFbAppId(e.target.value)}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3.5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500/50 transition-all font-mono text-xs shadow-inner"
+                                        className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3.5 text-slate-200 focus:outline-none focus:ring-1 focus:ring-rose-500/50 focus:border-rose-500/50 transition-all font-mono text-xs shadow-inner backdrop-blur-sm"
                                     />
                                 </div>
                             </div>
@@ -361,7 +379,8 @@ create policy "Allow all access" on user_profiles for all using (true);`;
 
                     <button
                         onClick={testFbConnection}
-                        className="mt-8 w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-slate-950 border border-slate-800 text-slate-300 font-bold hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/30 transition-all text-xs uppercase tracking-wider shadow-sm hover:shadow-rose-900/10"
+                        disabled={fbStatus === 'testing'}
+                        className="mt-8 w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-white/5 border border-white/10 text-slate-300 font-bold hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/30 transition-all text-xs uppercase tracking-wider"
                     >
                         {fbStatus === 'testing' ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Shield className="w-4 h-4" />}
                         {fbStatus === 'success' ? 'Authenticated' : 'Test Access'}
@@ -374,16 +393,16 @@ create policy "Allow all access" on user_profiles for all using (true);`;
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
-                className="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-xl shadow-black/20"
+                className="glass-card rounded-3xl p-8"
             >
                 <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-4">
-                        <div className="p-2 bg-slate-950 rounded-lg border border-slate-800">
-                            <FileCode className="w-5 h-5 text-slate-400" />
+                        <div className="p-3 bg-white/5 rounded-xl border border-white/10">
+                            <FileCode className="w-6 h-6 text-slate-300" />
                         </div>
                         <div>
                             <h3 className="text-lg font-bold text-white">Database Schema Helper</h3>
-                            <p className="text-xs text-slate-500 font-medium">Use this SQL to initialize your Supabase tables.</p>
+                            <p className="text-xs text-slate-400 font-medium mt-1">Use this SQL to initialize your Supabase tables.</p>
                         </div>
                     </div>
                     <button
@@ -391,26 +410,26 @@ create policy "Allow all access" on user_profiles for all using (true);`;
                             navigator.clipboard.writeText(sqlSchema);
                             alert('SQL copied!');
                         }}
-                        className="px-4 py-2 rounded-lg bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all"
+                        className="px-5 py-2.5 rounded-xl bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all"
                     >
                         Copy SQL
                     </button>
                 </div>
-                <div className="bg-slate-950 rounded-xl p-6 border border-slate-900 overflow-hidden relative shadow-inner">
-                    <div className="absolute inset-0 bg-linear-to-b from-transparent to-slate-950/90 pointer-events-none" />
+                <div className="bg-app-card rounded-xl p-6 border border-white/5 overflow-hidden relative shadow-inner">
+                    <div className="absolute inset-0 bg-linear-to-b from-transparent to-app-card/90 pointer-events-none" />
                     <pre className="text-[10px] text-slate-500 font-mono leading-relaxed opacity-70">
                         {sqlSchema}
                     </pre>
                 </div>
             </motion.div>
 
-            <div className="sticky bottom-8 left-0 right-0 flex justify-center pt-8 pointer-events-none z-50">
+            <div className="sticky bottom-6 left-0 right-0 flex justify-center pt-8 pointer-events-none z-50">
                 <button
                     onClick={handleSave}
-                    className="flex items-center gap-3 px-10 py-5 rounded-2xl bg-white text-black font-black hover:bg-slate-200 shadow-2xl shadow-white/10 active:scale-95 transition-all text-xs uppercase tracking-widest pointer-events-auto border border-white/50"
+                    className="flex items-center gap-3 px-10 py-5 rounded-2xl bg-white text-black font-black hover:bg-slate-200 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.2)] active:scale-95 transition-all text-xs uppercase tracking-widest pointer-events-auto ring-1 ring-white/50"
                 >
                     <Save className="w-5 h-5" />
-                    {fbStatus === 'success' ? 'All Systems Synced' : 'Save Configuration'}
+                    {fbStatus === 'success' && sbStatus === 'success' ? 'All Systems Synced' : 'Save Configuration'}
                 </button>
             </div>
         </div>

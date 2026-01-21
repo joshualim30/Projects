@@ -2,7 +2,6 @@
 
 # Ignore certain projects
 # wave-bball/
-bouncer/
 
 # Dependencies
 node_modules/

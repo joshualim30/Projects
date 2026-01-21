@@ -20,9 +20,16 @@ export interface Email {
     date: string;
     snippet: string;
     body: string;
+    html?: string;
 }
 
 const GMAIL_API_BASE = 'https://gmail.googleapis.com/gmail/v1/users/me';
+
+const decodeHtml = (html: string) => {
+    const txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+};
 
 export const searchGmail = async (query: string, maxResults = 20): Promise<Email[]> => {
     const token = getGoogleAccessToken();
@@ -38,7 +45,9 @@ export const searchGmail = async (query: string, maxResults = 20): Promise<Email
         });
 
         if (!listRes.ok) {
-            throw new Error(`Gmail API error: ${listRes.statusText}`);
+            const errorData = await listRes.json().catch(() => ({}));
+            console.error('Gmail API Error Details:', JSON.stringify(errorData, null, 2));
+            throw new Error(`Gmail API error: ${listRes.status} ${listRes.statusText} - ${errorData.error?.message || 'Unknown error'}`);
         }
 
         const listData = await listRes.json();
@@ -54,19 +63,38 @@ export const searchGmail = async (query: string, maxResults = 20): Promise<Email
             const detailData: GmailMessage = await detailRes.json();
 
             const headers = detailData.payload.headers;
-            const subject = headers.find(h => h.name === 'Subject')?.value || '(No Subject)';
-            const from = headers.find(h => h.name === 'From')?.value || '(Unknown)';
+            const subject = decodeHtml(headers.find(h => h.name === 'Subject')?.value || '(No Subject)');
+            const from = decodeHtml(headers.find(h => h.name === 'From')?.value || '(Unknown)');
             const date = headers.find(h => h.name === 'Date')?.value || '';
 
             // Decode body (checking parts if necessary)
-            let body = '';
+            let body = ''; // Plain text
+            let html = ''; // HTML content
+
+            const decodePart = (data: string) => atob(data.replace(/-/g, '+').replace(/_/g, '/'));
+
             if (detailData.payload.body?.data) {
-                body = atob(detailData.payload.body.data.replace(/-/g, '+').replace(/_/g, '/'));
+                // Single part message - usually html if not specified, but could be plain
+                const decoded = decodePart(detailData.payload.body.data);
+                body = decoded;
+                html = decoded; // Assume it might be HTML if it's the only body
             } else if (detailData.payload.parts) {
-                const part = detailData.payload.parts.find(p => p.mimeType === 'text/plain') || detailData.payload.parts[0];
-                if (part?.body?.data) {
-                    body = atob(part.body.data.replace(/-/g, '+').replace(/_/g, '/'));
-                }
+                // Multipart message
+                const findPart = (parts: any[], mimeType: string): string | null => {
+                    for (const part of parts) {
+                        if (part.mimeType === mimeType && part.body?.data) {
+                            return decodePart(part.body.data);
+                        }
+                        if (part.parts) {
+                            const found = findPart(part.parts, mimeType);
+                            if (found) return found;
+                        }
+                    }
+                    return null;
+                };
+
+                html = findPart(detailData.payload.parts, 'text/html') || '';
+                body = findPart(detailData.payload.parts, 'text/plain') || html.replace(/<[^>]*>?/gm, ''); // Fallback to stripping HTML if no plain text
             }
 
             return {
@@ -75,8 +103,9 @@ export const searchGmail = async (query: string, maxResults = 20): Promise<Email
                 subject,
                 from,
                 date,
-                snippet: detailData.snippet,
-                body
+                snippet: decodeHtml(detailData.snippet),
+                body,
+                html
             };
         });
 

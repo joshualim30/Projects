@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, Github, Globe, ExternalLink, Zap, Sparkles, RefreshCw } from 'lucide-react';
+import { Search, Github, Globe, ExternalLink, Zap, Sparkles, RefreshCw, Briefcase } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Internship {
@@ -110,31 +110,34 @@ export const Discovery = () => {
     return (
         <div className="flex flex-col gap-6 relative pb-12 w-full max-w-7xl mx-auto px-4 md:px-8">
             {/* Header */}
-            <div className="flex flex-col items-center justify-center pt-8 pb-4 relative z-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-bold uppercase tracking-wider text-indigo-400 mb-6"
-                >
-                    <Sparkles className="w-3.5 h-3.5" />
-                    Discovery Hub
-                </motion.div>
-                <motion.h2
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="text-5xl md:text-6xl font-black text-white tracking-tighter mb-4 text-center"
-                >
-                    Find Your Next Role
-                </motion.h2>
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="text-slate-400 text-lg font-medium max-w-xl mx-auto text-center leading-relaxed"
-                >
-                    Aggregating high-quality opportunities from GitHub community lists and intelligent direct ATS sourcing.
-                </motion.p>
+            {/* Header */}
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10 pt-4 mb-6">
+                <div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest text-indigo-300 mb-2 shadow-sm backdrop-blur-md"
+                    >
+                        <Sparkles className="w-3.5 h-3.5" />
+                        Discovery Hub
+                    </motion.div>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className="text-4xl md:text-5xl font-black text-white tracking-tighter glow-text"
+                    >
+                        Find Your Next Role
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="text-slate-400 font-medium text-lg mt-2"
+                    >
+                        Aggregating high-quality opportunities from GitHub & ATS.
+                    </motion.p>
+                </div>
             </div>
 
             {/* Command Center Search */}
@@ -144,8 +147,8 @@ export const Discovery = () => {
                 transition={{ delay: 0.3 }}
                 className="w-full max-w-3xl mx-auto relative z-20"
             >
-                <div className="relative group p-1 rounded-2xl bg-linear-to-b from-slate-800 to-slate-900 border border-slate-700 shadow-2xl shadow-black/50">
-                    <div className="bg-slate-950 rounded-xl p-2 flex items-center gap-3 relative overflow-hidden">
+                <div className="relative group p-1 rounded-2xl bg-linear-to-br from-primary/20 via-slate-800/50 to-slate-900/50 border border-white/10 shadow-[0_0_50px_rgba(79,70,229,0.15)] backdrop-blur-xl">
+                    <div className="bg-slate-950/80 rounded-xl p-2 flex items-center gap-3 relative overflow-hidden backdrop-blur-md">
                         <div className="pl-4">
                             <Search className="w-5 h-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
                         </div>
@@ -180,7 +183,7 @@ export const Discovery = () => {
                                 href={`https://www.google.com/search?q=${encodeURIComponent(dork.query)}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="px-4 py-2 rounded-lg bg-slate-900 border border-slate-800 text-xs font-bold text-slate-400 hover:text-white hover:border-indigo-500/50 transition-all flex items-center gap-2 shadow-sm"
+                                className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-xs font-bold text-slate-400 hover:text-white hover:border-indigo-500/50 hover:bg-indigo-500/10 transition-all flex items-center gap-2 shadow-sm backdrop-blur-sm"
                             >
                                 <ExternalLink className="w-3 h-3" />
                                 {dork.label}
@@ -192,7 +195,7 @@ export const Discovery = () => {
 
             {/* Results Section */}
             <div className="w-full mt-8">
-                <div className="flex items-center gap-6 mb-8 border-b border-slate-800 pb-1">
+                <div className="flex items-center gap-6 mb-8 border-b border-white/5 pb-1">
                     <button
                         onClick={() => setActiveTab('all')}
                         className={`text-sm font-bold pb-4 -mb-1.5 border-b-2 transition-all ${activeTab === 'all' ? 'text-white border-indigo-500' : 'text-slate-500 border-transparent hover:text-slate-300'}`}
@@ -206,7 +209,7 @@ export const Discovery = () => {
                     {loading ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                             {[...Array(6)].map((_, i) => (
-                                <div key={i} className="h-56 bg-slate-900 border border-slate-800 rounded-2xl animate-pulse" />
+                                <div key={i} className="h-56 glass-card rounded-2xl animate-pulse bg-white/5" />
                             ))}
                         </div>
                     ) : (searchResults.length > 0 || internships.length > 0) ? (
@@ -228,29 +231,34 @@ export const Discovery = () => {
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: idx * 0.05 }}
                                         whileHover={{ y: -4 }}
-                                        className="group relative bg-slate-900 border border-slate-800 rounded-2xl p-6 overflow-hidden hover:border-indigo-500/50 transition-colors shadow-lg shadow-black/20"
+                                        className="group relative glass-card rounded-2xl p-6 overflow-hidden hover:border-indigo-500/30 transition-all"
                                     >
+                                        <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
                                         <div className="relative z-10 flex flex-col h-full">
                                             <div className="flex items-start justify-between mb-5">
-                                                <div className="w-12 h-12 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center p-2.5 shadow-inner">
+                                                <div className="w-12 h-12 rounded-xl bg-black/40 border border-white/10 flex items-center justify-center p-2.5 shadow-inner backdrop-blur-sm group-hover:border-indigo-500/30 transition-colors">
                                                     {source === 'GitHub' ? <Github className="w-full h-full text-white" /> : <Globe className="w-full h-full text-indigo-400" />}
                                                 </div>
-                                                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-slate-950 px-2 py-1 rounded-md border border-slate-800">
+                                                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-black/40 px-2 py-1 rounded-md border border-white/5 group-hover:border-white/10 transition-colors">
                                                     {date}
                                                 </span>
                                             </div>
 
-                                            <h3 className="text-xl font-bold text-white leading-tight mb-1 line-clamp-2">
+                                            <h3 className="text-xl font-bold text-white leading-tight mb-1 line-clamp-2 group-hover:text-indigo-300 transition-colors">
                                                 {title}
                                             </h3>
-                                            <p className="text-sm font-medium text-slate-400 mb-6">{job.company}</p>
+                                            <p className="text-sm font-medium text-slate-400 mb-6 flex items-center gap-2">
+                                                <Briefcase className="w-3.5 h-3.5" />
+                                                {job.company}
+                                            </p>
 
                                             <div className="flex items-center gap-2 text-xs text-slate-500 font-semibold mb-auto">
                                                 <Globe className="w-3.5 h-3.5" />
                                                 {job.location}
                                             </div>
 
-                                            <div className="flex gap-3 mt-6 pt-6 border-t border-slate-800/50">
+                                            <div className="flex gap-3 mt-6 pt-6 border-t border-white/5 group-hover:border-white/10 transition-colors">
                                                 <button
                                                     onClick={() => trackJob({
                                                         company: job.company,
@@ -258,7 +266,7 @@ export const Discovery = () => {
                                                         location: job.location,
                                                         link: link
                                                     })}
-                                                    className="flex-1 py-2.5 rounded-lg bg-indigo-600 text-white text-xs font-bold uppercase tracking-wider hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-900/20 flex items-center justify-center gap-2"
+                                                    className="flex-1 py-2.5 rounded-lg bg-primary text-white text-xs font-bold uppercase tracking-wider hover:bg-primary/90 transition-all shadow-lg shadow-indigo-900/20 flex items-center justify-center gap-2 hover:shadow-indigo-500/30 hover:scale-[1.02] active:scale-[0.98]"
                                                 >
                                                     <Zap className="w-3.5 h-3.5" />
                                                     Track
@@ -267,7 +275,7 @@ export const Discovery = () => {
                                                     href={link}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="w-10 h-10 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-slate-600 transition-all"
+                                                    className="w-10 h-10 rounded-lg bg-black/40 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:border-white/20 transition-all hover:bg-white/5"
                                                 >
                                                     <ExternalLink className="w-4 h-4" />
                                                 </a>
@@ -278,8 +286,8 @@ export const Discovery = () => {
                             })}
                         </motion.div>
                     ) : (
-                        <div className="text-center py-24 bg-slate-900 border border-slate-800 rounded-3xl">
-                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-800 mb-6">
+                        <div className="text-center py-24 glass-card rounded-3xl">
+                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/5 mb-6 border border-white/5">
                                 <Search className="w-8 h-8 text-slate-500" />
                             </div>
                             <h3 className="text-xl font-bold text-white mb-2">No opportunities found</h3>

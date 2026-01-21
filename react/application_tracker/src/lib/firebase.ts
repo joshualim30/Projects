@@ -44,7 +44,8 @@ export const initFirebase = async (): Promise<Auth | null> => {
     return null;
 };
 
-let googleAccessToken: string | null = null;
+// Initialize from storage if available
+let googleAccessToken: string | null = localStorage.getItem('google_access_token');
 
 export const getGoogleAccessToken = () => googleAccessToken;
 
@@ -60,6 +61,7 @@ export const signInWithGoogle = async (): Promise<User> => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         if (credential?.accessToken) {
             googleAccessToken = credential.accessToken;
+            localStorage.setItem('google_access_token', credential.accessToken);
         }
         return result.user;
     } catch (error) {
@@ -71,6 +73,8 @@ export const signInWithGoogle = async (): Promise<User> => {
 export const logout = async (): Promise<void> => {
     if (!auth) return;
     await signOut(auth);
+    googleAccessToken = null;
+    localStorage.removeItem('google_access_token');
 };
 
 export const getFirebaseUser = (): User | null => auth?.currentUser || null;

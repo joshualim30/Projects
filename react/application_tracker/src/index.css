@@ -1,14 +1,45 @@
 @import "tailwindcss";
 
+@theme {
+  /* Colors */
+  --color-app-bg: #030712;
+  /* Richer dark background (gray-950) */
+  --color-app-card: #0f172a;
+  /* Slightly lighter for cards (slate-900) */
+  --color-app-card-hover: #1e293b;
+  /* Hover state (slate-800) */
+  --color-primary: #6366f1;
+  /* Indigo-500 */
+  --color-primary-hover: #4f46e5;
+  /* Indigo-600 */
+  --color-accent: #8b5cf6;
+  /* Violet-500 */
+  --color-success: #10b981;
+  /* Emerald-500 */
+  --color-warning: #f59e0b;
+  /* Amber-500 */
+  --color-danger: #ef4444;
+  /* Red-500 */
+  --color-text-main: #f8fafc;
+  /* Slate-50 */
+  --color-text-muted: #94a3b8;
+  /* Slate-400 */
+  --color-border: #1e293b;
+  /* Slate-800 */
+
+  /* Fonts */
+  --font-display: "Outfit", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+}
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--font-body);
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #0f172a;
-  /* Slate 900 */
+  color-scheme: dark;
+  color: var(--color-text-main);
+  background-color: var(--color-app-bg);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -20,9 +51,46 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  @apply bg-slate-950 text-slate-50;
+  background-color: var(--color-app-bg);
+  color: var(--color-text-main);
+  overflow-x: hidden;
 }
 
-#root {
-  width: 100%;
+/* Custom Utilities */
+@utility glass {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@utility glass-card {
+  background: rgba(30, 41, 59, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+@utility glow-text {
+  text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }
