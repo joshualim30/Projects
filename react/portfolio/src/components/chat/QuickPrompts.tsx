@@ -32,7 +32,7 @@ export const QuickPrompts = ({ onPromptSelect, isLoading }: QuickPromptsProps) =
                         onClick={() => onPromptSelect(prompt.input)}
                         disabled={isLoading}
                         className={`flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full border transition-colors whitespace-nowrap text-sm first:ml-0 last:mr-4 md:last:mr-0 ${isLoading
-                            ? 'bg-gray-50 dark:bg-[#1E1F20] text-white dark:text-gray-600 border-gray-100 dark:border-[#2D2E2F] cursor-not-allowed'
+                            ? 'bg-gray-50 dark:bg-[#1E1F20] text-gray-500 dark:text-gray-600 border-gray-100 dark:border-[#2D2E2F] cursor-not-allowed'
                             : 'bg-gray-100 dark:bg-[#1E1F20] border-gray-200 dark:border-[#444746] hover:bg-gray-200 dark:hover:bg-[#2D2E2F] text-gray-700 dark:text-white'
                             }`}
                     >
