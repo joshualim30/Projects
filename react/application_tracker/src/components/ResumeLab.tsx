@@ -461,7 +461,23 @@ export const ResumeLab = () => {
                     )}
 
                     {activeTab === 'analysis' && (
-                        analysisResult ? (
+                        isAnalyzing ? (
+                            <motion.div
+                                key="analyzing"
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="flex flex-col items-center justify-center h-[500px] glass-card rounded-[2.5rem] text-center p-12 border border-white/10"
+                            >
+                                <div className="w-24 h-24 rounded-full bg-black/30 flex items-center justify-center mb-6 shadow-inner ring-1 ring-white/10 relative overflow-hidden">
+                                    <div className="absolute inset-0 bg-indigo-500/20 blur-xl animate-pulse" />
+                                    <Loader2 className="w-10 h-10 text-indigo-400 animate-spin relative z-10" />
+                                </div>
+                                <h3 className="text-2xl font-black text-white mb-3">Analyzing Resume</h3>
+                                <p className="text-slate-400 max-w-md mx-auto font-medium leading-relaxed">
+                                    Scanning your resume against the job description to identify impact metrics, keywords, and formatting improvements...
+                                </p>
+                            </motion.div>
+                        ) : analysisResult ? (
                             <motion.div
                                 key="analysis"
                                 initial={{ opacity: 0, y: 10 }}
