@@ -19,7 +19,9 @@ export const ChatInterface = () => {
     };
 
     useEffect(() => {
-        scrollToBottom();
+        if (chatState.messages.length > 0) {
+            scrollToBottom();
+        }
     }, [chatState.messages, chatState.isLoading]);
 
     const handleSendMessage = async (text: string) => {
