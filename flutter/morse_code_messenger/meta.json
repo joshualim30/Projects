@@ -1,0 +1,29 @@
+{
+  "tags": [
+    "flutter",
+    "dart",
+    "mobile",
+    "messaging",
+    "morse-code",
+    "communication"
+  ],
+  "description": "A mobile messaging application that converts text to Morse code for communication",
+  "liveUrl": "",
+  "featured": false,
+  "difficulty": "intermediate",
+  "status": "active",
+  "technologies": [
+    "Flutter",
+    "Dart",
+    "Mobile Development",
+    "Morse Code Algorithm",
+    "UI/UX Design"
+  ],
+  "highlights": [
+    "Cross-platform mobile app",
+    "Morse code conversion",
+    "Real-time messaging",
+    "Intuitive user interface",
+    "Sound and visual feedback"
+  ]
+}

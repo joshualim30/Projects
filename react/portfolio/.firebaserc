@@ -1,5 +1,7 @@
 {
   "projects": {
     "default": "joshua-lim"
-  }
+  },
+  "targets": {},
+  "etags": {}
 }
