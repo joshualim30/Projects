@@ -81,7 +81,7 @@ export const ChatInterface = () => {
     return (
         <div className="flex flex-col h-full w-full bg-white dark:bg-[#131314] relative text-sm sm:text-base">
             {/* Messages Area - Full height with padding bottom for footer */}
-            <div className="flex-1 overflow-y-auto no-scrollbar scroll-smooth overscroll-y-contain px-4 pt-16 md:pt-8 pb-48 sm:pb-40">
+            <div className="flex-1 overflow-y-auto no-scrollbar scroll-smooth overscroll-y-contain px-4 pt-16 md:pt-8 pb-48 sm:pb-40 md:pb-64">
                 <div className="max-w-3xl mx-auto w-full">
                     {chatState.messages.length === 0 ? (
                         <WelcomeScreen onPromptSelect={handleSendMessage} />

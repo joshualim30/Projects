@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Save, CheckCircle2, Building2, MapPin, Globe, Briefcase, DollarSign, FileText } from 'lucide-react';
+import { X, Save, CheckCircle2, Building2, MapPin, Briefcase, DollarSign, FileText, Link as LinkIcon, Image as ImageIcon, RefreshCw } from 'lucide-react';
 import { getSupabaseClient } from '../lib/supabase';
 import { Application, ApplicationStatus } from '../types';
 import { cn } from '../lib/utils';
