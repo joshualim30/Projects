@@ -23,6 +23,12 @@ export const checkGeminiReady = () => !!genAI;
 export interface GeminiAnalysisResult {
     score: number;
     feedback: string;
+    reasoning: string;
+    suggestions: {
+        title: string;
+        explanation: string;
+        importance: 'high' | 'medium' | 'low';
+    }[];
     keywords: {
         found: string[];
         missing: string[];
@@ -64,6 +70,14 @@ export const analyzeResumeWithGemini = async (resumeText: string, jobDescription
     {
         "score": number (0-100 overall match score),
         "feedback": "concise executive summary (max 2 sentences)",
+        "reasoning": "A comprehensive paragraph explaining WHY the score is what it is. Mention specific strengths and critical weaknesses. Be direct and professional.",
+        "suggestions": [
+            {
+                "title": "Short action title (e.g. 'Quantify Achievements')",
+                "explanation": "Detailed instruction on how to fix this specific issue.",
+                "importance": "high" | "medium" | "low"
+            }
+        ],
         "keywords": {
             "found": ["list", "of", "matching", "hard", "skills", "found", "in", "resume"],
             "missing": ["list", "of", "critical", "keywords", "from", "JD", "missing", "in", "resume"]

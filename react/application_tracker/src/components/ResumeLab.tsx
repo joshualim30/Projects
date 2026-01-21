@@ -200,7 +200,9 @@ export const ResumeLab = () => {
                             score: aiResult.actionVerbs.score,
                             count: aiResult.actionVerbs.count
                         }
-                    }
+                    },
+                    reasoning: aiResult.reasoning,
+                    suggestions: aiResult.suggestions
                 });
             } else {
                 // ...
@@ -485,125 +487,152 @@ export const ResumeLab = () => {
                                 className="grid grid-cols-1 lg:grid-cols-12 gap-8"
                             >
                                 {/* Score Gauge */}
-                                <div className="lg:col-span-3 flex flex-col gap-6">
-                                    <div className="glass-card rounded-3xl p-8 flex flex-col items-center justify-center relative overflow-hidden min-h-[300px]">
+                                {/* LEFT COLUMN: Metrics & Data (4 cols) */}
+                                <div className="lg:col-span-4 space-y-6">
+                                    {/* Score Card */}
+                                    <div className="glass-card rounded-3xl p-6 flex flex-col items-center justify-center relative overflow-hidden">
                                         <div className="absolute inset-0 bg-gradient-radial from-indigo-500/10 to-transparent opacity-50"></div>
-                                        <motion.div
-                                            initial={{ scale: 0 }}
-                                            animate={{ scale: 1 }}
-                                            transition={{ type: "spring", bounce: 0.5 }}
-                                            className={`text-7xl font-black mb-4 tracking-tighter drop-shadow-lg ${analysisResult.totalScore >= 75 ? 'text-emerald-400' :
+                                        <div className="relative z-10 text-center">
+                                            <div className={`text-6xl font-black mb-2 tracking-tighter drop-shadow-lg ${analysisResult.totalScore >= 75 ? 'text-emerald-400' :
                                                 analysisResult.totalScore >= 50 ? 'text-amber-400' : 'text-rose-400'
-                                                }`}
-                                        >
-                                            {analysisResult.totalScore}
-                                        </motion.div>
-                                        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest bg-white/5 px-3 py-1 rounded-full border border-white/5">Match Score</p>
-
-                                        <div className="mt-8 flex flex-col gap-4 w-full">
-                                            <div>
-                                                <div className="flex justify-between text-[10px] text-slate-400 font-bold uppercase mb-1.5">
-                                                    <span>Keywords</span>
-                                                    <span>{analysisResult.details.keywords.score}/45</span>
-                                                </div>
-                                                <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
-                                                    <div className="h-full bg-primary rounded-full shadow-[0_0_10px_rgba(99,102,241,0.5)]" style={{ width: `${(analysisResult.details.keywords.score / 45) * 100}%` }}></div>
-                                                </div>
+                                                }`}>
+                                                {analysisResult.totalScore}
                                             </div>
+                                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-white/5 px-3 py-1 rounded-full border border-white/5 inline-block">Match Score</p>
+                                        </div>
 
-                                            <div>
-                                                <div className="flex justify-between text-[10px] text-slate-400 font-bold uppercase mb-1.5">
-                                                    <span>Impact</span>
-                                                    <span>{analysisResult.details.impact.score}/25</span>
+                                        <div className="mt-6 flex flex-col gap-3 w-full">
+                                            {[
+                                                { label: 'Keywords', score: analysisResult.details.keywords.score, max: 45, color: 'bg-primary' },
+                                                { label: 'Impact', score: analysisResult.details.impact.score, max: 25, color: 'bg-violet-500' },
+                                                { label: 'Format', score: analysisResult.details.formatting.score, max: 20, color: 'bg-pink-500' },
+                                                { label: 'Verbs', score: analysisResult.details.actionVerbs.score, max: 15, color: 'bg-orange-500' }
+                                            ].map((metric) => (
+                                                <div key={metric.label}>
+                                                    <div className="flex justify-between text-[10px] text-slate-400 font-bold uppercase mb-1">
+                                                        <span>{metric.label}</span>
+                                                        <span>{metric.score}/{metric.max}</span>
+                                                    </div>
+                                                    <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                                                        <div className={`h-full ${metric.color} rounded-full shadow-sm`} style={{ width: `${(metric.score / metric.max) * 100}%` }}></div>
+                                                    </div>
                                                 </div>
-                                                <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
-                                                    <div className="h-full bg-violet-500 rounded-full shadow-[0_0_10px_rgba(139,92,246,0.5)]" style={{ width: `${(analysisResult.details.impact.score / 25) * 100}%` }}></div>
-                                                </div>
-                                            </div>
+                                            ))}
                                         </div>
                                     </div>
-                                    <div className="glass-card rounded-3xl p-6 flex-1">
-                                        <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-                                            <AlertCircle className="w-4 h-4 text-indigo-400" /> Executive Summary
+
+                                    {/* Impact Metrics */}
+                                    <div className="glass-card rounded-3xl p-6">
+                                        <h4 className="text-xs font-black text-violet-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                            <Zap className="w-4 h-4" /> Impact Metrics
                                         </h4>
-                                        <p className="text-sm text-slate-400 leading-relaxed font-medium">
-                                            {analysisResult.feedback}
-                                        </p>
+                                        <div className="space-y-2">
+                                            {analysisResult.details.impact.metricsFound.map((m, i) => (
+                                                <div key={i} className="flex items-start gap-3 text-xs text-slate-400 font-mono bg-black/20 px-3 py-2 rounded-lg border border-white/5">
+                                                    <span className="mt-0.5 w-4 h-4 rounded-md bg-violet-500/10 text-violet-400 flex items-center justify-center text-[9px] font-bold border border-violet-500/10 shrink-0">#</span>
+                                                    <span className="break-all">{m}</span>
+                                                </div>
+                                            ))}
+                                            {analysisResult.details.impact.metricsFound.length === 0 && (
+                                                <span className="text-slate-600 text-xs font-medium italic">No quantified metrics found.</span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Keywords Cloud */}
+                                    <div className="glass-card rounded-3xl p-6">
+                                        <h4 className="text-xs font-black text-emerald-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                            <Target className="w-4 h-4" /> Keywords
+                                        </h4>
+                                        <div className="flex flex-wrap gap-1.5 mb-4">
+                                            {analysisResult.details.keywords.found.map((k, i) => (
+                                                <span key={i} className="px-2 py-1 bg-emerald-500/5 text-emerald-400 border border-emerald-500/10 rounded-md text-[10px] font-mono font-medium">
+                                                    {k}
+                                                </span>
+                                            ))}
+                                        </div>
+                                        {analysisResult.details.keywords.missing.length > 0 && (
+                                            <>
+                                                <h4 className="text-[10px] font-bold text-rose-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+                                                    Missing
+                                                </h4>
+                                                <div className="flex flex-wrap gap-1.5">
+                                                    {analysisResult.details.keywords.missing.map((k, i) => (
+                                                        <span key={i} className="px-2 py-1 bg-rose-500/5 text-rose-400 border border-rose-500/10 rounded-md text-[10px] font-mono font-medium opacity-80">
+                                                            {k}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+
+                                    {/* Formatting */}
+                                    <div className="glass-card rounded-3xl p-6">
+                                        <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                            <LayoutDashboard className="w-4 h-4" /> Formatting
+                                        </h4>
+                                        <div className="space-y-2">
+                                            {analysisResult.details.formatting.missingSections.length > 0 ? (
+                                                analysisResult.details.formatting.missingSections.map(s => (
+                                                    <div key={s} className="text-xs text-rose-400 flex items-center gap-2 bg-rose-500/5 px-3 py-2 rounded-lg border border-rose-500/10">
+                                                        <AlertCircle className="w-3 h-3" /> Missing: <span className="font-bold uppercase">{s}</span>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <div className="text-xs text-emerald-400 flex items-center gap-2 bg-emerald-500/5 px-3 py-2 rounded-lg border border-emerald-500/10">
+                                                    <CheckCircle className="w-3 h-3" /> All Sections Present
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
 
-                                {/* Detailed Findings */}
-                                <div className="lg:col-span-9 glass-card rounded-3xl p-8">
-                                    <div className="grid md:grid-cols-2 gap-12">
-                                        <div>
-                                            <h4 className="text-xs font-black text-emerald-400 uppercase tracking-widest mb-6 flex items-center gap-2">
-                                                <CheckCircle className="w-4 h-4" /> Matched Keywords
-                                            </h4>
-                                            <div className="flex flex-wrap gap-2">
-                                                {analysisResult.details.keywords.found.map((k, i) => (
-                                                    <span key={i} className="px-3 py-1.5 bg-emerald-500/5 text-emerald-400 border border-emerald-500/10 rounded-lg text-xs font-mono font-medium shadow-sm">
-                                                        {k}
-                                                    </span>
-                                                ))}
-                                                {analysisResult.details.keywords.found.length === 0 && (
-                                                    <span className="text-slate-600 text-xs font-medium">No direct matches found.</span>
-                                                )}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <h4 className="text-xs font-black text-rose-400 uppercase tracking-widest mb-6 flex items-center gap-2">
-                                                <Target className="w-4 h-4" /> Missing Keywords
-                                            </h4>
-                                            <div className="flex flex-wrap gap-2">
-                                                {analysisResult.details.keywords.missing.map((k, i) => (
-                                                    <span key={i} className="px-3 py-1.5 bg-rose-500/5 text-rose-400 border border-rose-500/10 rounded-lg text-xs font-mono font-medium opacity-80 hover:opacity-100 transition-opacity cursor-help shadow-sm">
-                                                        {k}
-                                                    </span>
-                                                ))}
-                                                {analysisResult.details.keywords.missing.length === 0 && (
-                                                    <span className="text-slate-600 text-xs font-medium">All keywords matched.</span>
-                                                )}
-                                            </div>
+                                {/* RIGHT COLUMN: Insights & Advice (8 cols) */}
+                                <div className="lg:col-span-8 space-y-6">
+                                    {/* Reasoning Panel */}
+                                    <div className="glass-card rounded-3xl p-8">
+                                        <h4 className="text-sm font-black text-indigo-300 uppercase tracking-widest mb-6 flex items-center gap-2">
+                                            <Bot className="w-5 h-5" /> AI Analysis Reasoning
+                                        </h4>
+                                        <div className="prose prose-invert prose-sm max-w-none">
+                                            <p className="text-base text-slate-300 leading-relaxed font-medium">
+                                                {analysisResult.reasoning || analysisResult.feedback}
+                                            </p>
                                         </div>
                                     </div>
 
-                                    <div className="mt-12 pt-10 border-t border-white/5 grid md:grid-cols-2 gap-12">
-                                        <div>
-                                            <h4 className="text-xs font-black text-violet-400 uppercase tracking-widest mb-6 flex items-center gap-2">
-                                                <Zap className="w-4 h-4" /> Impact Metrics
+                                    {/* Suggestions */}
+                                    {analysisResult.suggestions && analysisResult.suggestions.length > 0 && (
+                                        <div className="glass-card rounded-3xl p-8">
+                                            <h4 className="text-sm font-black text-amber-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+                                                <Sparkles className="w-5 h-5" /> Strategic Improvements
                                             </h4>
-                                            <div className="space-y-3">
-                                                {analysisResult.details.impact.metricsFound.map((m, i) => (
-                                                    <div key={i} className="flex items-center gap-3 text-xs text-slate-400 font-mono bg-black/20 px-4 py-3 rounded-xl border border-white/5 backdrop-blur-sm">
-                                                        <span className="w-5 h-5 rounded-md bg-violet-500/10 text-violet-400 flex items-center justify-center text-[10px] font-bold border border-violet-500/10">#</span>
-                                                        {m}
-                                                    </div>
-                                                ))}
-                                                {analysisResult.details.impact.metricsFound.length === 0 && (
-                                                    <span className="text-slate-600 text-xs font-medium">No quantifiable metrics detected.</span>
-                                                )}
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2">
-                                                <LayoutDashboard className="w-4 h-4" /> Formatting Check
-                                            </h4>
-                                            <div className="space-y-3">
-                                                {analysisResult.details.formatting.missingSections.length > 0 ? (
-                                                    analysisResult.details.formatting.missingSections.map(s => (
-                                                        <div key={s} className="text-xs text-rose-400 flex items-center gap-3 bg-rose-500/5 px-4 py-3 rounded-xl border border-rose-500/10">
-                                                            <AlertCircle className="w-4 h-4" /> Missing: <span className="font-bold uppercase">{s}</span>
+                                            <div className="space-y-4">
+                                                {analysisResult.suggestions.map((s, i) => (
+                                                    <div key={i} className={`p-6 rounded-2xl border transition-all hover:bg-white/5 ${s.importance === 'high' ? 'bg-rose-500/5 border-rose-500/10' :
+                                                        s.importance === 'medium' ? 'bg-amber-500/5 border-amber-500/10' :
+                                                            'bg-emerald-500/5 border-emerald-500/10'
+                                                        }`}>
+                                                        <div className="flex items-center gap-3 mb-3">
+                                                            <span className={`w-2 h-2 rounded-full ${s.importance === 'high' ? 'bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.5)]' :
+                                                                s.importance === 'medium' ? 'bg-amber-500' : 'bg-emerald-500'
+                                                                }`} />
+                                                            <h5 className={`text-sm font-black uppercase tracking-wide ${s.importance === 'high' ? 'text-rose-400' :
+                                                                s.importance === 'medium' ? 'text-amber-400' : 'text-emerald-400'
+                                                                }`}>{s.title}</h5>
+                                                            <span className="ml-auto text-[10px] font-bold bg-black/20 px-2 py-1 rounded-full text-slate-500 border border-white/5 uppercase">
+                                                                {s.importance} Priority
+                                                            </span>
                                                         </div>
-                                                    ))
-                                                ) : (
-                                                    <div className="text-xs text-emerald-400 flex items-center gap-3 bg-emerald-500/5 px-4 py-3 rounded-xl border border-emerald-500/10">
-                                                        <CheckCircle className="w-4 h-4" /> All Value Sections Present
+                                                        <p className="text-sm text-slate-300 leading-7 font-medium pl-5 border-l-2 border-white/5">
+                                                            {s.explanation}
+                                                        </p>
                                                     </div>
-                                                )}
+                                                ))}
                                             </div>
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
                             </motion.div>
                         ) : (

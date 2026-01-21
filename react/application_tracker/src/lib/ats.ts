@@ -8,6 +8,12 @@ export interface ATSResult {
         actionVerbs: { score: number; count: number };
     };
     feedback: string;
+    reasoning?: string;
+    suggestions?: {
+        title: string;
+        explanation: string;
+        importance: 'high' | 'medium' | 'low';
+    }[];
 }
 
 const ACTION_VERBS = new Set([
@@ -135,6 +141,12 @@ export const analyzeResume = (resumeText: string, jobDescription: string): ATSRe
             formatting: { score: formattingScore, missingSections },
             actionVerbs: { score: verbScore, count: uniqueVerbs.size }
         },
-        feedback: overallFeedback
+        feedback: overallFeedback,
+        reasoning: "Score calculated based on basic keyword matching, formatting checks, and impact metric detection. Enable AI for deeper analysis.",
+        suggestions: missingKeywords.length > 0 ? [{
+            title: "Add Missing Keywords",
+            explanation: `Consider adding the following keywords: ${missingKeywords.slice(0, 5).join(', ')}`,
+            importance: 'high'
+        }] : []
     };
 };

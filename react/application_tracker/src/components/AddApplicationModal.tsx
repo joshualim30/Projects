@@ -29,7 +29,7 @@ export const AddApplicationModal = ({ isOpen, onClose, onSuccess, initialData }:
         notes: '',
         contact_person: '',
         contact_email: '',
-        contact_phone: '',
+        contact_speed: '',
         application_url: '',
         resume_version: '',
         cover_letter_version: '',
@@ -53,7 +53,7 @@ export const AddApplicationModal = ({ isOpen, onClose, onSuccess, initialData }:
                 notes: initialData.notes || '',
                 contact_person: initialData.contact_person || '',
                 contact_email: initialData.contact_email || '',
-                contact_phone: initialData.contact_phone || '',
+                contact_speed: initialData.contact_phone || '',
                 application_url: initialData.application_url || '',
                 resume_version: initialData.resume_version || '',
                 cover_letter_version: initialData.cover_letter_version || '',
@@ -75,7 +75,7 @@ export const AddApplicationModal = ({ isOpen, onClose, onSuccess, initialData }:
                 notes: '',
                 contact_person: '',
                 contact_email: '',
-                contact_phone: '',
+                contact_speed: '',
                 application_url: '',
                 resume_version: '',
                 cover_letter_version: '',
@@ -95,14 +95,30 @@ export const AddApplicationModal = ({ isOpen, onClose, onSuccess, initialData }:
             return;
         }
 
-        const { error } = await client.from('applications').upsert([
-            {
-                ...formData,
-                id: initialData?.id, // Ensure ID is present for update
-                updated_at: new Date().toISOString(),
-                created_at: initialData?.created_at || new Date().toISOString(),
-            },
-        ]);
+        let error;
+
+        if (initialData?.id) {
+            // Update existing
+            const { error: updateError } = await client.from('applications').upsert([
+                {
+                    ...formData,
+                    id: initialData.id,
+                    updated_at: new Date().toISOString(),
+                    created_at: initialData.created_at, // Keep original created_at
+                },
+            ]);
+            error = updateError;
+        } else {
+            // Create new (let DB generate ID)
+            const { error: insertError } = await client.from('applications').insert([
+                {
+                    ...formData,
+                    updated_at: new Date().toISOString(),
+                    created_at: new Date().toISOString(),
+                },
+            ]);
+            error = insertError;
+        }
 
         if (error) {
             alert(error.message);
@@ -112,31 +128,6 @@ export const AddApplicationModal = ({ isOpen, onClose, onSuccess, initialData }:
         }
         setLoading(false);
     };
-
-    const FormSection = ({ title, children }: { title: string, children: React.ReactNode }) => (
-        <div className="space-y-4">
-            <h4 className="flex items-center gap-2 text-[10px] font-black text-indigo-300 uppercase tracking-widest ml-1 opacity-80">
-                <span className="w-6 h-px bg-indigo-500/50"></span>
-                {title}
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                {children}
-            </div>
-        </div>
-    );
-
-    const InputField = ({ label, icon: Icon, className, ...props }: React.InputHTMLAttributes<HTMLInputElement> & { label: string, icon?: React.ElementType }) => (
-        <div className={cn("space-y-2", className)}>
-            <label className="text-xs font-bold text-slate-400 ml-1">{label}</label>
-            <div className="relative group">
-                {Icon && <Icon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 group-focus-within:text-indigo-400 transition-colors duration-300" />}
-                <input
-                    {...props}
-                    className={`w-full bg-black/20 border border-white/10 rounded-xl ${Icon ? 'pl-11' : 'px-4'} pr-4 py-3.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm font-medium shadow-inner backdrop-blur-sm hover:border-white/20`}
-                />
-            </div>
-        </div>
-    );
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-app-bg/80 backdrop-blur-md animate-in fade-in duration-300">
@@ -302,3 +293,28 @@ export const AddApplicationModal = ({ isOpen, onClose, onSuccess, initialData }:
         </div>
     );
 };
+
+const FormSection = ({ title, children }: { title: string, children: React.ReactNode }) => (
+    <div className="space-y-4">
+        <h4 className="flex items-center gap-2 text-[10px] font-black text-indigo-300 uppercase tracking-widest ml-1 opacity-80">
+            <span className="w-6 h-px bg-indigo-500/50"></span>
+            {title}
+        </h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {children}
+        </div>
+    </div>
+);
+
+const InputField = ({ label, icon: Icon, className, ...props }: React.InputHTMLAttributes<HTMLInputElement> & { label: string, icon?: React.ElementType }) => (
+    <div className={cn("space-y-2", className)}>
+        <label className="text-xs font-bold text-slate-400 ml-1">{label}</label>
+        <div className="relative group">
+            {Icon && <Icon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 group-focus-within:text-indigo-400 transition-colors duration-300" />}
+            <input
+                {...props}
+                className={`w-full bg-black/20 border border-white/10 rounded-xl ${Icon ? 'pl-11' : 'px-4'} pr-4 py-3.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm font-medium shadow-inner backdrop-blur-sm hover:border-white/20`}
+            />
+        </div>
+    </div>
+);
