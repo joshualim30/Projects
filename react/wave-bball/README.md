@@ -1,8 +1,11 @@
-# 🏀 Wave Basketball
+# Wave Basketball
+
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
 
 > The official digital platform for Wave Basketball, featuring dedicated portals for coaches and parents, advanced training management, and dynamic team content.
 
-## 🎯 Project Overview
+## Project Overview
 
 Wave Basketball is a modern, full-stack React application designed to streamline the operations of a premier 17u AAU basketball organization. Rebuilt in late 2024, it has evolved from a simple promotional site into a robust platform handling user authentication, player profiles, training schedules, and payments.
 
@@ -12,9 +15,9 @@ Wave Basketball is a modern, full-stack React application designed to streamline
 - **Parent Convenience**: Customer portal for managing player profiles, tracking billing, and booking sessions.
 - **Professional Standard**: High-performance, secure, and visually premium experience.
 
-## ✨ Features
+## Features
 
-### 🏢 **Portals & Authentication**
+### Portals & Authentication
 - **Coach Portal (`/portal`)**: 
   - Restricted Google Sign-In (requires `@wavebasketball.net` workspace email).
   - Syncs profile data to `coaches` Firestore collection.
@@ -25,20 +28,20 @@ Wave Basketball is a modern, full-stack React application designed to streamline
   - **Session History**: View past and upcoming training sessions.
   - **Payment Integration**: Stripe integration for seamless transaction history.
 
-### ⚡ **Dynamic Content**
+### Dynamic Content
 - **"Meet the Trainers"**: Dynamic page fetching real-time coach profiles from Firestore, ensuring roster changes are instantly reflected.
 - **Event Scheduling**: Interactive calendar system for training sessions and clinics.
 - **Global Dark Mode**: Unified "Sleek" aesthetic with radial gradients and glassmorphism UI elements.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-### **Frontend**
+### Frontend
 - **Framework**: React 18 + Vite (Blazing fast build & HMR)
 - **Language**: TypeScript (Strict type safety)
 - **UI Library**: NextUI (based on Tailwind CSS) + Framer Motion (Animations)
 - **Icons**: Lucide React
 
-### **Backend & Services (Firebase)**
+### Backend & Services (Firebase)
 - **Hosting**: Global CDN hosting.
 - **Authentication**: dual-flow system (Google Workspace for Staff, Email/Pass for Customers).
 - **Firestore**: NoSQL database for flexible data modeling (Users, Coaches, Products, Sessions).
@@ -47,7 +50,7 @@ Wave Basketball is a modern, full-stack React application designed to streamline
   - `firestore-stripe-payments`: Payment processing.
   - `firestore-send-email`: Automated transactional emails.
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js 18+
@@ -78,7 +81,7 @@ Wave Basketball is a modern, full-stack React application designed to streamline
    npm run dev
    ```
 
-## 📦 Deployment
+## Deployment
 
 The project uses a standard Vite build process deployed to Firebase Hosting.
 
@@ -89,7 +92,7 @@ npm run deploy
 
 > **Note**: This runs `tsc -b && vite build` followed by `firebase deploy`.
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 src/
@@ -101,7 +104,7 @@ src/
 └── main.tsx        # Entry point
 ```
 
-## 👨‍💻 Author
+## Author
 
 **Joshua Lim**  
 *Developer & Lead Coach*  

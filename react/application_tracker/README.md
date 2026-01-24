@@ -1,30 +1,69 @@
-# React + TypeScript + Vite
+# Application Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
 
-Currently, two official plugins are available:
+A premium job application tracker designed to streamline your job search process. Built with modern web technologies, it features integration with Firebase and Supabase to securely manage your application data.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+-   **Application Tracking**: Keep a detailed log of all your job applications, including status, dates, and notes.
+-   **Cloud Sync**: Data is synced across devices using Firebase and Supabase.
+-   **Desktop Experience**: Packaged with Electron for a native desktop application experience.
+-   **Modern UI**: Built with TailwindCSS and Framer Motion for a smooth and responsive user interface.
+-   **PDF Handling**: Integrated PDF viewing capabilities for managing resumes and cover letters.
+-   **AI Integration**: Utilizes Google Generative AI for enhanced features (e.g., resume analysis or suggestions).
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Tech Stack
 
-- Configure the top-level `parserOptions` property like this:
+-   **Frontend**: React, TypeScript, Vite
+-   **Styling**: TailwindCSS, Framer Motion, clsx
+-   **Backend / Auth**: Firebase, Supabase
+-   **Desktop Wrapper**: Electron
+-   **AI**: Google Generative AI SDK
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+## Getting Started
+
+### Prerequisites
+
+-   Node.js (Latest LTS recommended)
+-   npm or yarn
+
+### Installation
+
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/joshualim30/application_tracker.git
+    cd application_tracker
+    ```
+
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+
+3.  Set up environment variables:
+    - Create a `.env` file based on the required configuration for Firebase and Supabase.
+
+### Running the App
+
+**Development Mode (Web)**:
+```bash
+npm run dev
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+**Development Mode (Electron)**:
+*(Note: Ensure your `dev` script or a separate script supports Electron dev launch if applicable, otherwise use the build command for a production-like test)*  
+The project is configured with `vite-plugin-electron`. Usually, `npm run dev` handles the dev server.
+
+**Build for Production**:
+```bash
+npm run build
+```
+This command compiles the TypeScript code, builds the Vite app, and packages it with electron-builder.
+
+**Linting**:
+```bash
+npm run lint
+```
+

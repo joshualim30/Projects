@@ -1,12 +1,12 @@
-# 🚀 Joshua Lim's Project Portfolio
+# Joshua Lim's Project Portfolio
 
-> A curated collection of small-scale projects demonstrating my passion for software development and technical skills
+> A curated collection of small-scale projects demonstrating my passion for software development and technical skills.
 
-## 📋 Overview
+## Overview
 
 Welcome to my project portfolio! This repository contains a diverse collection of small-scale projects that I've built to learn new technologies, practice my programming skills, and showcase my capabilities as a developer. Each project represents my journey in exploring different programming languages, frameworks, and development concepts.
 
-## 🎯 Purpose
+## Purpose
 
 This portfolio is designed to:
 - **Demonstrate technical skills** across multiple programming languages and frameworks
@@ -15,51 +15,53 @@ This portfolio is designed to:
 - **Provide concrete examples** of my coding style and project organization
 - **Serve as a conversation starter** for internship interviews and networking
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 My projects span across various technologies:
 
-### **Frontend Development**
-- **React** - Modern web applications with TypeScript
-- **Flutter** - Cross-platform mobile development
-- **Swift** - iOS development
+### Frontend Development
+- **React**: Modern web applications with TypeScript
+- **Flutter**: Cross-platform mobile development
+- **Swift**: iOS development
 
-### **Backend & Data**
-- **Python** - Data analysis, automation, and web scraping
-- **SQL** - Database design and management
+### Backend & Data
+- **Python**: Data analysis, automation, and web scraping
+- **SQL**: Database design and management
 
-### **Development Tools**
-- **TypeScript** - Type-safe JavaScript development
-- **Vite** - Modern build tooling
-- **Tailwind CSS** - Utility-first styling
-- **Git** - Version control and collaboration
+### Development Tools
+- **TypeScript**: Type-safe JavaScript development
+- **Vite**: Modern build tooling
+- **Tailwind CSS**: Utility-first styling
+- **Git**: Version control and collaboration
 
-## 📁 Project Categories
+## Project Categories
 
-### 🎨 **Web Applications**
-- **Internship Tracker** - React/TypeScript application for managing internship applications
-- **Portfolio** - React/TypeScript application for showcasing my projects
+### Web Applications (React)
+-   **[Application Tracker](./react/application_tracker)**: Premium job application tracking tool with Firebase/Supabase.
+-   **[Portfolio](./react/portfolio)**: AI-powered personal portfolio website.
+-   **[Wave Basketball](./react/wave-bball)**: Digital platform for a basketball organization.
 
-## 🚀 Getting Started
+### Mobile Applications (Flutter)
+-   **[Morse Code Messenger](./flutter/morse_code_messenger)**: Secure messaging app using Morse code.
+-   **[Relecture](./flutter/relecture)**: Reading tracking application.
+
+### Data & Automation (Python)
+-   **[NBA Data Chatbot](./python/nba-data)**: NBA stats analysis and chatbot tool.
+
+### iOS Applications (Swift)
+-   **[Dashboard](./swift/Dashboard)**: Personal dashboard app.
+-   **[Redesigned Instagram](./swift/redesigned_instagram)**: Concept UI redesign of Instagram.
+
+## Getting Started
 
 Each project in this collection is self-contained with its own setup instructions. Navigate to any project directory to find:
 
-- **README.md** - Project-specific documentation
-- **Setup instructions** - How to run and test the project
-- **Technology details** - Frameworks and libraries used
-- **Key features** - What the project accomplishes
+- **README.md**: Project-specific documentation
+- **Setup instructions**: How to run and test the project
+- **Technology details**: Frameworks and libraries used
+- **Key features**: What the project accomplishes
 
-## 📈 Learning Journey
-
-These projects represent my continuous learning approach:
-
-1. **Problem Identification** - Finding real-world problems to solve
-2. **Technology Selection** - Choosing appropriate tools for the task
-3. **Implementation** - Building functional solutions
-4. **Iteration** - Refining and improving based on feedback
-5. **Documentation** - Ensuring code is maintainable and well-documented
-
-## 🤝 Connect With Me
+## Connect With Me
 
 I'm always excited to discuss these projects, explore new technologies, and collaborate on interesting challenges. Feel free to reach out if you'd like to:
 
@@ -68,12 +70,11 @@ I'm always excited to discuss these projects, explore new technologies, and coll
 - **Provide feedback** on my code or approach
 - **Connect** for internship and job opportunities
 
-## 📝 Note
+## Note
 
 While these projects showcase my skills and learning approach, I also work on larger, private repositories and contribute to more complex systems. This collection focuses on demonstrating my ability to quickly learn new technologies and deliver working solutions.
 
 ---
 
-*Built with ❤️ by Joshua Lim*
-
-*Last updated: October 2025*
+*Built by Joshua Lim*
+*Last updated: January 2026*

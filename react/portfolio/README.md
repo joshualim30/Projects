@@ -1,31 +1,34 @@
 # Joshua Lim's AI Portfolio
 
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
+
 > A next-generation portfolio website featuring an interactive AI chatbot powered by Google's Gemini API.
 
-## ✨ Features
+## Features
 
-- 🤖 **AI-Powered Personality** - A conversational interface powered by **Google Gemini**, capable of answering questions about my background, skills, and experience.
-- 💬 **Interactive Chat** - A sleek chat interface familiar to users of modern LLMs, featuring streaming responses and rich UI elements.
-- 📱 **Mobile-First Design** - Fully responsive layout with an adaptive sidebar and mobile-optimized input areas.
-- ⚡ **Real-time Streaming** - Serverless backend using Firebase Functions to stream AI responses directly to the client.
-- 🎨 **Modern Aesthetics** - Built with Tailwind CSS for a clean, professional, and dark-mode-friendly look.
-- 📁 **Dynamic Project Showcase** - Rich project cards and details integrated directly into the chat flow.
+- **AI-Powered Personality**: A conversational interface powered by **Google Gemini**, capable of answering questions about my background, skills, and experience.
+- **Interactive Chat**: A sleek chat interface familiar to users of modern LLMs, featuring streaming responses and rich UI elements.
+- **Mobile-First Design**: Fully responsive layout with an adaptive sidebar and mobile-optimized input areas.
+- **Real-time Streaming**: Serverless backend using Firebase Functions to stream AI responses directly to the client.
+- **Modern Aesthetics**: Built with Tailwind CSS for a clean, professional, and dark-mode-friendly look.
+- **Dynamic Project Showcase**: Rich project cards and details integrated directly into the chat flow.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-### **Frontend**
-- **React 18** - Component-based UI architecture
-- **TypeScript** - Type safety and developer ergonomics
-- **Tailwind CSS** - Utility-first styling with dark mode support
-- **Framer Motion** - Smooth animations for message bubbles and transitions
-- **Vite** - High-performance build tooling
+### Frontend
+- **React 18**: Component-based UI architecture
+- **TypeScript**: Type safety and developer ergonomics
+- **Tailwind CSS**: Utility-first styling with dark mode support
+- **Framer Motion**: Smooth animations for message bubbles and transitions
+- **Vite**: High-performance build tooling
 
-### **Backend & AI**
-- **Firebase Functions** - Serverless compute for secure API handling
-- **Google Gemini API** - The intelligence behind the chatbot persona
-- **Firebase Hosting** - Fast and secure global content delivery
+### Backend & AI
+- **Firebase Functions**: Serverless compute for secure API handling
+- **Google Gemini API**: The intelligence behind the chatbot persona
+- **Firebase Hosting**: Fast and secure global content delivery
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -52,7 +55,7 @@
 
 4. **Open your browser:** Visit `http://localhost:5173`
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
@@ -66,7 +69,7 @@ src/
 functions/            # Firebase Cloud Functions (Backend)
 ```
 
-## 🚀 Deployment
+## Deployment
 
 This project is deployed using Firebase Hosting.
 
@@ -76,11 +79,11 @@ npm run deploy
 
 This command builds the React application and deploys it along with the Cloud Functions to Firebase.
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License.
 
 ---
 
-*Built with ❤️ by Joshua Lim*
+*Built by Joshua Lim*
 
