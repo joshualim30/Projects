@@ -29,7 +29,7 @@ const SAMPLE_PROJECTS: Project[] = [
         title: 'Hybrid',
         description: 'Flexible code for flexible environments. My ongoing open-source interpreted language!',
         technologies: ['Rust', 'Python', 'JavaScript'],
-        link: 'https://github.com/joshualim30/hybrid',
+        link: 'https://github.com/Creating-Real/hybrid',
     },
 ];
 
