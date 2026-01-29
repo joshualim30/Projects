@@ -19,10 +19,23 @@ export interface Application {
     company_industry?: string;
     company_size?: string;
     position_description?: string;
-    salary_range?: string;
+    salary_range?: string; // Legacy
+    salary_min?: number;
+    salary_max?: number;
+    currency?: string;
+    locations?: string[];
+    rejection_source?: 'me' | 'them';
+    rejection_reason?: string;
+    interview_stages?: {
+        id: string;
+        name: string; // 'Screening', 'Technical', 'System Design'
+        date?: string;
+        completed: boolean;
+        notes?: string;
+    }[];
     application_date: string;
     status: ApplicationStatus;
-    interview_date?: string;
+    interview_date?: string; // Legacy
     notes?: string;
     contact_person?: string;
     contact_email?: string;

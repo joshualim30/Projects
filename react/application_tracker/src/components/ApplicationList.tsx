@@ -254,10 +254,12 @@ export const ApplicationList = () => {
                                             {app.contact_person}
                                         </div>
                                     )}
-                                    {app.salary_range && (
+                                    {(app.salary_min || app.salary_max || app.salary_range) && (
                                         <div className="flex items-center gap-2 text-xs text-emerald-400 font-bold bg-emerald-500/5 px-2 py-1 rounded-md border border-emerald-500/10">
                                             <DollarSign className="w-3.5 h-3.5" />
-                                            {app.salary_range}
+                                            {app.salary_min && app.salary_max
+                                                ? `${app.currency || '$'} ${app.salary_min.toLocaleString()} - ${app.salary_max.toLocaleString()}`
+                                                : app.salary_range}
                                         </div>
                                     )}
                                 </div>

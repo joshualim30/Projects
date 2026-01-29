@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { LayoutDashboard, Briefcase, Mail, Settings as SettingsIcon, LogOut, Search, FileText, LogIn } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { signInWithGoogle, logout, getFirebaseUser, initFirebase } from '../lib/firebase';
+import { ChatBot } from './ChatBot';
 
 interface NavItemProps {
     icon: React.ElementType;
@@ -177,13 +178,15 @@ export const AppLayout = ({ children, activeTab, setActiveTab }: { children: Rea
                 onClose={() => setIsMobileMenuOpen(false)}
             />
 
+            <ChatBot activeTab={activeTab} />
+
             <main className="flex-1 md:ml-72 h-screen overflow-hidden relative">
                 {/* Drag Region for macOS */}
                 <div className="absolute top-0 left-0 right-0 h-8 w-full z-50" style={{ WebkitAppRegion: 'drag' } as any} />
 
                 {/* Background Ambient Glows */}
-                <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[128px] pointer-events-none opacity-50 mix-blend-screen" />
-                <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-[#a855f7]/10 rounded-full blur-[128px] pointer-events-none opacity-50 mix-blend-screen" />
+                <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[128px] pointer-events-none opacity-30 mix-blend-screen" />
+                <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-[#a855f7]/10 rounded-full blur-[128px] pointer-events-none opacity-30 mix-blend-screen" />
 
                 <div className="h-full overflow-y-auto custom-scrollbar p-6 md:p-10 pt-24 md:pt-10 scroll-smooth">
                     <div className="max-w-7xl mx-auto space-y-8 pb-12">

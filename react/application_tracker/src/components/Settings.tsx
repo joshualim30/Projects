@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Save, RefreshCw, Globe, FileCode, Shield, Database, Server, Settings2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Save, RefreshCw, Globe, FileCode, Shield, Server, Settings2, CheckCircle2, AlertCircle, Cpu } from 'lucide-react';
 import { getSupabaseClient, saveSupabaseConfig } from '../lib/supabase';
 import { AppStorage } from '../lib/storage';
 import { initFirebase, testFirebaseConnection } from '../lib/firebase';
+import { checkOllamaConnection } from '../lib/ollama';
 import { motion } from 'framer-motion';
 
 
@@ -19,9 +20,13 @@ export const Settings = () => {
     const [fbAppId, setFbAppId] = useState<string>('');
     const [fbStatus, setFbStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
 
-    // Discovery
-    const [githubUrl, setGithubUrl] = useState<string>('https://raw.githubusercontent.com/SimplifyJobs/Summer2025-Internships/dev/.github/scripts/data.json');
-    const [dorkingTargets, setDorkingTargets] = useState<string>('Greenhouse, Lever, Ashby, Workable');
+
+
+    // AI
+    const [aiProvider, setAiProvider] = useState<'gemini' | 'ollama'>('gemini');
+    const [ollamaUrl, setOllamaUrl] = useState<string>('http://localhost:11434');
+    const [ollamaModel, setOllamaModel] = useState<string>('llama3');
+    const [ollamaStatus, setOllamaStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
 
     useEffect(() => {
         const loadSettings = async () => {
@@ -33,8 +38,11 @@ export const Settings = () => {
             setFbProjectId(await AppStorage.getItem('FIREBASE_PROJECT_ID') || import.meta.env.VITE_FIREBASE_PROJECT_ID || '');
             setFbAppId(await AppStorage.getItem('FIREBASE_APP_ID') || import.meta.env.VITE_FIREBASE_APP_ID || '');
 
-            setGithubUrl(await AppStorage.getItem('GITHUB_SOURCE_URL') || 'https://raw.githubusercontent.com/SimplifyJobs/Summer2025-Internships/dev/.github/scripts/data.json');
-            setDorkingTargets(await AppStorage.getItem('DORKING_TARGETS') || 'Greenhouse, Lever, Ashby, Workable');
+
+
+            setAiProvider(await AppStorage.getItem('AI_PROVIDER') as any || 'gemini');
+            setOllamaUrl(await AppStorage.getItem('OLLAMA_URL') || 'http://localhost:11434');
+            setOllamaModel(await AppStorage.getItem('OLLAMA_MODEL') || 'llama3');
         };
         loadSettings();
     }, []);
@@ -48,8 +56,11 @@ export const Settings = () => {
         await AppStorage.setItem('FIREBASE_PROJECT_ID', fbProjectId);
         await AppStorage.setItem('FIREBASE_APP_ID', fbAppId);
 
-        await AppStorage.setItem('GITHUB_SOURCE_URL', githubUrl);
-        await AppStorage.setItem('DORKING_TARGETS', dorkingTargets);
+
+
+        await AppStorage.setItem('AI_PROVIDER', aiProvider);
+        await AppStorage.setItem('OLLAMA_URL', ollamaUrl);
+        await AppStorage.setItem('OLLAMA_MODEL', ollamaModel);
 
         window.dispatchEvent(new Event('config-updated'));
 
@@ -94,88 +105,120 @@ export const Settings = () => {
         setTimeout(() => setFbStatus('idle'), 3000);
     };
 
-    const sqlSchema = `-- Run this in your Supabase SQL Editor
--- SAFE TO RUN: This script checks "IF NOT EXISTS" and will not delete your data.
+    const testOllamaConnection = async () => {
+        setOllamaStatus('testing');
+        const success = await checkOllamaConnection(ollamaUrl);
+        setOllamaStatus(success ? 'success' : 'error');
+        setTimeout(() => setOllamaStatus('idle'), 3000);
+    };
 
--- 1. Applications Table
-create table if not exists public.applications (
-  id serial not null,
-  title character varying(255) not null,
-  company_name character varying(255) not null,
-  company_location character varying(255) null,
-  company_website character varying(500) null,
-  company_logo character varying(500) null,
-  company_description text null,
-  company_industry character varying(255) null,
-  company_size character varying(100) null,
-  position_description text null,
-  salary_range character varying(100) null,
-  application_date date not null default CURRENT_DATE,
-  status character varying(50) not null default 'applied'::character varying,
-  interview_date timestamp without time zone null,
-  notes text null,
-  contact_person character varying(255) null,
-  contact_email character varying(255) null,
-  contact_phone character varying(50) null,
-  application_url character varying(500) null,
-  resume_version character varying(100) null,
-  cover_letter_version character varying(100) null,
-  created_at timestamp without time zone null default CURRENT_TIMESTAMP,
-  updated_at timestamp without time zone null default CURRENT_TIMESTAMP,
-  constraint internships_pkey primary key (id),
-  constraint internships_status_check check (
-    (
-      (status)::text = any (
-        array[
-          ('applied'::character varying)::text,
-          ('interview_scheduled'::character varying)::text,
-          ('interview_completed'::character varying)::text,
-          ('offer_received'::character varying)::text,
-          ('offer_accepted'::character varying)::text,
-          ('offer_declined'::character varying)::text,
-          ('rejected'::character varying)::text,
-          ('withdrawn'::character varying)::text
-        ]
-      )
-    )
-  )
+    const sqlSchema = `-- 1. Migration Logic: Rename legacy 'internships' table to 'applications' if it exists
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'internships') THEN
+    ALTER TABLE IF EXISTS internships RENAME TO applications;
+  END IF;
+END $$;
+
+-- 2. Applications Table Definition
+CREATE TABLE IF NOT EXISTS public.applications (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now(),
+  
+  -- Core Fields
+  company_name TEXT NOT NULL,
+  role_title TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'Applied',
+  
+  -- Details
+  location TEXT,
+  salary_range TEXT,
+  job_url TEXT,
+  notes TEXT,
+  
+  -- Dates
+  applied_date DATE DEFAULT CURRENT_DATE,
+  last_activity TIMESTAMPTZ DEFAULT now(),
+  
+  -- Contact Info
+  contact_name TEXT,
+  contact_email TEXT,
+  contact_phone TEXT,
+  
+  -- V2 Fields (Ensure existence if table was renamed)
+  salary_min NUMERIC,
+  salary_max NUMERIC,
+  currency TEXT DEFAULT 'USD',
+  locations TEXT[],           -- Array of strings for multiple locations
+  rejection_source TEXT,      -- 'Me' | 'Them' | 'Auto'
+  rejection_reason TEXT,
+  interview_stages JSONB DEFAULT '[]'::jsonb
 );
 
--- 2. Documents Table
-create table if not exists public.documents (
-  id uuid not null default gen_random_uuid(),
-  name text not null,
-  type text not null,
-  content text,
-  version text,
-  created_at timestamp with time zone default current_timestamp,
-  constraint documents_pkey primary key (id)
+-- 3. Add Columns Safely (Idempotent Migration for existing tables)
+DO $$
+BEGIN
+    -- Ensure columns exist if table was migrated or created with old schema
+    BEGIN
+        ALTER TABLE applications ADD COLUMN IF NOT EXISTS salary_min NUMERIC;
+    EXCEPTION WHEN duplicate_column THEN END;
+    
+    BEGIN
+        ALTER TABLE applications ADD COLUMN IF NOT EXISTS salary_max NUMERIC;
+    EXCEPTION WHEN duplicate_column THEN END;
+
+    BEGIN
+        ALTER TABLE applications ADD COLUMN IF NOT EXISTS currency TEXT DEFAULT 'USD';
+    EXCEPTION WHEN duplicate_column THEN END;
+
+    BEGIN
+         ALTER TABLE applications ADD COLUMN IF NOT EXISTS locations TEXT[];
+    EXCEPTION WHEN duplicate_column THEN END;
+
+    BEGIN
+        ALTER TABLE applications ADD COLUMN IF NOT EXISTS rejection_source TEXT;
+    EXCEPTION WHEN duplicate_column THEN END;
+
+    BEGIN
+        ALTER TABLE applications ADD COLUMN IF NOT EXISTS rejection_reason TEXT;
+    EXCEPTION WHEN duplicate_column THEN END;
+
+    BEGIN
+        ALTER TABLE applications ADD COLUMN IF NOT EXISTS interview_stages JSONB DEFAULT '[]'::jsonb;
+    EXCEPTION WHEN duplicate_column THEN END;
+    
+    BEGIN
+        ALTER TABLE applications ADD COLUMN IF NOT EXISTS resume_version TEXT;
+    EXCEPTION WHEN duplicate_column THEN END;
+
+    BEGIN
+        ALTER TABLE applications ADD COLUMN IF NOT EXISTS cover_letter_version TEXT;
+    EXCEPTION WHEN duplicate_column THEN END;
+END $$;
+
+
+-- 4. Enable Row Level Security (RLS)
+ALTER TABLE applications ENABLE ROW LEVEL SECURITY;
+
+-- 5. RLS Policies
+DROP POLICY IF EXISTS "Allow all access" ON applications;
+CREATE POLICY "Allow all access" ON applications FOR ALL USING (true) WITH CHECK (true);
+
+-- 6. User Profiles Table
+CREATE TABLE IF NOT EXISTS public.user_profiles (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id TEXT UNIQUE,
+  bio TEXT,
+  key_achievements TEXT,
+  experience_summary TEXT,
+  skills TEXT,
+  updated_at TIMESTAMPTZ DEFAULT current_timestamp
 );
 
--- 3. Security Policies (Idempotent)
-alter table applications enable row level security;
-drop policy if exists "Allow all access" on applications;
-create policy "Allow all access" on applications for all using (true);
-
-alter table documents enable row level security;
-drop policy if exists "Allow all access" on documents;
-create policy "Allow all access" on documents for all using (true);
-
--- 3. User Profiles Table
-create table if not exists public.user_profiles (
-  id uuid not null default gen_random_uuid(),
-  user_id text unique,
-  bio text,
-  key_achievements text,
-  experience_summary text,
-  skills text,
-  updated_at timestamp with time zone default current_timestamp,
-  constraint user_profiles_pkey primary key (id)
-);
-
-alter table user_profiles enable row level security;
-drop policy if exists "Allow all access" on user_profiles;
-create policy "Allow all access" on user_profiles for all using (true);`;
+ALTER TABLE user_profiles ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Allow all access" ON user_profiles;
+CREATE POLICY "Allow all access" ON user_profiles FOR ALL USING (true);`;
 
     const StatusBadge = ({ status }: { status: 'idle' | 'testing' | 'success' | 'error' }) => {
         if (status === 'idle') return null;
@@ -219,45 +262,74 @@ create policy "Allow all access" on user_profiles for all using (true);`;
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10 text-left">
                 {/* Data Sources Config */}
+
+
+                {/* AI Config */}
                 <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 }}
+                    transition={{ delay: 0.35 }}
                     className="col-span-1 lg:col-span-2 glass-card rounded-3xl p-8 w-full relative overflow-hidden group"
                 >
-                    <div className="absolute top-0 left-0 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2 pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity" />
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-fuchsia-500/5 rounded-full blur-3xl translate-y-1/2 translate-x-1/2 pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity" />
 
                     <div className="flex items-center gap-5 mb-8 border-b border-white/10 pb-6 relative z-10">
-                        <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20 shadow-lg shadow-indigo-500/10">
-                            <Database className="w-7 h-7 text-indigo-400" />
+                        <div className="w-14 h-14 rounded-2xl bg-fuchsia-500/10 flex items-center justify-center border border-fuchsia-500/20 shadow-lg shadow-fuchsia-500/10">
+                            <Cpu className="w-7 h-7 text-fuchsia-400" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-white">Discovery Sources</h3>
-                            <p className="text-sm text-slate-400 font-medium mt-1">Configure where your job feed and search targets come from.</p>
+                            <div className="flex items-center gap-3">
+                                <h3 className="text-xl font-bold text-white">AI Intelligence</h3>
+                                {aiProvider === 'ollama' && <StatusBadge status={ollamaStatus} />}
+                            </div>
+                            <p className="text-sm text-slate-400 font-medium mt-1">Configure your LLM provider for Resume Analysis and Cover Letters.</p>
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
                         <div className="space-y-3">
-                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">GitHub Data URL</label>
-                            <input
-                                type="text"
-                                value={githubUrl}
-                                onChange={(e) => setGithubUrl(e.target.value)}
-                                placeholder="https://raw.githubusercontent.com/..."
-                                className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all font-mono text-xs shadow-inner backdrop-blur-sm"
-                            />
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Provider</label>
+                            <select
+                                value={aiProvider}
+                                onChange={(e) => setAiProvider(e.target.value as any)}
+                                className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3.5 text-slate-200 focus:outline-none focus:ring-1 focus:ring-fuchsia-500/50 focus:border-fuchsia-500/50 transition-all font-mono text-xs shadow-inner backdrop-blur-sm appearance-none"
+                            >
+                                <option value="gemini">Gemini (Cloud)</option>
+                                <option value="ollama">Ollama (Local)</option>
+                            </select>
                         </div>
-                        <div className="space-y-3">
-                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Smart Search Targets</label>
-                            <input
-                                type="text"
-                                value={dorkingTargets}
-                                onChange={(e) => setDorkingTargets(e.target.value)}
-                                placeholder="Greenhouse, Lever, Ashby"
-                                className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all font-mono text-xs shadow-inner backdrop-blur-sm"
-                            />
-                        </div>
+                        {aiProvider === 'ollama' && (
+                            <>
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Ollama URL</label>
+                                    <input
+                                        type="text"
+                                        value={ollamaUrl}
+                                        onChange={(e) => setOllamaUrl(e.target.value)}
+                                        placeholder="http://localhost:11434"
+                                        className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-fuchsia-500/50 focus:border-fuchsia-500/50 transition-all font-mono text-xs shadow-inner backdrop-blur-sm"
+                                    />
+                                </div>
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Model Name</label>
+                                    <input
+                                        type="text"
+                                        value={ollamaModel}
+                                        onChange={(e) => setOllamaModel(e.target.value)}
+                                        placeholder="llama3"
+                                        className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-fuchsia-500/50 focus:border-fuchsia-500/50 transition-all font-mono text-xs shadow-inner backdrop-blur-sm"
+                                    />
+                                </div>
+                                <button
+                                    onClick={testOllamaConnection}
+                                    disabled={ollamaStatus === 'testing'}
+                                    className="md:col-span-2 flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-white/5 border border-white/10 text-slate-300 font-bold hover:bg-fuchsia-500/10 hover:text-fuchsia-400 hover:border-fuchsia-500/30 transition-all text-xs uppercase tracking-wider mt-2"
+                                >
+                                    {ollamaStatus === 'testing' ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Server className="w-4 h-4" />}
+                                    {ollamaStatus === 'success' ? 'Connected to Local LLM' : 'Test Ollama Connection'}
+                                </button>
+                            </>
+                        )}
                     </div>
                 </motion.div>
 

@@ -45,6 +45,9 @@ export const searchGmail = async (query: string, maxResults = 20): Promise<Email
         });
 
         if (!listRes.ok) {
+            if (listRes.status === 401) {
+                throw new Error('Unauthorized');
+            }
             const errorData = await listRes.json().catch(() => ({}));
             console.error('Gmail API Error Details:', JSON.stringify(errorData, null, 2));
             throw new Error(`Gmail API error: ${listRes.status} ${listRes.statusText} - ${errorData.error?.message || 'Unknown error'}`);

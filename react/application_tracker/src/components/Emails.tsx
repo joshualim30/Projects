@@ -16,6 +16,7 @@ export const Emails = () => {
     const [emails, setEmails] = useState<Email[]>([]);
     const [fetchingEmails, setFetchingEmails] = useState(false);
     const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
+    const [needsGmailConnect, setNeedsGmailConnect] = useState(false);
 
     useEffect(() => {
         const fetchApps = async () => {
@@ -38,9 +39,13 @@ export const Emails = () => {
     useEffect(() => {
         const loadEmails = async () => {
             if (!user) return;
-            if (!getGoogleAccessToken()) {
-                console.warn("No Google Access Token. User needs to sign in again to grant Gmail access.");
+
+            const token = getGoogleAccessToken();
+            if (!token) {
+                setNeedsGmailConnect(true);
                 return;
+            } else {
+                setNeedsGmailConnect(false);
             }
 
             setFetchingEmails(true);
@@ -60,8 +65,13 @@ export const Emails = () => {
 
                 const results = await searchGmail(query);
                 setEmails(results);
-            } catch (err) {
+            } catch (err: any) {
                 console.error("Failed to fetch emails", err);
+                if (err.message === 'Unauthorized') {
+                    setNeedsGmailConnect(true);
+                    // Optionally clear the invalid token here or let the user action handle it
+                    localStorage.removeItem('google_access_token');
+                }
             } finally {
                 setFetchingEmails(false);
             }
@@ -163,10 +173,10 @@ export const Emails = () => {
                         </motion.div>
                     ))}
                 </div>
-            ) : !user ? (
+            ) : (!user || needsGmailConnect) ? (
                 <EmptyState
                     icon={Inbox}
-                    title="No Gmail Link"
+                    title="Connect Gmail"
                     description="Connect your Gmail account by signing in with Google in the sidebar to automatically fetch and filter communications."
                     actionLabel="Go to Settings"
                     onAction={() => window.dispatchEvent(new CustomEvent('changeTab', { detail: 'settings' }))}

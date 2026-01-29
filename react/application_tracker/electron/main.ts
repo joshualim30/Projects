@@ -37,8 +37,10 @@ function createWindow() {
     trafficLightPosition: { x: 20, y: 20 },
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
+      webviewTag: true,
     },
   })
+  win.maximize()
 
   // Test active push message to Renderer-process.
   win.webContents.on('did-finish-load', () => {

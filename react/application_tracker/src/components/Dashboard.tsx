@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, Send, Users, CheckCircle, Clock, AlertCircle, Unplug, Plus, Search, FileText, ArrowUpRight, LayoutDashboard } from 'lucide-react';
+import { TrendingUp, Send, Users, CheckCircle, Clock, AlertCircle, Unplug, Plus, Search, FileText, LayoutDashboard } from 'lucide-react';
 import { getSupabaseClient } from '../lib/supabase';
 import { AppStorage } from '../lib/storage';
 import { Application } from '../types';
@@ -202,34 +202,33 @@ export const Dashboard = () => {
                         <Plus className="w-5 h-5 text-amber-400" />
                         Quick Actions
                     </h3>
-                    <div className="space-y-3">
+                    <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
                         <button
                             onClick={() => changeTab('applications')}
-                            className="w-full bg-white/5 hover:bg-indigo-500/10 hover:border-indigo-500/30 text-slate-300 hover:text-white p-4 rounded-xl font-bold transition-all text-sm text-left flex items-center justify-between border border-white/5 group active:scale-95"
+                            className="bg-white/5 hover:bg-indigo-500/10 hover:border-indigo-500/30 text-slate-300 hover:text-white p-4 rounded-xl font-bold transition-all text-sm text-center flex flex-col items-center justify-center gap-2 border border-white/5 group active:scale-95"
                         >
-                            <div className="flex items-center gap-3">
-                                <Plus className="w-4 h-4 text-indigo-400" />
-                                New Application
+                            <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <Plus className="w-5 h-5 text-indigo-400" />
                             </div>
-                            <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all translate-x-1 group-hover:translate-x-0 text-indigo-400" />
+                            New App
                         </button>
                         <button
                             onClick={() => changeTab('discovery')}
-                            className="w-full bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white p-4 rounded-xl font-bold transition-all text-sm text-left flex items-center justify-between border border-white/5 group active:scale-95"
+                            className="bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white p-4 rounded-xl font-bold transition-all text-sm text-center flex flex-col items-center justify-center gap-2 border border-white/5 group active:scale-95"
                         >
-                            <div className="flex items-center gap-3">
-                                <Search className="w-4 h-4 text-amber-400" />
-                                Smart Job Search
+                            <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <Search className="w-5 h-5 text-amber-400" />
                             </div>
+                            Search Jobs
                         </button>
                         <button
                             onClick={() => changeTab('resume')}
-                            className="w-full bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white p-4 rounded-xl font-bold transition-all text-sm text-left flex items-center justify-between border border-white/5 group active:scale-95"
+                            className="col-span-2 lg:col-span-1 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white p-4 rounded-xl font-bold transition-all text-sm text-center flex flex-col items-center justify-center gap-2 border border-white/5 group active:scale-95"
                         >
-                            <div className="flex items-center gap-3">
-                                <FileText className="w-4 h-4 text-emerald-400" />
-                                Analyze Resume
+                            <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <FileText className="w-5 h-5 text-emerald-400" />
                             </div>
+                            Analyze Resume
                         </button>
                     </div>
 

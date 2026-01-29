@@ -8,7 +8,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { getSupabaseClient } from '../lib/supabase';
 import { AppDocument } from '../types';
 import { analyzeResume, ATSResult } from '../lib/ats';
-import { initializeGemini, checkGeminiReady, analyzeResumeWithGemini, generateCoverLetterWithGemini } from '../lib/gemini';
+
+import { initializeGemini, checkGeminiReady } from '../lib/gemini'; // Keep specific init for API key modal if used
+import { analyzeResumeAI, generateCoverLetterAI } from '../lib/ai';
 import * as pdfjsLib from 'pdfjs-dist';
 
 // Type definition to suppress TS errors if any
@@ -174,8 +176,8 @@ export const ResumeLab = () => {
         setActiveTab('analysis');
 
         try {
-            if (useAI && checkGeminiReady()) {
-                const aiResult = await analyzeResumeWithGemini(resumeText, jobDescription);
+            if (useAI) {
+                const aiResult = await analyzeResumeAI(resumeText, jobDescription);
                 // Map AI result to our internal format
                 setAnalysisResult({
                     totalScore: aiResult.score,
@@ -224,11 +226,11 @@ export const ResumeLab = () => {
         setIsGenerating(true);
 
         try {
-            if (useAI && checkGeminiReady()) {
+            if (useAI) {
                 const profileContext = localStorage.getItem('user_profile_context');
                 const parsedContext = profileContext ? JSON.parse(profileContext) : undefined;
 
-                const letter = await generateCoverLetterWithGemini(resumeText, jobDescription, parsedContext);
+                const letter = await generateCoverLetterAI(resumeText, jobDescription, parsedContext);
                 setGeneratedCL(letter);
             } else {
                 // Template fallback

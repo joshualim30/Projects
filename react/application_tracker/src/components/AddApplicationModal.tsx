@@ -24,6 +24,12 @@ export const AddApplicationModal = ({ isOpen, onClose, onSuccess, initialData }:
         company_size: '',
         position_description: '',
         salary_range: '',
+        salary_min: '',
+        salary_max: '',
+        currency: 'USD',
+        locations: '',
+        rejection_source: 'them' as 'me' | 'them',
+        rejection_reason: '',
         status: 'applied' as ApplicationStatus,
         application_date: new Date().toISOString().split('T')[0],
         notes: '',
@@ -32,6 +38,7 @@ export const AddApplicationModal = ({ isOpen, onClose, onSuccess, initialData }:
         application_url: '',
         resume_version: '',
         cover_letter_version: '',
+        interview_stages: [] as any[], // { name, date, completed, notes }
     });
 
     React.useEffect(() => {
@@ -47,7 +54,14 @@ export const AddApplicationModal = ({ isOpen, onClose, onSuccess, initialData }:
                 company_size: initialData.company_size || '',
                 position_description: initialData.position_description || '',
                 salary_range: initialData.salary_range || '',
+                salary_min: initialData.salary_min?.toString() || '',
+                salary_max: initialData.salary_max?.toString() || '',
+                currency: initialData.currency || 'USD',
+                locations: initialData.locations?.join(', ') || '',
                 status: initialData.status || 'applied',
+                rejection_source: initialData.rejection_source || 'them',
+                rejection_reason: initialData.rejection_reason || '',
+                interview_stages: initialData.interview_stages || [],
                 application_date: initialData.application_date || new Date().toISOString().split('T')[0],
                 notes: initialData.notes || '',
                 contact_person: initialData.contact_person || '',
@@ -68,7 +82,14 @@ export const AddApplicationModal = ({ isOpen, onClose, onSuccess, initialData }:
                 company_size: '',
                 position_description: '',
                 salary_range: '',
+                salary_min: '',
+                salary_max: '',
+                currency: 'USD',
+                locations: '',
                 status: 'applied' as ApplicationStatus,
+                rejection_source: 'them',
+                rejection_reason: '',
+                interview_stages: [],
                 application_date: new Date().toISOString().split('T')[0],
                 notes: '',
                 contact_person: '',
@@ -100,6 +121,9 @@ export const AddApplicationModal = ({ isOpen, onClose, onSuccess, initialData }:
                 {
                     ...formData,
                     id: initialData.id,
+                    salary_min: formData.salary_min ? parseFloat(formData.salary_min) : null,
+                    salary_max: formData.salary_max ? parseFloat(formData.salary_max) : null,
+                    locations: formData.locations.split(',').map(s => s.trim()).filter(Boolean),
                     updated_at: new Date().toISOString(),
                     created_at: initialData.created_at, // Keep original created_at
                 },
@@ -110,6 +134,9 @@ export const AddApplicationModal = ({ isOpen, onClose, onSuccess, initialData }:
             const { error: insertError } = await client.from('applications').insert([
                 {
                     ...formData,
+                    salary_min: formData.salary_min ? parseFloat(formData.salary_min) : null,
+                    salary_max: formData.salary_max ? parseFloat(formData.salary_max) : null,
+                    locations: formData.locations.split(',').map(s => s.trim()).filter(Boolean),
                     updated_at: new Date().toISOString(),
                     created_at: new Date().toISOString(),
                 },
@@ -188,7 +215,82 @@ export const AddApplicationModal = ({ isOpen, onClose, onSuccess, initialData }:
                             value={formData.company_location}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, company_location: e.target.value })}
                             placeholder="e.g. Remote / New York"
+                            className="md:col-span-2"
                         />
+                        <InputField
+                            label="Specific Locations (comma separated)"
+                            icon={MapPin}
+                            value={formData.locations}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, locations: e.target.value })}
+                            placeholder="e.g. NYC, London, Austin (will appear in list)"
+                            className="md:col-span-2"
+                        />
+                    </FormSection>
+
+                    {/* Interview Stages Editor */}
+                    <FormSection title="Interview Process">
+                        <div className="col-span-1 md:col-span-2 space-y-4">
+                            <label className="text-xs font-bold text-slate-400 ml-1">Stages (Timeline)</label>
+                            <div className="space-y-3">
+                                {formData.interview_stages.map((stage, idx) => (
+                                    <div key={idx} className="flex flex-col md:flex-row gap-3 p-3 rounded-xl bg-white/5 border border-white/5 relative group">
+                                        <div className="flex items-center gap-2 flex-1">
+                                            <input
+                                                type="checkbox"
+                                                checked={stage.completed}
+                                                onChange={(e) => {
+                                                    const newStages = [...formData.interview_stages];
+                                                    newStages[idx].completed = e.target.checked;
+                                                    setFormData({ ...formData, interview_stages: newStages });
+                                                }}
+                                                className="w-4 h-4 rounded border-white/20 bg-black/40 text-indigo-500 focus:ring-indigo-500/50"
+                                            />
+                                            <input
+                                                value={stage.name}
+                                                onChange={(e) => {
+                                                    const newStages = [...formData.interview_stages];
+                                                    newStages[idx].name = e.target.value;
+                                                    setFormData({ ...formData, interview_stages: newStages });
+                                                }}
+                                                placeholder="Stage Name"
+                                                className="bg-transparent border-none text-sm font-bold text-white focus:outline-none w-full"
+                                            />
+                                        </div>
+                                        <input
+                                            type="date"
+                                            value={stage.date || ''}
+                                            onChange={(e) => {
+                                                const newStages = [...formData.interview_stages];
+                                                newStages[idx].date = e.target.value;
+                                                setFormData({ ...formData, interview_stages: newStages });
+                                            }}
+                                            className="bg-black/20 rounded-lg px-2 py-1 text-xs text-slate-300 border border-white/10"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                const newStages = formData.interview_stages.filter((_, i) => i !== idx);
+                                                setFormData({ ...formData, interview_stages: newStages });
+                                            }}
+                                            className="text-slate-500 hover:text-rose-400"
+                                        >
+                                            <X className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                ))}
+                                <button
+                                    type="button"
+                                    onClick={() => setFormData({
+                                        ...formData,
+                                        interview_stages: [...formData.interview_stages, { name: 'New Stage', completed: false }]
+                                    })}
+                                    className="text-xs font-bold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 mt-2"
+                                >
+                                    + Add Interview Stage
+                                </button>
+                            </div>
+                        </div>
+
                     </FormSection>
 
                     <FormSection title="Status & Details">
@@ -228,8 +330,73 @@ export const AddApplicationModal = ({ isOpen, onClose, onSuccess, initialData }:
                             icon={DollarSign}
                             value={formData.salary_range}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, salary_range: e.target.value })}
-                            placeholder="e.g. $120k - $150k"
+                            placeholder="e.g. $120k - $150k (Legacy)"
                         />
+                        <div className="grid grid-cols-3 gap-4 md:col-span-2">
+                            <InputField
+                                label="Min Salary"
+                                type="number"
+                                icon={DollarSign}
+                                value={formData.salary_min}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, salary_min: e.target.value })}
+                                placeholder="Min"
+                            />
+                            <InputField
+                                label="Max Salary"
+                                type="number"
+                                icon={DollarSign}
+                                value={formData.salary_max}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, salary_max: e.target.value })}
+                                placeholder="Max"
+                            />
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-slate-400 ml-1">Currency</label>
+                                <select
+                                    value={formData.currency}
+                                    onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
+                                    className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3.5 text-slate-200 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500/50 font-bold appearance-none"
+                                >
+                                    <option value="USD">USD ($)</option>
+                                    <option value="EUR">EUR (€)</option>
+                                    <option value="GBP">GBP (£)</option>
+                                    <option value="CAD">CAD ($)</option>
+                                    <option value="SGD">SGD ($)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        {formData.status === 'rejected' && (
+                            <div className="md:col-span-2 space-y-4 p-4 rounded-xl bg-rose-500/5 border border-rose-500/10">
+                                <label className="text-xs font-black text-rose-400 uppercase tracking-widest">Rejection Details</label>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-slate-400">Source</label>
+                                        <div className="flex gap-2">
+                                            <button
+                                                type="button"
+                                                onClick={() => setFormData({ ...formData, rejection_source: 'them' })}
+                                                className={cn("px-3 py-2 rounded-lg text-xs font-bold border", formData.rejection_source === 'them' ? 'bg-rose-500/20 text-rose-300 border-rose-500/30' : 'bg-black/20 text-slate-500 border-white/10')}
+                                            >
+                                                They Rejected Me
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setFormData({ ...formData, rejection_source: 'me' })}
+                                                className={cn("px-3 py-2 rounded-lg text-xs font-bold border", formData.rejection_source === 'me' ? 'bg-rose-500/20 text-rose-300 border-rose-500/30' : 'bg-black/20 text-slate-500 border-white/10')}
+                                            >
+                                                I Rejected Them
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <InputField
+                                        label="Reason (Optional)"
+                                        value={formData.rejection_reason}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, rejection_reason: e.target.value })}
+                                        placeholder="e.g. Ghosted, Lowball, Culture"
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </FormSection>
 
                     <FormSection title="Links & Assets">
@@ -287,7 +454,7 @@ export const AddApplicationModal = ({ isOpen, onClose, onSuccess, initialData }:
                     </button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 
