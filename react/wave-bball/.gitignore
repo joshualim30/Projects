@@ -32,7 +32,6 @@ dist-ssr
 *.sw?
 
 # Firebase
-src/firebase.ts
 .firebase
 
 # Build artifacts

@@ -5,7 +5,7 @@ import { Button, Spinner } from '@nextui-org/react';
 import { getAuth, GoogleAuthProvider, signInWithPopup, User, onAuthStateChanged, signOut } from 'firebase/auth';
 import { db } from '../firebase';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
-import TrainingDashboard from './TrainingDashboard';
+// import TrainingDashboard from './TrainingDashboard'; // TODO: re-enable when dashboard is rebuilt
 import { Lock } from 'lucide-react';
 
 const CoachPortal = () => {
@@ -103,7 +103,7 @@ const CoachPortal = () => {
                     </Button>
                 </div>
             ) : (
-                <TrainingDashboard />
+                <div className="p-8 text-center text-gray-400">Dashboard coming soon.</div>
             )}
         </div>
     );

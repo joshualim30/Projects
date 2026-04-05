@@ -49,20 +49,41 @@ export default {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
-				chart: {
-					'1': 'hsl(var(--chart-1))',
-					'2': 'hsl(var(--chart-2))',
-					'3': 'hsl(var(--chart-3))',
-					'4': 'hsl(var(--chart-4))',
-					'5': 'hsl(var(--chart-5))'
-				}
+				'wave-blue': '#1A9BD7',
+				'wave-orange': '#E87420',
+				'wave-navy': '#0B1120',
 			}
 		}
 	},
-	darkMode: "class",
 	plugins: [
-		nextui(),
+		nextui({
+			themes: {
+				dark: {
+					colors: {
+						background: "#0B1120",
+						foreground: "#F5F5F5",
+						primary: {
+							50: "#E6F4FB",
+							100: "#CCE9F7",
+							200: "#99D3EF",
+							300: "#66BDE7",
+							400: "#33A7DF",
+							500: "#1A9BD7",
+							600: "#157CAC",
+							700: "#105D81",
+							800: "#0A3E56",
+							900: "#051F2B",
+							DEFAULT: "#1A9BD7",
+							foreground: "#FFFFFF",
+						},
+						secondary: {
+							DEFAULT: "#E87420",
+							foreground: "#FFFFFF",
+						},
+					},
+				},
+			},
+		}),
 		require("tailwindcss-animate")
 	],
 }
-

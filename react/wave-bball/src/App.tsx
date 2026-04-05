@@ -3,28 +3,24 @@ import SiteNavbar from './components/Navbar';
 import SiteFooter from './components/Footer';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import OurStory from './pages/OurStory';
+import About from './pages/About';
 import Contact from './pages/Contact';
-import CoachPortal from './pages/CoachPortal';
-import Events from './pages/Events';
-import Training from './pages/Training';
-import CustomerPortal from './pages/CustomerPortal';
+import NotFound from './pages/NotFound';
+// import CoachPortal from './pages/CoachPortal'; // TODO: re-enable when portal is ready
 
 function App() {
   return (
-    <div className='w-screen min-h-screen text-white flex flex-col font-sans selection:bg-primary selection:text-white'>
+    <div className='w-full min-h-screen text-white flex flex-col font-sans'>
       <SiteNavbar />
-      <div className='flex-grow'>
+      <main className='flex-grow'>
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='events' element={<Events />} />
-          <Route path='training' element={<Training />} />
-          <Route path='our-story' element={<OurStory />} />
+          <Route path='about' element={<About />} />
           <Route path='contact' element={<Contact />} />
-          <Route path='portal' element={<CoachPortal />} />
-          <Route path='customer' element={<CustomerPortal />} />
+          {/* <Route path='portal' element={<CoachPortal />} /> */}
+          <Route path='*' element={<NotFound />} />
         </Routes>
-      </div>
+      </main>
       <SiteFooter />
     </div>
   )
